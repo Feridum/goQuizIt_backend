@@ -1,4 +1,4 @@
-package com.example.easynotes;
+package com.goquizit;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

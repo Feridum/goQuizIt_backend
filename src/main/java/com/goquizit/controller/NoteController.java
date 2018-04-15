@@ -1,8 +1,10 @@
-package com.example.easynotes.controller;
+package com.goquizit.controller;
 
-import com.example.easynotes.exception.ResourceNotFoundException;
-import com.example.easynotes.model.Note;
-import com.example.easynotes.repository.NoteRepository;
+import com.goquizit.exception.ResourceNotFoundException;
+import com.goquizit.model.Note;
+import com.goquizit.model.Question;
+import com.goquizit.repository.NoteRepository;
+import com.goquizit.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,9 @@ public class NoteController {
 
     @Autowired
     NoteRepository noteRepository;
+
+    @Autowired
+    QuestionRepository questionRepository;
 
 
     @GetMapping("")
@@ -42,6 +47,12 @@ public class NoteController {
     public Note getNoteById(@PathVariable(value = "id") Long noteId) {
         return noteRepository.findById(noteId)
                 .orElseThrow(() -> new ResourceNotFoundException("Note", "id", noteId));
+    }
+
+    @PostMapping("questions")
+    public Question createQuestion(@Valid @RequestBody Question question)
+    {
+        return questionRepository.save(question);
     }
 
     @PutMapping("/notes/{id}")

@@ -1,4 +1,4 @@
-package com.example.easynotes;
+package com.goquizit;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
