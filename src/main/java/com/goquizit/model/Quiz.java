@@ -1,17 +1,44 @@
 package com.goquizit.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
+@Entity
+@Table(name = "quizzes")
+@EntityListeners(AuditingEntityListener.class)
+@JsonIgnoreProperties(value = {"createdAt", "updatedAt"},
+        allowGetters = true)
 public class Quiz {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private String quizId;
+
+  @NotNull
   private String token;
+
+  @NotNull
   private String title;
+
   private String state;
+
   private String startOnTime;
+
   private String isKahoot;
+
+  @NotNull
   private java.sql.Date endDate;
+
+  @NotNull
   private java.sql.Date startDate;
+
+  @NotNull
   private String ownerId;
+
+  @NotNull
   private String userIdUser;
 
 
