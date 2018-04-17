@@ -1,8 +1,10 @@
 package com.goquizit.controller;
 
 import com.goquizit.exception.ResourceNotFoundException;
+import com.goquizit.model.Answer;
 import com.goquizit.model.Note;
 import com.goquizit.model.Question;
+import com.goquizit.repository.AnswerRepository;
 import com.goquizit.repository.NoteRepository;
 import com.goquizit.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ public class NoteController {
 
     @Autowired
     QuestionRepository questionRepository;
+
+    @Autowired
+    AnswerRepository answerRepository;
 
 
     @GetMapping("")
@@ -53,6 +58,12 @@ public class NoteController {
     public Question createQuestion(@Valid @RequestBody Question question)
     {
         return questionRepository.save(question);
+    }
+
+    @PostMapping("answers")
+    public Answer createAnswer(@Valid @RequestBody Answer answer)
+    {
+        return answerRepository.save(answer);
     }
 
     @PutMapping("/notes/{id}")

@@ -17,11 +17,15 @@ public class Answer {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private String answerId;
 
+  @NotNull
   private String questionId;
 
   @NotNull
   private String value;
+
+  @NotNull
   private String isPositive;
+
   private String questionIdQuestion;
 
 

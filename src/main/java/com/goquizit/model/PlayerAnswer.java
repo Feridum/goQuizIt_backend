@@ -1,11 +1,28 @@
 package com.goquizit.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
+@Entity
+@Table(name = "playersanswers")
+@EntityListeners(AuditingEntityListener.class)
+@JsonIgnoreProperties(value = {"createdAt", "updatedAt"},
+        allowGetters = true)
 public class PlayerAnswer {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private String answerId;
+
+  @NotNull
   private String questionId;
+
+  @NotNull
   private String value;
+
   private String playerIdPlayer;
   private String questionIdQuestion;
 
