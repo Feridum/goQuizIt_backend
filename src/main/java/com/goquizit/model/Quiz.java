@@ -5,9 +5,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "quizzes")
+@Table(name = "quiz")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"createdAt", "updatedAt"},
         allowGetters = true)
@@ -23,11 +25,21 @@ public class Quiz {
   @NotNull
   private String title;
 
+  @NotNull
   private String state;
 
   private String startOnTime;
 
+  @NotNull
   private String isKahoot;
+
+  public Set<Question> getQuestions() {
+    return questions;
+  }
+
+  public void setQuestions(Set<Question> questions) {
+    this.questions = questions;
+  }
 
   @NotNull
   private java.sql.Date endDate;
@@ -41,6 +53,8 @@ public class Quiz {
   @NotNull
   private String userIdUser;
 
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,mappedBy = "abcd")
+  private Set<Question> questions = new HashSet<>();
 
   public String getQuizId() {
     return quizId;

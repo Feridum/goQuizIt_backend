@@ -31,8 +31,9 @@ public class Question {
   @Min(1)
   private int duration;
 
-  @NotNull
-  private String quizIdQuiz;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "quiz_id", nullable = false)
+  private Quiz quizIdQuiz;
 
 
   public String getQuestionId() { return questionId; }
@@ -66,13 +67,11 @@ public class Question {
     this.duration = duration;
   }
 
+    public Quiz getQuizIdQuiz() {
+        return quizIdQuiz;
+    }
 
-  public String getQuizIdQuiz() {
-    return quizIdQuiz;
-  }
-
-  public void setQuizIdQuiz(String quizIdQuiz) {
-    this.quizIdQuiz = quizIdQuiz;
-  }
-
+    public void setQuizIdQuiz(Quiz quizIdQuiz) {
+        this.quizIdQuiz = quizIdQuiz;
+    }
 }
