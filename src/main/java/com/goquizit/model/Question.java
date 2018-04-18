@@ -10,15 +10,14 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "questions")
-@EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(value = {"createdAt", "updatedAt"},
-        allowGetters = true)
+@Table(name = "QUESTION")
+//@EntityListeners(AuditingEntityListener.class)
+@JsonIgnoreProperties(value = {"createdAt", "updatedAt"})
 public class Question {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private String questionId;
+  private Long questionId;
 
   @NotNull
   private String value;
@@ -32,17 +31,23 @@ public class Question {
   private int duration;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "quiz_id", nullable = false)
-  private Quiz quizIdQuiz;
+  @JoinColumn(name = "quiz")
+  private Quiz quiz;
 
 
-  public String getQuestionId() { return questionId; }
 
-  public void setQuestionId(String questionId) { this.questionId = questionId; }
 
 
   public String getValue() {
     return value;
+  }
+
+  public Long getQuestionId() {
+    return questionId;
+  }
+
+  public void setQuestionId(Long questionId) {
+    this.questionId = questionId;
   }
 
   public void setValue(String value) {
@@ -67,11 +72,12 @@ public class Question {
     this.duration = duration;
   }
 
-    public Quiz getQuizIdQuiz() {
-        return quizIdQuiz;
-    }
 
-    public void setQuizIdQuiz(Quiz quizIdQuiz) {
-        this.quizIdQuiz = quizIdQuiz;
-    }
+  public Quiz getQuiz() {
+    return quiz;
+  }
+
+  public void setQuiz(Quiz quiz) {
+    this.quiz = quiz;
+  }
 }

@@ -9,15 +9,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "quiz")
-@EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(value = {"createdAt", "updatedAt"},
-        allowGetters = true)
+@Table(name = "QUIZ")
+//@EntityListeners(AuditingEntityListener.class)
+//@JsonIgnoreProperties(value = {"createdAt", "updatedAt"})
 public class Quiz {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private String quizId;
+  private Long id;
 
   @NotNull
   private String token;
@@ -33,6 +32,7 @@ public class Quiz {
   @NotNull
   private String isKahoot;
 
+
   public Set<Question> getQuestions() {
     return questions;
   }
@@ -41,29 +41,28 @@ public class Quiz {
     this.questions = questions;
   }
 
-  @NotNull
-  private java.sql.Date endDate;
+//  @NotNull
+//  private java.sql.Date endDate;
+//
+//  @NotNull
+//  private java.sql.Date startDate;
+//
+//  @NotNull
+//  private String ownerId;
+//
+//  @NotNull
+//  private String userIdUser;
 
-  @NotNull
-  private java.sql.Date startDate;
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "quiz", cascade = CascadeType.ALL)
+  private Set<Question> questions;
 
-  @NotNull
-  private String ownerId;
-
-  @NotNull
-  private String userIdUser;
-
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,mappedBy = "abcd")
-  private Set<Question> questions = new HashSet<>();
-
-  public String getQuizId() {
-    return quizId;
+  public Long getId() {
+    return id;
   }
 
-  public void setQuizId(String quizId) {
-    this.quizId = quizId;
+  public void setId(Long id) {
+    this.id = id;
   }
-
 
   public String getToken() {
     return token;
@@ -110,39 +109,39 @@ public class Quiz {
   }
 
 
-  public java.sql.Date getEndDate() {
-    return endDate;
-  }
-
-  public void setEndDate(java.sql.Date endDate) {
-    this.endDate = endDate;
-  }
-
-
-  public java.sql.Date getStartDate() {
-    return startDate;
-  }
-
-  public void setStartDate(java.sql.Date startDate) {
-    this.startDate = startDate;
-  }
-
-
-  public String getOwnerId() {
-    return ownerId;
-  }
-
-  public void setOwnerId(String ownerId) {
-    this.ownerId = ownerId;
-  }
-
-
-  public String getUserIdUser() {
-    return userIdUser;
-  }
-
-  public void setUserIdUser(String userIdUser) {
-    this.userIdUser = userIdUser;
-  }
+//  public java.sql.Date getEndDate() {
+//    return endDate;
+//  }
+//
+//  public void setEndDate(java.sql.Date endDate) {
+//    this.endDate = endDate;
+//  }
+//
+//
+//  public java.sql.Date getStartDate() {
+//    return startDate;
+//  }
+//
+//  public void setStartDate(java.sql.Date startDate) {
+//    this.startDate = startDate;
+//  }
+//
+//
+//  public String getOwnerId() {
+//    return ownerId;
+//  }
+//
+//  public void setOwnerId(String ownerId) {
+//    this.ownerId = ownerId;
+//  }
+//
+//
+//  public String getUserIdUser() {
+//    return userIdUser;
+//  }
+//
+//  public void setUserIdUser(String userIdUser) {
+//    this.userIdUser = userIdUser;
+//  }
 
 }
