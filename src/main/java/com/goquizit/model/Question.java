@@ -19,6 +19,8 @@ public class Question {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long questionId;
 
+  private Long sampleQuizId;
+
   @NotNull
   private String value;
 
@@ -35,8 +37,13 @@ public class Question {
   private Quiz quiz;
 
 
+  public Long getSampleQuizId() {
+    return sampleQuizId;
+  }
 
-
+  public void setSampleQuizId(Long sampleQuizId) {
+    this.sampleQuizId = sampleQuizId;
+  }
 
   public String getValue() {
     return value;

@@ -73,6 +73,8 @@ public class RESTController {
     @PostMapping("/quiz/{quiz_id}/questions/")
     public Quiz createquiz(@PathVariable(value = "quiz_id") Long quiz_id, @Valid @RequestBody Question question) {
         Quiz oldQuiz = quizRepository.findById(quiz_id).orElseThrow(() -> new ResourceNotFoundException("Quiz", "id", quiz_id));
+        question.setSampleQuizId(quiz_id);
+        questionRepository.save(question);
         oldQuiz.getQuestions().add(question);
         return quizRepository.save(oldQuiz);
     }
