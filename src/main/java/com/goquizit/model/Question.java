@@ -5,13 +5,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "QUESTION")
-//@EntityListeners(AuditingEntityListener.class)
+@EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"createdAt", "updatedAt"})
 public class Question {
 
@@ -19,7 +17,7 @@ public class Question {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long questionId;
 
-  private Long sampleQuizId;
+  private Long quizId;
 
   @NotNull
   private String value;
@@ -32,17 +30,13 @@ public class Question {
   @Min(1)
   private int duration;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "quiz")
-  private Quiz quiz;
 
-
-  public Long getSampleQuizId() {
-    return sampleQuizId;
+  public Long getQuizId() {
+    return quizId;
   }
 
-  public void setSampleQuizId(Long sampleQuizId) {
-    this.sampleQuizId = sampleQuizId;
+  public void setQuizId(Long quizId) {
+    this.quizId = quizId;
   }
 
   public String getValue() {
@@ -77,14 +71,5 @@ public class Question {
 
   public void setDuration(int duration) {
     this.duration = duration;
-  }
-
-
-  public Quiz getQuiz() {
-    return quiz;
-  }
-
-  public void setQuiz(Quiz quiz) {
-    this.quiz = quiz;
   }
 }

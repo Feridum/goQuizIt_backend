@@ -1,9 +1,11 @@
 package com.goquizit.controller;
 
 import com.goquizit.exception.ResourceNotFoundException;
+import com.goquizit.model.Answer;
 import com.goquizit.model.Note;
 import com.goquizit.model.Question;
 import com.goquizit.model.Quiz;
+import com.goquizit.repository.AnswerRepository;
 import com.goquizit.repository.NoteRepository;
 import com.goquizit.repository.QuestionRepository;
 import com.goquizit.repository.QuizRepository;
@@ -26,8 +28,8 @@ public class RESTController {
     @Autowired
     QuestionRepository questionRepository;
 
-//    @Autowired
-//    AnswerRepository answerRepository;
+    @Autowired
+    AnswerRepository answerRepository;
 
     @Autowired
     QuizRepository quizRepository;
@@ -60,10 +62,10 @@ public class RESTController {
         return questionRepository.save(question);
     }
 
-//    @PostMapping("/answers")
-//    public Answer createAnswer(@Valid @RequestBody Answer answer) {
-//        return answerRepository.save(answer);
-//    }
+    @PostMapping("/answers")
+    public Answer createAnswer(@Valid @RequestBody Answer answer) {
+        return answerRepository.save(answer);
+    }
 
     @PostMapping("/quiz")
     public Quiz createquiz(@Valid @RequestBody Quiz quiz) {
@@ -73,10 +75,13 @@ public class RESTController {
     @PostMapping("/quiz/{quiz_id}/questions/")
     public Quiz createquiz(@PathVariable(value = "quiz_id") Long quiz_id, @Valid @RequestBody Question question) {
         Quiz oldQuiz = quizRepository.findById(quiz_id).orElseThrow(() -> new ResourceNotFoundException("Quiz", "id", quiz_id));
-        question.setSampleQuizId(quiz_id);
+        question.setQuizId(quiz_id);
         questionRepository.save(question);
-        oldQuiz.getQuestions().add(question);
         return quizRepository.save(oldQuiz);
+    }
+    @GetMapping("/quiz/{id}/questions")
+    public List<Question> getQuestionsById(@PathVariable(value = "id") Long quizId) {
+        return questionRepository.findByQuizId(quizId);
     }
     @GetMapping("/quiz/{id}")
     public Quiz getQuizById(@PathVariable(value = "id") Long quizId) {
@@ -95,26 +100,6 @@ public class RESTController {
     }
 
 
-//    @PostMapping("/quiz/{quiz_id}/answer/{answer_id")
-//    public Quiz addAnswer(@PathVariable(value = "quiz_id") Long quiz_id) {
-//        Quiz quiz = quizRepository.findById(quiz_id).orElseThrow(() -> new ResourceNotFoundException("Note", "id", quiz_id));
-//
-//        quiz.getQuestions().add()
-//    }
-
-//    @PutMapping("/notes/{id}")
-//    public Note updateNote(@PathVariable(value = "id") Long noteId,
-//                           @Valid @RequestBody Note noteDetails) {
-//
-//        Note note = noteRepository.findById(noteId)
-//                .orElseThrow(() -> new ResourceNotFoundException("Note", "id", noteId));
-//
-//        note.setTitle(noteDetails.getTitle());
-//        note.setContent(noteDetails.getContent());
-//
-//        Note updatedNote = noteRepository.save(note);
-//        return updatedNote;
-//    }
 //
 //    @DeleteMapping("/notes/{id}")
 //    public ResponseEntity<?> deleteNote(@PathVariable(value = "id") Long noteId) {

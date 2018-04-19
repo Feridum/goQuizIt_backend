@@ -32,29 +32,17 @@ public class Quiz {
   @NotNull
   private String isKahoot;
 
+  //@NotNull
+  private java.sql.Date endDate;
 
-  public Set<Question> getQuestions() {
-    return questions;
-  }
+  //@NotNull
+  private java.sql.Date startDate;
 
-  public void setQuestions(Set<Question> questions) {
-    this.questions = questions;
-  }
+  //@NotNull
+  private String ownerId;
 
-//  @NotNull
-//  private java.sql.Date endDate;
-//
-//  @NotNull
-//  private java.sql.Date startDate;
-//
-//  @NotNull
-//  private String ownerId;
-//
-//  @NotNull
-//  private String userIdUser;
-
-  @OneToMany(fetch = FetchType.EAGER, mappedBy = "quiz", cascade = CascadeType.ALL)
-  private Set<Question> questions;
+  //@NotNull
+  private String userIdUser;
 
   public Long getId() {
     return id;
@@ -109,39 +97,39 @@ public class Quiz {
   }
 
 
-//  public java.sql.Date getEndDate() {
-//    return endDate;
-//  }
-//
-//  public void setEndDate(java.sql.Date endDate) {
-//    this.endDate = endDate;
-//  }
-//
-//
-//  public java.sql.Date getStartDate() {
-//    return startDate;
-//  }
-//
-//  public void setStartDate(java.sql.Date startDate) {
-//    this.startDate = startDate;
-//  }
-//
-//
-//  public String getOwnerId() {
-//    return ownerId;
-//  }
-//
-//  public void setOwnerId(String ownerId) {
-//    this.ownerId = ownerId;
-//  }
-//
-//
-//  public String getUserIdUser() {
-//    return userIdUser;
-//  }
-//
-//  public void setUserIdUser(String userIdUser) {
-//    this.userIdUser = userIdUser;
-//  }
+  public java.sql.Date getEndDate() {
+    return endDate;
+  }
+
+  public void setEndDate(java.sql.Date endDate) {
+    this.endDate = endDate;
+  }
+
+
+  public java.sql.Date getStartDate() {
+    return startDate;
+  }
+
+  public void setStartDate(java.sql.Date startDate) {
+    this.startDate = startDate;
+  }
+
+
+  public String getOwnerId() {
+    return ownerId;
+  }
+
+  public void setOwnerId(String ownerId) {
+    this.ownerId = ownerId;
+  }
+
+
+  public String getUserIdUser() {
+    return userIdUser;
+  }
+
+  public void setUserIdUser(String userIdUser) {
+    this.userIdUser = userIdUser;
+  }
 
 }
