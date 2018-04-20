@@ -1,8 +1,8 @@
 package com.goquizit.repository;
 
-import com.goquizit.model.Answer;
+import com.goquizit.model.Player;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PlayerRepository extends JpaRepository<Answer, Long> {
+public interface PlayerRepository extends JpaRepository<Player, Long> {
 }
 

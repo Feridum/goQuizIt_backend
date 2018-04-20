@@ -1,12 +1,10 @@
 package com.goquizit.controller;
 
 import com.goquizit.exception.ResourceNotFoundException;
-import com.goquizit.model.Answer;
-import com.goquizit.model.Note;
-import com.goquizit.model.Question;
-import com.goquizit.model.Quiz;
+import com.goquizit.model.*;
 import com.goquizit.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,29 +17,9 @@ import java.util.List;
 @RequestMapping("/api")
 public class RESTController {
 
-    // Unnecessary sample section
-    @Autowired
-    NoteRepository noteRepository;
-
     @GetMapping("")
     public String retu() {
-        return "Hej";
-    }
-
-    @GetMapping("/notes")
-    public List<Note> getAllNotes() {
-        return noteRepository.findAll();
-    }
-
-    @PostMapping("/notes")
-    public Note createNote(@Valid @RequestBody Note note) {
-        return noteRepository.save(note);
-    }
-
-    @GetMapping("/notes/{id}")
-    public Note getNoteById(@PathVariable(value = "id") Long noteId) {
-        return noteRepository.findById(noteId)
-                .orElseThrow(() -> new ResourceNotFoundException("Note", "id", noteId));
+        return "The best app ;)";
     }
 
     @Autowired
@@ -65,20 +43,33 @@ public class RESTController {
         return answerRepository.save(answer);
     }
 
-    @PostMapping(/"answers")
-    public List<Answer> getAllAnswers(@Valid @RequestBody Answer answer) { return answerRepository.findAll();}
+    @GetMapping("/answers")
+    public List<Answer> getAllAnswers(@Valid @RequestBody Answer answer) {
+        return answerRepository.findAll();
+    }
 
-    @PostMapping("answers/{answer_id}")
+    @PostMapping("/answers/{answer_id}")
     public Answer getAnswerById(@PathVariable(value = "answer_id") Long answerId) {
-        return answerRepository.findById(answerId);
+        return answerRepository.findById(answerId).orElseThrow(() -> new ResourceNotFoundException("Answer", "id", answerId));
+    }
+
+    @DeleteMapping("/answers/{answer_id}")
+    public ResponseEntity<?> deleteAnswerById(@PathVariable(value = "answer_id") Long answerId) {
+        Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new ResourceNotFoundException("Answer", "id", answerId));
+        answerRepository.delete(answer);
+        return ResponseEntity.ok().build();
     }
 
     // Players methods
     @PostMapping("/players")
-    public Player createPlayer(@Valid @RequestBody Player player) { return playerRepository.save(player); }
+    public Player createPlayer(@Valid @RequestBody Player player) {
+        return playerRepository.save(player);
+    }
 
-    @PostMapping("/players")
-    public List<Player> getAllPlayers() { return playerRepository.findAll();}
+    @GetMapping("/players")
+    public List<Player> getAllPlayers() {
+        return playerRepository.findAll();
+    }
 
     // Questions methods
     @PostMapping("/questions")
@@ -91,24 +82,24 @@ public class RESTController {
         return questionRepository.findAll();
     }
 
+
     // Quiz methods
     @PostMapping("/quiz")
-    public Quiz createquiz(@Valid @RequestBody Quiz quiz) {
+    public Quiz createQuiz(@Valid @RequestBody Quiz quiz) {
         return quizRepository.save(quiz);
     }
 
     @GetMapping("/quiz")
-    public List<Quiz> getAllQuizes() {
+    public List<Quiz> getAllQuizzes() {
         return quizRepository.findAll();
     }
 
-    // TODO - change method name (it doesnt create quiz, it saves questions to the quiz
     @PostMapping("/quiz/{quiz_id}/questions/")
-    public Quiz createquiz(@PathVariable(value = "quiz_id") Long quiz_id, @Valid @RequestBody Question question) {
-        Quiz oldQuiz = quizRepository.findById(quiz_id).orElseThrow(() -> new ResourceNotFoundException("Quiz", "id", quiz_id));
+    public Quiz createQuestion(@PathVariable(value = "quiz_id") Long quiz_id, @Valid @RequestBody Question question) {
+        Quiz quiz = quizRepository.findById(quiz_id).orElseThrow(() -> new ResourceNotFoundException("Quiz", "id", quiz_id));
         question.setQuizId(quiz_id);
         questionRepository.save(question);
-        return quizRepository.save(oldQuiz);
+        return quizRepository.save(quiz);
     }
 
     @GetMapping("/quiz/{id}/questions")
@@ -124,20 +115,12 @@ public class RESTController {
 
     // User methods
     @PostMapping("/users")
-    public User createUser(@Valid @RequestBody User User) { return userRepository.save(user); }
+    public User createUser(@Valid @RequestBody User user) {
+        return userRepository.save(user);
+    }
 
-    @PostMapping("/users")
-    public List<User> getAllUsers() { return userRepository.findAll();}
-
-
-//
-//    @DeleteMapping("/notes/{id}")
-//    public ResponseEntity<?> deleteNote(@PathVariable(value = "id") Long noteId) {
-//        Note note = noteRepository.findById(noteId)
-//                .orElseThrow(() -> new ResourceNotFoundException("Note", "id", noteId));
-//
-//        noteRepository.delete(note);
-//
-//        return ResponseEntity.ok().build();
-//    }
+    @GetMapping("/users")
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
 }

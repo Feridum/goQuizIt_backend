@@ -32,7 +32,6 @@ public class Quiz {
   @NotNull
   private String isKahoot;
 
-  //@NotNull
   private java.sql.Date endDate;
 
   //@NotNull
