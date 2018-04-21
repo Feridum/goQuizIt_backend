@@ -45,6 +45,7 @@ public class Question {
     this.quizId = quizId;
   }
 
+
   public String getValue() {
     return value;
   }
@@ -52,6 +53,7 @@ public class Question {
   public UUID getQuestionId() {
     return questionId;
   }
+
 
   public void setQuestionId(UUID questionId) {
     this.questionId = questionId;

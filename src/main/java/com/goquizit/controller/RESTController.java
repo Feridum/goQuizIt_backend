@@ -1,12 +1,9 @@
 package com.goquizit.controller;
 
-import com.goquizit.exception.ResourceNotFoundException;
+import com.goquizit.exception.*;
 import com.goquizit.model.*;
-import com.goquizit.repository.AnswerRepository;
-import com.goquizit.repository.PlayerRepository;
-import com.goquizit.repository.UserRepository;
-import com.goquizit.services.QuestionService;
-import com.goquizit.services.QuizService;
+import com.goquizit.repository.*;
+import com.goquizit.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,51 +13,56 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by rajeevkumarsingh on 27/06/17.
+ * Main controller of the application.
  */
 @RestController
 @RequestMapping("/api")
 public class RESTController {
 
     @Autowired
+    AnswerService answerService;
+
+    @Autowired
     QuestionService questionService;
+
     @Autowired
     QuizService quizService;
+
+    // TODO: refactor to service
     @Autowired
     PlayerRepository playerRepository;
-    @Autowired
-    AnswerRepository answerRepository;
+
+    // TODO: refactor to service
     @Autowired
     UserRepository userRepository;
 
+    //--------------------------------------------------------------------
+
+    // Sample method of the application
     @GetMapping("")
     public String retu() {
         return "The best app ;)";
     }
 
+    //--------------------------------------------------------------------
+
     // Answers methods
-    @PostMapping("/answers")
+    @PostMapping("/answer")
     public Answer createAnswer(@Valid @RequestBody Answer answer) {
-        return answerRepository.save(answer);
+        return answerService.createAnswer(answer);
     }
 
     @GetMapping("/answers")
-    public List<Answer> getAllAnswers(@Valid @RequestBody Answer answer) {
-        return answerRepository.findAll();
+    public List<Answer> getAllAnswers() {
+        return answerService.getAllAnswers();
     }
 
-    @PostMapping("/answers/{answer_id}")
-    public Answer getAnswerById(@PathVariable(value = "answer_id") Long answerId) {
-        return answerRepository.findById(answerId).orElseThrow(() -> new ResourceNotFoundException("Answer", "id", answerId));
+    @PostMapping("/answer/{answer_id}")
+    public Answer getAnswerById(@PathVariable(value = "answer_id") UUID answerId) {
+        return answerService.getAnswerById(answerId);
     }
 
-    @DeleteMapping("/answers/{answer_id}")
-    public ResponseEntity<?> deleteAnswerById(@PathVariable(value = "answer_id") Long answerId) {
-        Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new ResourceNotFoundException("Answer", "id", answerId));
-        answerRepository.delete(answer);
-        return ResponseEntity.ok().build();
-    }
-
+    //--------------------------------------------------------------------
 
     // Players methods
     @PostMapping("/players")
@@ -73,6 +75,7 @@ public class RESTController {
         return playerRepository.findAll();
     }
 
+    //--------------------------------------------------------------------
 
     // Questions methods
     @PostMapping("/questions")
@@ -100,6 +103,7 @@ public class RESTController {
         return questionService.deleteById(questionId);
     }
 
+    //--------------------------------------------------------------------
 
     // Quiz methods
     @PostMapping("/quiz")
@@ -126,6 +130,8 @@ public class RESTController {
     public ResponseEntity<?> deleteQuizById(@PathVariable(value = "quiz_id") UUID quizId) {
         return quizService.deteleById(quizId);
     }
+
+    //--------------------------------------------------------------------
 
     // Users methods
     @PostMapping("/users")

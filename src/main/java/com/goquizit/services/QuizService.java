@@ -14,6 +14,7 @@ import java.util.UUID;
 
 @Service
 public class QuizService {
+
     @Autowired
     QuizRepository quizRepository;
 
@@ -41,6 +42,9 @@ public class QuizService {
                 .orElseThrow(() -> new ResourceNotFoundException("Quiz", "id", quizId));
     }
 
+    // TODO:
+    // Incorrect syntax!
+    // Change: detele to delete
     public ResponseEntity<?> deteleById(UUID quizId) {
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new ResourceNotFoundException("Quiz", "id", quizId));
         List <Question> questions = questionService.findByQuizId(quizId);

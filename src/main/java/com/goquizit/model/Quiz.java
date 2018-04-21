@@ -9,8 +9,6 @@ import org.springframework.util.IdGenerator;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -40,10 +38,12 @@ public class Quiz{
   @NotNull
   private String isKahoot;
 
-  private Date endDate;
-
   //@NotNull
   private Date startDate;
+
+  //@NotNull
+  private Date endDate;
+
 
   //@NotNull
   private String ownerId;

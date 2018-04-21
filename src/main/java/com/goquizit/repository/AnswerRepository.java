@@ -2,6 +2,10 @@ package com.goquizit.repository;
 
 import com.goquizit.model.Answer;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface AnswerRepository extends JpaRepository<Answer, Long> {
+import java.util.UUID;
+
+@Repository
+public interface AnswerRepository extends JpaRepository<Answer, UUID> {
 }
