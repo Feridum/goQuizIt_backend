@@ -1,7 +1,7 @@
 package com.goquizit.model;
 
 public enum QuizState {
-    Started("Started"), Ended("Ended");
+    ACTIVE("active"), INACTIVE("inactive"), FINISHED("finished");
 
     public String getValue() {
         return value;

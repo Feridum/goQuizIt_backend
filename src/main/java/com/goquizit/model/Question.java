@@ -1,11 +1,14 @@
 package com.goquizit.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 @Entity
 @Table(name = "QUESTION")
@@ -14,10 +17,13 @@ import javax.validation.constraints.NotNull;
 public class Question {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long questionId;
+  @Type(type = "pg-uuid")
+  @GeneratedValue(generator = "uuid2")
+  @GenericGenerator(name = "uuid2", strategy = "uuid2")
+  @Column(columnDefinition = "uuid")
+  private UUID questionId;
 
-  private Long quizId;
+  private UUID quizId;
 
   @NotNull
   private String value;
@@ -31,11 +37,11 @@ public class Question {
   private int duration;
 
 
-  public Long getQuizId() {
+  public UUID getQuizId() {
     return quizId;
   }
 
-  public void setQuizId(Long quizId) {
+  public void setQuizId(UUID quizId) {
     this.quizId = quizId;
   }
 
@@ -43,11 +49,11 @@ public class Question {
     return value;
   }
 
-  public Long getQuestionId() {
+  public UUID getQuestionId() {
     return questionId;
   }
 
-  public void setQuestionId(Long questionId) {
+  public void setQuestionId(UUID questionId) {
     this.questionId = questionId;
   }
 

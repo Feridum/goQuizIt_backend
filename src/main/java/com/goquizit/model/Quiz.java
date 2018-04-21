@@ -1,22 +1,30 @@
 package com.goquizit.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.util.IdGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "QUIZ")
 //@EntityListeners(AuditingEntityListener.class)
 //@JsonIgnoreProperties(value = {"createdAt", "updatedAt"})
-public class Quiz {
+public class Quiz{
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  @Type(type = "pg-uuid")
+  @GeneratedValue(generator = "uuid2")
+  @GenericGenerator(name = "uuid2", strategy = "uuid2")
+  @Column(columnDefinition = "uuid")
+  private UUID id;
 
   @NotNull
   private String token;
@@ -32,22 +40,19 @@ public class Quiz {
   @NotNull
   private String isKahoot;
 
-  private java.sql.Date endDate;
+  private Date endDate;
 
   //@NotNull
-  private java.sql.Date startDate;
+  private Date startDate;
 
   //@NotNull
   private String ownerId;
 
-  //@NotNull
-  private String userIdUser;
-
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 
@@ -96,20 +101,20 @@ public class Quiz {
   }
 
 
-  public java.sql.Date getEndDate() {
+  public Date getEndDate() {
     return endDate;
   }
 
-  public void setEndDate(java.sql.Date endDate) {
+  public void setEndDate(Date endDate) {
     this.endDate = endDate;
   }
 
 
-  public java.sql.Date getStartDate() {
+  public Date getStartDate() {
     return startDate;
   }
 
-  public void setStartDate(java.sql.Date startDate) {
+  public void setStartDate(Date startDate) {
     this.startDate = startDate;
   }
 
@@ -120,15 +125,6 @@ public class Quiz {
 
   public void setOwnerId(String ownerId) {
     this.ownerId = ownerId;
-  }
-
-
-  public String getUserIdUser() {
-    return userIdUser;
-  }
-
-  public void setUserIdUser(String userIdUser) {
-    this.userIdUser = userIdUser;
   }
 
 }

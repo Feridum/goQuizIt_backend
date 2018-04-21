@@ -9,15 +9,12 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
-@Table(name = "User")
-@EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(value = {"createdAt", "updatedAt"},
-        allowGetters = true)
-public class User {
+@Table(name = "Users")
+public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String userId;
+    private Long userId;
 
     @NotNull
     private String login;
@@ -33,11 +30,11 @@ public class User {
     private String isLoggedIn;
 
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
