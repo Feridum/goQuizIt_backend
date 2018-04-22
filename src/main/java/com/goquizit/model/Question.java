@@ -23,7 +23,7 @@ public class Question {
   @Column(columnDefinition = "uuid")
   private UUID questionId;
 
-  // TODO: quizId should not be null (by default it is filled anyways)
+  @NotNull
   private UUID quizId;
 
   @NotNull

@@ -38,25 +38,7 @@ public class RESTController {
     @Autowired
     UserRepository userRepository;
 
-    //--------------------------------------------------------------------
-
-    // TODO: Delete unnecessary method
-    // Sample method of the application
-    @GetMapping("")
-    public String retu() {
-        return "The best app ;)";
-    }
-
-    //--------------------------------------------------------------------
-
     // Answers methods
-    //Czy jest to potrzebne???
-    // TODO: delete unnecessary method; got method for creating multiple answers
-    @PostMapping("/answer")
-    public Answer createAnswer(@Valid @RequestBody Answer answer) {
-        return answerService.createAnswer(answer);
-    }
-
     @PostMapping("/question/{question_id}/answers")
     public List<Answer> createAnswers(@Valid @RequestBody List<Answer> answers, @PathVariable("question_id") UUID questionId) {
         return answerService.createAnswers(answers,questionId);
