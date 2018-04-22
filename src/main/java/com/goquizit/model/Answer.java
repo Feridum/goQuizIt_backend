@@ -22,7 +22,6 @@ public class Answer {
     @Column(columnDefinition = "uuid")
     private UUID answerId;
 
-    @NotNull
     private UUID questionId;
 
     @NotNull

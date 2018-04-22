@@ -1,7 +1,10 @@
 package com.goquizit.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.goquizit.services.QuizService;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,8 +13,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "QUIZ")
-//@EntityListeners(AuditingEntityListener.class)
-//@JsonIgnoreProperties(value = {"createdAt", "updatedAt"})
+@EntityListeners(AuditingEntityListener.class)
+@JsonIgnoreProperties(value = {"createdAt", "updatedAt"})
 public class Quiz {
 
     @Id
@@ -28,7 +31,8 @@ public class Quiz {
     private String title;
 
     @NotNull
-    private String state;
+    @Enumerated(EnumType.STRING)
+    private QuizState state;
 
     @NotNull
     private String isKahoot;
@@ -56,7 +60,6 @@ public class Quiz {
         this.token = token;
     }
 
-
     public String getTitle() {
         return title;
     }
@@ -65,12 +68,11 @@ public class Quiz {
         this.title = title;
     }
 
-
-    public String getState() {
+    public QuizState getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(QuizState state) {
         this.state = state;
     }
 
@@ -82,7 +84,6 @@ public class Quiz {
         this.isKahoot = isKahoot;
     }
 
-
     public Date getEndDate() {
         return endDate;
     }
@@ -90,7 +91,6 @@ public class Quiz {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
-
 
     public Date getStartDate() {
         return startDate;
@@ -100,7 +100,6 @@ public class Quiz {
         this.startDate = startDate;
     }
 
-
     public String getOwnerId() {
         return ownerId;
     }
@@ -108,5 +107,4 @@ public class Quiz {
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
     }
-
 }

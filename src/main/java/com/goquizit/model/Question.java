@@ -23,7 +23,6 @@ public class Question {
   @Column(columnDefinition = "uuid")
   private UUID questionId;
 
-  @NotNull
   private UUID quizId;
 
   @NotNull
