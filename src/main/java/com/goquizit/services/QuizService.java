@@ -31,13 +31,6 @@ public class QuizService {
         return quizRepository.findAll();
     }
 
-    public Quiz createQuestion(UUID quiz_id, @Valid Question question) {
-        Quiz quiz = quizRepository.findById(quiz_id).orElseThrow(() -> new ResourceNotFoundException("Quiz", "id", quiz_id));
-        question.setQuizId(quiz_id);
-        questionService.createQuestion(question);
-        return quizRepository.save(quiz);
-    }
-
     public Quiz getQuizById(UUID quizId) {
         return quizRepository.findById(quizId)
                 .orElseThrow(() -> new ResourceNotFoundException("Quiz", "id", quizId));

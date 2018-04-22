@@ -23,9 +23,13 @@ public class AnswerService {
         return answerRepository.save(answer);
     }
 
-    public List<Answer> createAnswers(@Valid List<Answer> answers)
+    public List<Answer> createAnswers(@Valid List<Answer> answers, UUID questionId)
     {
-        answers.forEach(answer -> answerRepository.save(answer));
+        answers.forEach(answer ->
+        {
+            answer.setQuestionId(questionId);
+            answerRepository.save(answer);
+        });
         return answers;
     }
 
@@ -37,15 +41,13 @@ public class AnswerService {
         return answerRepository.findByQuestionId(questionId);
     }
 
-    public Answer getAnswerById(@PathVariable(value = "answer_id") UUID answerId) {
+    public Answer getAnswerById(UUID answerId) {
         return answerRepository.findById(answerId).orElseThrow(() -> new ResourceNotFoundException("Answer", "id", answerId));
     }
 
-    public ResponseEntity<?> deleteAnswerById(@PathVariable(value = "answer_id") UUID answerId) {
+    public ResponseEntity<?> deleteAnswerById(UUID answerId) {
         Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new ResourceNotFoundException("Answer", "id", answerId));
         answerRepository.delete(answer);
         return ResponseEntity.ok().build();
     }
-
-
 }

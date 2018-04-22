@@ -38,6 +38,11 @@ public class QuestionService {
         return questionRepository.findAll();
     }
 
+    public Question createQuestion(UUID quiz_id, @Valid Question question) {
+        question.setQuizId(quiz_id);
+       return this.createQuestion(question);
+    }
+
     public ResponseEntity<?> deleteById(UUID questionId) {
         Question question = questionRepository.findById(questionId).orElseThrow(() -> new ResourceNotFoundException("Question", "id", questionId));
         List<Answer> answers = answerService.findByQuestionId(questionId);

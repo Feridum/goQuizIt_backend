@@ -49,16 +49,16 @@ public class RESTController {
     //--------------------------------------------------------------------
 
     // Answers methods
+    //Czy jest to potrzebne???
     @PostMapping("/answer")
     public Answer createAnswer(@Valid @RequestBody Answer answer) {
         return answerService.createAnswer(answer);
     }
 
-    //ToDO adding list of answers
-//    @PostMapping("/answers")
-//    public Answer createAnswers(@Valid @RequestBody List <Answer> answers) {
-//        return answerService.createAnswers(answers);
-//    }
+    @PostMapping("/question/{question_id}/answers")
+    public List<Answer> createAnswers(@Valid @RequestBody List<Answer> answers, @PathVariable("question_id") UUID questionId) {
+        return answerService.createAnswers(answers,questionId);
+    }
 
     @GetMapping("/answers")
     public List<Answer> getAllAnswers() {
@@ -87,9 +87,9 @@ public class RESTController {
     //--------------------------------------------------------------------
 
     // Questions methods
-    @PostMapping("/questions")
-    public Question createQuestion(@Valid @RequestBody Question question) {
-        return questionService.createQuestion(question);
+    @PostMapping("/quiz/{quiz_id}/questions/")
+    public Question createQuestion(@PathVariable(value = "quiz_id") UUID quiz_id, @Valid @RequestBody Question question) {
+        return questionService.createQuestion(quiz_id, question);
     }
 
     @GetMapping("/questions")
@@ -123,11 +123,6 @@ public class RESTController {
     @GetMapping("/quiz")
     public List<Quiz> getAllQuizzes() {
         return quizService.getAllQuizzes();
-    }
-
-    @PostMapping("/quiz/{quiz_id}/questions/")
-    public Quiz createQuestion(@PathVariable(value = "quiz_id") UUID quiz_id, @Valid @RequestBody Question question) {
-        return quizService.createQuestion(quiz_id, question);
     }
 
     @GetMapping("/quiz/{quiz_id}")
