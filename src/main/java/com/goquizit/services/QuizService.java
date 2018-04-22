@@ -23,6 +23,7 @@ public class QuizService {
 
 
     public Quiz createQuiz(@Valid Quiz quiz) {
+        //Todo check if ownerId exist
         return quizRepository.save(quiz);
     }
 
@@ -42,14 +43,24 @@ public class QuizService {
                 .orElseThrow(() -> new ResourceNotFoundException("Quiz", "id", quizId));
     }
 
-    // TODO:
-    // Incorrect syntax!
-    // Change: detele to delete
-    public ResponseEntity<?> deteleById(UUID quizId) {
+    public ResponseEntity<?> deleteById(UUID quizId) {
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new ResourceNotFoundException("Quiz", "id", quizId));
-        List <Question> questions = questionService.findByQuizId(quizId);
+        List<Question> questions = questionService.findByQuizId(quizId);
         questions.forEach(question -> questionService.deleteById(question.getQuestionId()));
         quizRepository.delete(quiz);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(204).build();
+    }
+
+    public ResponseEntity<?> updateById(UUID quizId, @Valid Quiz quiz)
+    {
+        Quiz quizToUpdate = quizRepository.getOne(quizId);
+        quizToUpdate.setTitle(quiz.getTitle());
+        quizToUpdate.setState(quiz.getState());
+        quizToUpdate.setIsKahoot(quiz.getIsKahoot());
+        quizToUpdate.setEndDate(quiz.getEndDate());
+        quizToUpdate.setOwnerId(quiz.getOwnerId());
+        quizToUpdate.setStartDate(quiz.getStartDate());
+        quizRepository.save(quizToUpdate);
+        return ResponseEntity.status(204).build();
     }
 }

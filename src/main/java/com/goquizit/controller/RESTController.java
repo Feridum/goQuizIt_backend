@@ -1,9 +1,11 @@
 package com.goquizit.controller;
 
-import com.goquizit.exception.*;
 import com.goquizit.model.*;
-import com.goquizit.repository.*;
-import com.goquizit.services.*;
+import com.goquizit.repository.PlayerRepository;
+import com.goquizit.repository.UserRepository;
+import com.goquizit.services.AnswerService;
+import com.goquizit.services.QuestionService;
+import com.goquizit.services.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,11 +54,18 @@ public class RESTController {
         return answerService.createAnswer(answer);
     }
 
+    //ToDO adding list of answers
+//    @PostMapping("/answers")
+//    public Answer createAnswers(@Valid @RequestBody List <Answer> answers) {
+//        return answerService.createAnswers(answers);
+//    }
+
     @GetMapping("/answers")
     public List<Answer> getAllAnswers() {
         return answerService.getAllAnswers();
     }
 
+    //What is that???
     @PostMapping("/answer/{answer_id}")
     public Answer getAnswerById(@PathVariable(value = "answer_id") UUID answerId) {
         return answerService.getAnswerById(answerId);
@@ -128,9 +137,13 @@ public class RESTController {
 
     @DeleteMapping("/quiz/{quiz_id}")
     public ResponseEntity<?> deleteQuizById(@PathVariable(value = "quiz_id") UUID quizId) {
-        return quizService.deteleById(quizId);
+        return quizService.deleteById(quizId);
     }
 
+    @PutMapping("/quiz/{quiz_id}")
+    public ResponseEntity<?> updateQuizBuId(@PathVariable(value = "quiz_id") UUID quizId, @Valid @RequestBody Quiz quiz) {
+        return quizService.updateById(quizId, quiz);
+    }
     //--------------------------------------------------------------------
 
     // Users methods

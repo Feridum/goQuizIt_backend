@@ -15,68 +15,54 @@ import java.util.UUID;
 @JsonIgnoreProperties(value = {"createdAt", "updatedAt"})
 public class Answer {
 
-  @Id
-  @Type(type = "pg-uuid")
-  @GeneratedValue(generator = "uuid2")
-  @GenericGenerator(name = "uuid2", strategy = "uuid2")
-  @Column(columnDefinition = "uuid")
-  private UUID answerId;
+    @Id
+    @Type(type = "pg-uuid")
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(columnDefinition = "uuid")
+    private UUID answerId;
 
-  //@NotNull
-  private UUID questionId;
+    private UUID questionId;
 
-  @NotNull
-  private String value;
+    @NotNull
+    private String value;
 
-  @NotNull
-  private boolean isPositive;
-
-  // What is this for?
-  private String questionIdQuestion;
+    @NotNull
+    private boolean isPositive;
 
 
-  public UUID getAnswerId() {
-    return answerId;
-  }
+    public UUID getAnswerId() {
+        return answerId;
+    }
 
-  public void setAnswerId(UUID answerId) {
-    this.answerId = answerId;
-  }
-
-
-  public UUID getQuestionId() {
-    return questionId;
-  }
-
-  public void setQuestionId(UUID questionId) {
-    this.questionId = questionId;
-  }
+    public void setAnswerId(UUID answerId) {
+        this.answerId = answerId;
+    }
 
 
-  public String getValue() {
-    return value;
-  }
+    public UUID getQuestionId() {
+        return questionId;
+    }
 
-  public void setValue(String value) {
-    this.value = value;
-  }
-
-
-  public boolean getIsPositive() {
-    return isPositive;
-  }
-
-  public void setIsPositive(boolean isPositive) {
-    this.isPositive = isPositive;
-  }
+    public void setQuestionId(UUID questionId) {
+        this.questionId = questionId;
+    }
 
 
-  public String getQuestionIdQuestion() {
-    return questionIdQuestion;
-  }
+    public String getValue() {
+        return value;
+    }
 
-  public void setQuestionIdQuestion(String questionIdQuestion) {
-    this.questionIdQuestion = questionIdQuestion;
-  }
+    public void setValue(String value) {
+        this.value = value;
+    }
 
+
+    public boolean getIsPositive() {
+        return isPositive;
+    }
+
+    public void setIsPositive(boolean isPositive) {
+        this.isPositive = isPositive;
+    }
 }

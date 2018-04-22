@@ -23,8 +23,18 @@ public class AnswerService {
         return answerRepository.save(answer);
     }
 
+    public List<Answer> createAnswers(@Valid List<Answer> answers)
+    {
+        answers.forEach(answer -> answerRepository.save(answer));
+        return answers;
+    }
+
     public List<Answer> getAllAnswers() {
         return answerRepository.findAll();
+    }
+
+    public List<Answer> findByQuestionId(UUID questionId) {
+        return answerRepository.findByQuestionId(questionId);
     }
 
     public Answer getAnswerById(@PathVariable(value = "answer_id") UUID answerId) {

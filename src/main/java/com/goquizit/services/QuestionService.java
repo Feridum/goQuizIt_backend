@@ -1,6 +1,7 @@
 package com.goquizit.services;
 
 import com.goquizit.exception.ResourceNotFoundException;
+import com.goquizit.model.Answer;
 import com.goquizit.model.Question;
 import com.goquizit.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,10 @@ public class QuestionService {
 
     @Autowired
     QuestionRepository questionRepository;
+
+    @Autowired
+    AnswerService answerService;
+
 
     public Question createQuestion(@Valid Question question) {
         return questionRepository.save(question);
@@ -35,8 +40,9 @@ public class QuestionService {
 
     public ResponseEntity<?> deleteById(UUID questionId) {
         Question question = questionRepository.findById(questionId).orElseThrow(() -> new ResourceNotFoundException("Question", "id", questionId));
+        List<Answer> answers = answerService.findByQuestionId(questionId);
+        answers.forEach(answer -> answerService.deleteAnswerById(answer.getQuestionId()));
         questionRepository.delete(question);
         return ResponseEntity.ok().build();
-        //Todo delete answers!!!
     }
 }

@@ -1,10 +1,7 @@
 package com.goquizit.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.util.IdGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -15,116 +12,101 @@ import java.util.UUID;
 @Table(name = "QUIZ")
 //@EntityListeners(AuditingEntityListener.class)
 //@JsonIgnoreProperties(value = {"createdAt", "updatedAt"})
-public class Quiz{
+public class Quiz {
 
-  @Id
-  @Type(type = "pg-uuid")
-  @GeneratedValue(generator = "uuid2")
-  @GenericGenerator(name = "uuid2", strategy = "uuid2")
-  @Column(columnDefinition = "uuid")
-  private UUID id;
+    @Id
+    @Type(type = "pg-uuid")
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(columnDefinition = "uuid")
+    private UUID id;
 
-  @NotNull
-  private String token;
+    @NotNull
+    private String token;
 
-  @NotNull
-  private String title;
+    @NotNull
+    private String title;
 
-  @NotNull
-  private String state;
+    @NotNull
+    private String state;
 
-  private String startOnTime;
+    @NotNull
+    private String isKahoot;
 
-  @NotNull
-  private String isKahoot;
+    private Date startDate;
 
-  //@NotNull
-  private Date startDate;
+    private Date endDate;
 
-  //@NotNull
-  private Date endDate;
+    @NotNull
+    private String ownerId;
 
+    public UUID getId() {
+        return id;
+    }
 
-  //@NotNull
-  private String ownerId;
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
-  public UUID getId() {
-    return id;
-  }
+    public String getToken() {
+        return token;
+    }
 
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  public String getToken() {
-    return token;
-  }
-
-  public void setToken(String token) {
-    this.token = token;
-  }
+    public void setToken(String token) {
+        this.token = token;
+    }
 
 
-  public String getTitle() {
-    return title;
-  }
+    public String getTitle() {
+        return title;
+    }
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-
-  public String getState() {
-    return state;
-  }
-
-  public void setState(String state) {
-    this.state = state;
-  }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
 
-  public String getStartOnTime() {
-    return startOnTime;
-  }
+    public String getState() {
+        return state;
+    }
 
-  public void setStartOnTime(String startOnTime) {
-    this.startOnTime = startOnTime;
-  }
+    public void setState(String state) {
+        this.state = state;
+    }
 
+    public String getIsKahoot() {
+        return isKahoot;
+    }
 
-  public String getIsKahoot() {
-    return isKahoot;
-  }
-
-  public void setIsKahoot(String isKahoot) {
-    this.isKahoot = isKahoot;
-  }
-
-
-  public Date getEndDate() {
-    return endDate;
-  }
-
-  public void setEndDate(Date endDate) {
-    this.endDate = endDate;
-  }
+    public void setIsKahoot(String isKahoot) {
+        this.isKahoot = isKahoot;
+    }
 
 
-  public Date getStartDate() {
-    return startDate;
-  }
+    public Date getEndDate() {
+        return endDate;
+    }
 
-  public void setStartDate(Date startDate) {
-    this.startDate = startDate;
-  }
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
 
 
-  public String getOwnerId() {
-    return ownerId;
-  }
+    public Date getStartDate() {
+        return startDate;
+    }
 
-  public void setOwnerId(String ownerId) {
-    this.ownerId = ownerId;
-  }
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
 
 }
