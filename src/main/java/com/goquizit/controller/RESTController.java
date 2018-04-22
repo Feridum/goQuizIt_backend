@@ -40,6 +40,7 @@ public class RESTController {
 
     //--------------------------------------------------------------------
 
+    // TODO: Delete unnecessary method
     // Sample method of the application
     @GetMapping("")
     public String retu() {
@@ -50,6 +51,7 @@ public class RESTController {
 
     // Answers methods
     //Czy jest to potrzebne???
+    // TODO: delete unnecessary method; got method for creating multiple answers
     @PostMapping("/answer")
     public Answer createAnswer(@Valid @RequestBody Answer answer) {
         return answerService.createAnswer(answer);
@@ -60,19 +62,34 @@ public class RESTController {
         return answerService.createAnswers(answers,questionId);
     }
 
+    @GetMapping("/question/{question_id}/answers")
+    public List<Answer> getAnswersByQuestionId(@PathVariable("question_id") UUID questionId) {
+        return answerService.findByQuestionId(questionId);
+    }
+
     @GetMapping("/answers")
     public List<Answer> getAllAnswers() {
         return answerService.getAllAnswers();
     }
 
-    //What is that???
-    @PostMapping("/answer/{answer_id}")
+    @GetMapping("/answer/{answer_id}")
     public Answer getAnswerById(@PathVariable(value = "answer_id") UUID answerId) {
         return answerService.getAnswerById(answerId);
     }
 
+    @PutMapping("/answer/{answer_id}")
+    public ResponseEntity<?> updateAnswerById(@PathVariable(value = "answer_id") UUID answerId, @Valid @RequestBody Answer answer) {
+        return answerService.updateAnswerById(answerId, answer);
+    }
+
+    @DeleteMapping("/answer/{answer_id}")
+    public ResponseEntity<?> deleteAnswerById(@PathVariable(value = "answer_id") UUID answerId) {
+        return answerService.deleteAnswerById(answerId);
+    }
+
     //--------------------------------------------------------------------
 
+    // TODO: Implement Player API
     // Players methods
     @PostMapping("/players")
     public Player createPlayer(@Valid @RequestBody Player player) {
@@ -87,7 +104,7 @@ public class RESTController {
     //--------------------------------------------------------------------
 
     // Questions methods
-    @PostMapping("/quiz/{quiz_id}/questions/")
+    @PostMapping("/quiz/{quiz_id}/questions")
     public Question createQuestion(@PathVariable(value = "quiz_id") UUID quiz_id, @Valid @RequestBody Question question) {
         return questionService.createQuestion(quiz_id, question);
     }
@@ -107,8 +124,13 @@ public class RESTController {
         return questionService.getQuestionById(questionId);
     }
 
+    @PutMapping("/question/{question_id}")
+    public ResponseEntity<?> updateQuestionById(@PathVariable(value = "question_id") UUID questionId, @Valid @RequestBody Question question) {
+        return questionService.updateQuestionById(questionId, question);
+    }
+
     @DeleteMapping("/question/{question_id}")
-    public ResponseEntity<?> deleteAnswerById(@PathVariable(value = "question_id") UUID questionId) {
+    public ResponseEntity<?> deleteQuestionById(@PathVariable(value = "question_id") UUID questionId) {
         return questionService.deleteById(questionId);
     }
 
@@ -130,17 +152,19 @@ public class RESTController {
         return quizService.getQuizById(quizId);
     }
 
+    @PutMapping("/quiz/{quiz_id}")
+    public ResponseEntity<?> updateQuizBuId(@PathVariable(value = "quiz_id") UUID quizId, @Valid @RequestBody Quiz quiz) {
+        return quizService.updateById(quizId, quiz);
+    }
+
     @DeleteMapping("/quiz/{quiz_id}")
     public ResponseEntity<?> deleteQuizById(@PathVariable(value = "quiz_id") UUID quizId) {
         return quizService.deleteById(quizId);
     }
 
-    @PutMapping("/quiz/{quiz_id}")
-    public ResponseEntity<?> updateQuizBuId(@PathVariable(value = "quiz_id") UUID quizId, @Valid @RequestBody Quiz quiz) {
-        return quizService.updateById(quizId, quiz);
-    }
     //--------------------------------------------------------------------
 
+    // TODO: Implement User API
     // Users methods
     @PostMapping("/users")
     public Users createUser(@Valid @RequestBody Users users) {

@@ -43,6 +43,16 @@ public class QuestionService {
        return this.createQuestion(question);
     }
 
+    public ResponseEntity<?> updateQuestionById(UUID questionId, @Valid Question question)
+    {
+        Question questionToUpdate = questionRepository.getOne(questionId);
+        questionToUpdate.setValue(question.getValue());
+        questionToUpdate.setType(question.getType());
+        questionToUpdate.setDuration(question.getDuration());
+        questionRepository.save(questionToUpdate);
+        return ResponseEntity.status(204).build();
+    }
+
     public ResponseEntity<?> deleteById(UUID questionId) {
         Question question = questionRepository.findById(questionId).orElseThrow(() -> new ResourceNotFoundException("Question", "id", questionId));
         List<Answer> answers = answerService.findByQuestionId(questionId);

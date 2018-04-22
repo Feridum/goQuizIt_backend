@@ -23,7 +23,7 @@ public class QuizService {
 
 
     public Quiz createQuiz(@Valid Quiz quiz) {
-        //Todo check if ownerId exist
+        //TODO: check if ownerId exist
         return quizRepository.save(quiz);
     }
 
@@ -36,14 +36,7 @@ public class QuizService {
                 .orElseThrow(() -> new ResourceNotFoundException("Quiz", "id", quizId));
     }
 
-    public ResponseEntity<?> deleteById(UUID quizId) {
-        Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new ResourceNotFoundException("Quiz", "id", quizId));
-        List<Question> questions = questionService.findByQuizId(quizId);
-        questions.forEach(question -> questionService.deleteById(question.getQuestionId()));
-        quizRepository.delete(quiz);
-        return ResponseEntity.status(204).build();
-    }
-
+    // TODO: consider changing method name: updateById -> updateQuizById
     public ResponseEntity<?> updateById(UUID quizId, @Valid Quiz quiz)
     {
         Quiz quizToUpdate = quizRepository.getOne(quizId);
@@ -53,7 +46,17 @@ public class QuizService {
         quizToUpdate.setEndDate(quiz.getEndDate());
         quizToUpdate.setOwnerId(quiz.getOwnerId());
         quizToUpdate.setStartDate(quiz.getStartDate());
+
         quizRepository.save(quizToUpdate);
+        return ResponseEntity.status(204).build();
+    }
+
+    // TODO: consider changing method name: deleteById -> deleteQuizById
+    public ResponseEntity<?> deleteById(UUID quizId) {
+        Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new ResourceNotFoundException("Quiz", "id", quizId));
+        List<Question> questions = questionService.findByQuizId(quizId);
+        questions.forEach(question -> questionService.deleteById(question.getQuestionId()));
+        quizRepository.delete(quiz);
         return ResponseEntity.status(204).build();
     }
 }

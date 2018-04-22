@@ -45,6 +45,15 @@ public class AnswerService {
         return answerRepository.findById(answerId).orElseThrow(() -> new ResourceNotFoundException("Answer", "id", answerId));
     }
 
+    public ResponseEntity<?> updateAnswerById(UUID answerId, @Valid Answer answer)
+    {
+        Answer answerToUpdate = answerRepository.getOne(answerId);
+        answerToUpdate.setValue(answer.getValue());
+        answerToUpdate.setIsPositive(answer.getIsPositive());
+        answerRepository.save(answerToUpdate);
+        return ResponseEntity.status(204).build();
+    }
+
     public ResponseEntity<?> deleteAnswerById(UUID answerId) {
         Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new ResourceNotFoundException("Answer", "id", answerId));
         answerRepository.delete(answer);
