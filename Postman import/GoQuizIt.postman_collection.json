@@ -1,0 +1,339 @@
+{
+	"info": {
+		"_postman_id": "4aae4383-0e4e-4d23-890e-22c1612ab9a8",
+		"name": "GoQuizIt",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get all quizzes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8082/api/quiz",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"quiz"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add quiz",
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"value": "",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"token\": \"abc\",\n\t\"title\": \"title2\",\n\t\"state\": \"state\",\n\t\"isKahoot\": false,\n\t\"ownerId\": \"123456\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8082/api/quiz/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"quiz",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update quiz",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"token\": \"abc\",\n\t\"title\": \"update title\",\n\t\"state\": \"state\",\n\t\"isKahoot\": false,\n\t\"ownerId\": \"123456\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8082/api/quiz/0612566d-3a87-4c96-a8fe-898c1a5b4bab",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"quiz",
+						"0612566d-3a87-4c96-a8fe-898c1a5b4bab"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete quiz",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8082/api/quiz/0612566d-3a87-4c96-a8fe-898c1a5b4bab",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"quiz",
+						"0612566d-3a87-4c96-a8fe-898c1a5b4bab"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add question",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huTm93In0.GKUUmiqKgT5pA98TbCHz6hLi6oW__86d-hkSUA3TJUB14gt0E2Nuh1Fn8QuldVj2S95mA1baUfWaHniPvVh-tQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"value\": \"My fiewrst question1gr111e\",\n\t\"duration\": 140,\n\t\"type\": \"SINGLE_CHOICE\"\n}\n\n"
+				},
+				"url": {
+					"raw": "http://localhost:8082/api/quiz/ca5bb07b-c82e-4c1c-a1de-7ef884cc39a2/questions/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"quiz",
+						"ca5bb07b-c82e-4c1c-a1de-7ef884cc39a2",
+						"questions",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get quiz questions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8082/api/quiz/0612566d-3a87-4c96-a8fe-898c1a5b4bab/questions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"quiz",
+						"0612566d-3a87-4c96-a8fe-898c1a5b4bab",
+						"questions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all questions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8082/api/questions/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"questions",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete question",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8082/api/question/60fb4e35-e2fd-4016-b136-eb6fb92baaff",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"question",
+						"60fb4e35-e2fd-4016-b136-eb6fb92baaff"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add answers to question",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n\t{\n\t\"value\" : \"odpowiedz1\",\n\t\"isPositive\": true\n\t}, \n\t{\n\t\"value\" : \"odpowiedz2\",\n\t\"isPositive\": false\n\t}\n]"
+				},
+				"url": {
+					"raw": "http://localhost:8082/api//question/648227e3-3d50-4395-8456-ebcfd44126c3/answers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"",
+						"question",
+						"648227e3-3d50-4395-8456-ebcfd44126c3",
+						"answers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all answers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8082/api/answers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"answers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "put answer",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"questionId\": \"65b2fdbb-af11-44d9-82c4-809ddc155587\",\n\"value\": \"Jak najbardziej\",\n\"isPositive\": false\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8082/api/answers/5b71b46d-a383-4161-9912-3e2e68c1c5cd",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"answers",
+						"5b71b46d-a383-4161-9912-3e2e68c1c5cd"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete answer",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8082/api/answer/f03081b3-5709-45c4-b523-0b6d0ec9522a",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"answer",
+						"f03081b3-5709-45c4-b523-0b6d0ec9522a"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

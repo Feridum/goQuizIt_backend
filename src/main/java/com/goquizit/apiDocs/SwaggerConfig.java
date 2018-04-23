@@ -1,4 +1,4 @@
-package com.goquizit.config;
+package com.goquizit.apiDocs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
