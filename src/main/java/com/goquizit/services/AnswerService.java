@@ -1,15 +1,18 @@
 package com.goquizit.services;
 
+import com.goquizit.DTO.CreateUpdateAnswersDTO;
 import com.goquizit.exception.ResourceNotFoundException;
 import com.goquizit.model.Answer;
 import com.goquizit.repository.AnswerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,13 +26,18 @@ public class AnswerService {
         return answerRepository.save(answer);
     }
 
-    public List<Answer> createAnswers(@Valid List<Answer> answers, UUID questionId)
+    public List<Answer> createAnswers(@Valid List<CreateUpdateAnswersDTO> createUpdateAnswersDTOS, UUID questionId)
     {
-        answers.forEach(answer ->
+        List<Answer> answers = new ArrayList<>();
+        for(int i=0; i<createUpdateAnswersDTOS.size();++i)
         {
-            answer.setQuestionId(questionId);
-            answerRepository.save(answer);
-        });
+            Answer newAnswer = new Answer();
+            newAnswer.setValue(createUpdateAnswersDTOS.get(i).getValue());
+            newAnswer.setIsPositive(createUpdateAnswersDTOS.get(i).isPositive());
+            newAnswer.setQuestionId(questionId);
+            answerRepository.save(newAnswer);
+            answers.add(newAnswer);
+        }
         return answers;
     }
 
@@ -45,13 +53,13 @@ public class AnswerService {
         return answerRepository.findById(answerId).orElseThrow(() -> new ResourceNotFoundException("Answer", "id", answerId));
     }
 
-    public ResponseEntity<?> updateAnswerById(UUID answerId, @Valid Answer answer)
+    public ResponseEntity<?> updateAnswerById(UUID answerId, @Valid CreateUpdateAnswersDTO answer)
     {
         Answer answerToUpdate = answerRepository.getOne(answerId);
         answerToUpdate.setValue(answer.getValue());
-        answerToUpdate.setIsPositive(answer.getIsPositive());
+        answerToUpdate.setIsPositive(answer.isPositive());
         answerRepository.save(answerToUpdate);
-        return ResponseEntity.status(204).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     public ResponseEntity<?> deleteAnswerById(UUID answerId) {

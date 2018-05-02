@@ -7,7 +7,7 @@ import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-public class CreateQuizDTO {
+public class CreateUpdateQuizDTO {
     @NotNull
     private String title;
 

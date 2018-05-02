@@ -24,10 +24,8 @@ public class Answer {
 
     private UUID questionId;
 
-    @NotNull
     private String value;
 
-    @NotNull
     private boolean isPositive;
 
 

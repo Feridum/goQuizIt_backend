@@ -25,15 +25,10 @@ public class Question {
 
   private UUID quizId;
 
-  @NotNull
   private String value;
 
-  @NotNull
-  @Enumerated(EnumType.STRING)
   private QuestionState type;
 
-  @NotNull
-  @Min(1)
   private int duration;
 
 

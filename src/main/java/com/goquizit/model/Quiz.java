@@ -1,7 +1,6 @@
 package com.goquizit.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.goquizit.services.QuizService;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -24,24 +23,19 @@ public class Quiz {
     @Column(columnDefinition = "uuid")
     private UUID id;
 
-    @NotNull
     private String token;
 
-    @NotNull
     private String title;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     private QuizState state;
 
-    @NotNull
-    private String isKahoot;
+    private boolean isKahoot;
 
     private Date startDate;
 
     private Date endDate;
 
-    @NotNull
     private String ownerId;
 
     public UUID getId() {
@@ -76,11 +70,11 @@ public class Quiz {
         this.state = state;
     }
 
-    public String getIsKahoot() {
+    public boolean getIsKahoot() {
         return isKahoot;
     }
 
-    public void setIsKahoot(String isKahoot) {
+    public void setIsKahoot(boolean isKahoot) {
         this.isKahoot = isKahoot;
     }
 
