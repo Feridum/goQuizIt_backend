@@ -1,18 +1,24 @@
 package com.goquizit.services;
 
 import com.goquizit.DTO.CreateUpdateQuizDTO;
+import com.goquizit.DTO.QuizOutputDTO;
+import com.goquizit.DTO.TokenDto;
+import com.goquizit.exception.InvalidContentException;
 import com.goquizit.exception.ResourceNotFoundException;
-import com.goquizit.model.Question;
+import com.goquizit.exception.UnknownRepositoryException;
 import com.goquizit.model.Quiz;
 import com.goquizit.model.QuizState;
 import com.goquizit.repository.QuizRepository;
 import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.PersistenceException;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,55 +32,60 @@ public class QuizService {
     QuestionService questionService;
 
 
-    public Quiz createQuiz(@Valid CreateUpdateQuizDTO createQuizDTO) {
+    public QuizOutputDTO createQuiz(@Valid CreateUpdateQuizDTO createQuizDTO) {
         //TODO: check if ownerId exist
         Quiz quiz = new Quiz();
+        quiz = checkQuizIsKahoot(quiz, createQuizDTO);
         quiz.setTitle(createQuizDTO.getTitle());
         quiz.setOwnerId(createQuizDTO.getOwnerId());
         quiz.setIsKahoot(createQuizDTO.getIsKahoot());
-        if(createQuizDTO.getIsKahoot())
-        {
-            quiz.setStartDate(createQuizDTO.getStartDate());
-            quiz.setEndDate(createQuizDTO.getEndDate());
-        }
         quiz.setToken(generateToken());
         quiz.setState(QuizState.INACTIVE);
-        return quizRepository.save(quiz);
+
+        Quiz newQuiz = quizRepository.save(quiz);
+        return mapQuizToOutput(newQuiz);
     }
 
-    public List<Quiz> getAllQuizzes() {
-        return quizRepository.findAll();
+    public List<QuizOutputDTO> getAllQuizzes() {
+        List<Quiz> quizzes = quizRepository.findAll();
+        List<QuizOutputDTO> outputDTOS = new ArrayList<>();
+        quizzes.forEach(quiz -> outputDTOS.add(mapQuizToOutput(quiz)));
+        return outputDTOS;
     }
 
-    public Quiz getQuizById(UUID quizId) {
-        return quizRepository.findById(quizId)
+    public QuizOutputDTO getQuizById(UUID quizId) throws ResourceNotFoundException {
+        Quiz quiz = quizRepository.findById(quizId)
                 .orElseThrow(() -> new ResourceNotFoundException("Quiz", "id", quizId));
+        return mapQuizToOutput(quiz);
     }
 
-    // TODO: consider changing method name: updateById -> updateQuizById
-    public ResponseEntity<?> updateById(UUID quizId, @Valid CreateUpdateQuizDTO quiz) {
-        Quiz quizToUpdate = quizRepository.getOne(quizId);
-        quizToUpdate.setTitle(quiz.getTitle());
-        quizToUpdate.setState(quiz.getState());
-        quizToUpdate.setIsKahoot(quiz.getIsKahoot());
-        quizToUpdate.setEndDate(quiz.getEndDate());
-        quizToUpdate.setOwnerId(quiz.getOwnerId());
-        quizToUpdate.setStartDate(quiz.getStartDate());
+    public QuizOutputDTO updateQuizById(UUID quizId, @Valid CreateUpdateQuizDTO quiz) {
+        try {
+            Quiz quizToUpdate = quizRepository.getOne(quizId);
+            quizToUpdate = checkQuizIsKahoot(quizToUpdate, quiz);
+            quizToUpdate.setTitle(quiz.getTitle());
+            quizToUpdate.setState(quiz.getState());
+            quizToUpdate.setIsKahoot(quiz.getIsKahoot());
+            quizToUpdate.setEndDate(quiz.getEndDate());
+            quizToUpdate.setOwnerId(quiz.getOwnerId());
+            quizToUpdate.setStartDate(quiz.getStartDate());
 
-        quizRepository.save(quizToUpdate);
-        return ResponseEntity.status(204).build();
+            Quiz newQuiz = quizRepository.save(quizToUpdate);
+            return mapQuizToOutput(newQuiz);
+        } catch (PersistenceException e) {
+            throw new UnknownRepositoryException(e.getMessage());
+        }
     }
 
-    // TODO: consider changing method name: deleteById -> deleteQuizById
-    public ResponseEntity<?> deleteById(UUID quizId) {
+    public ResponseEntity deleteQuizById(UUID quizId) {
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new ResourceNotFoundException("Quiz", "id", quizId));
-        List<Question> questions = questionService.findByQuizId(quizId);
-        questions.forEach(question -> questionService.deleteById(question.getQuestionId()));
+        //List<Question> questions = questionService.getQuestionsByQuizId(quizId);
+        // questions.forEach(question -> questionService.deleteById(question.getQuestionId()));
         quizRepository.delete(quiz);
-        return ResponseEntity.status(204).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    public String generateToken() {
+    private String generateToken() {
         RandomStringGenerator randomStringGenerator =
                 new RandomStringGenerator.Builder()
                         .withinRange('0', 'z')
@@ -83,8 +94,60 @@ public class QuizService {
         return randomStringGenerator.generate(8);
     }
 
-    public String getToken(UUID quizId) {
+    public TokenDto getToken(UUID quizId) throws ResourceNotFoundException {
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new ResourceNotFoundException("Quiz", "id", quizId));
-        return quiz.getToken();
+        return new TokenDto(quiz.getToken());
+    }
+
+    public Quiz getOne(UUID quizId) {
+        try {
+            return quizRepository.getOne(quizId);
+        } catch (PersistenceException e) {
+            throw new UnknownRepositoryException(e.getMessage());
+        }
+    }
+
+    public Quiz save(Quiz quiz) {
+        return quizRepository.save(quiz);
+    }
+
+    public QuizOutputDTO changeState(UUID quizId, @Valid QuizState quizState) {
+        Quiz quiz = quizRepository.getOne(quizId);
+        quiz.setState(quizState);
+        Quiz newQuiz = quizRepository.save(quiz);
+        return mapQuizToOutput(newQuiz);
+    }
+
+    public List<QuizOutputDTO> getByState(@Valid QuizState quizState) {
+        List<Quiz> quizzes = quizRepository.findByState(quizState);
+        List<QuizOutputDTO> outputDTOS = new ArrayList<>();
+        quizzes.forEach(quiz -> outputDTOS.add(mapQuizToOutput(quiz)));
+        return outputDTOS;
+    }
+
+    private QuizOutputDTO mapQuizToOutput(Quiz quiz) {
+        QuizOutputDTO outputDTO = new QuizOutputDTO();
+        outputDTO.setId(quiz.getId());
+        outputDTO.setEndDate(quiz.getEndDate());
+        outputDTO.setKahoot(quiz.getIsKahoot());
+        outputDTO.setOwnerId(quiz.getOwnerId());
+        outputDTO.setTitle(quiz.getTitle());
+        outputDTO.setStartDate(quiz.getStartDate());
+        outputDTO.setState(quiz.getState());
+        outputDTO.setToken(quiz.getToken());
+        return outputDTO;
+    }
+
+    private Quiz checkQuizIsKahoot(Quiz quiz, CreateUpdateQuizDTO createQuizDTO) throws InvalidContentException {
+        if (createQuizDTO.getIsKahoot()) {
+            if (createQuizDTO.getEndDate() != null && createQuizDTO.getStartDate() != null) {
+                quiz.setStartDate(createQuizDTO.getStartDate());
+                quiz.setEndDate(createQuizDTO.getEndDate());
+                return quiz;
+            } else {
+                throw new InvalidContentException("StartDate,endDate");
+            }
+        }
+        return quiz;
     }
 }

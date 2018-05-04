@@ -4,6 +4,7 @@ package com.goquizit.DTO;
         import com.goquizit.model.Question;
 
         import java.util.List;
+        import java.util.Set;
 
 public class QuestionWithAnswersInputDTO {
     private CreateUpdateQuestionDTO question;

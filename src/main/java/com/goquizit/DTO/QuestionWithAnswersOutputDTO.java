@@ -6,27 +6,27 @@ import com.goquizit.model.Question;
 import java.util.List;
 
 public class QuestionWithAnswersOutputDTO {
-    private Question question;
-    private List<Answer> answers;
+    private QuestionOutputDTO questionOutputDTO;
+    private List<AnswerOutputDTO> answerOutputDTOS;
 
-    public QuestionWithAnswersOutputDTO(Question question, List<Answer> answers) {
-        this.question = question;
-        this.answers = answers;
+    public QuestionWithAnswersOutputDTO(QuestionOutputDTO questionOutputDTO, List<AnswerOutputDTO> answerOutputDTOS) {
+        this.questionOutputDTO = questionOutputDTO;
+        this.answerOutputDTOS = answerOutputDTOS;
     }
 
-    public Question getQuestion() {
-        return question;
+    public QuestionOutputDTO getQuestionOutputDTO() {
+        return questionOutputDTO;
     }
 
-    public void setQuestion(Question question) {
-        this.question = question;
+    public void setQuestionOutputDTO(QuestionOutputDTO questionOutputDTO) {
+        this.questionOutputDTO = questionOutputDTO;
     }
 
-    public List<Answer> getAnswers() {
-        return answers;
+    public List<AnswerOutputDTO> getAnswerOutputDTOS() {
+        return answerOutputDTOS;
     }
 
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
+    public void setAnswerOutputDTOS(List<AnswerOutputDTO> answerOutputDTOS) {
+        this.answerOutputDTOS = answerOutputDTOS;
     }
 }

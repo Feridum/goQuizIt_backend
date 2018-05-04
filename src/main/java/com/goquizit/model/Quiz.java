@@ -6,8 +6,8 @@ import org.hibernate.annotations.Type;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -24,6 +24,10 @@ public class Quiz {
     private UUID id;
 
     private String token;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "quiz")
+    private List<Question> questionSet;
 
     private String title;
 
@@ -100,5 +104,18 @@ public class Quiz {
 
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
+    }
+
+    public List<Question> getQuestions() {
+        return questionSet;
+    }
+
+    public void setQuestionSet(List<Question> questionSet) {
+        this.questionSet = questionSet;
+    }
+
+    public Question getLastQuestion()
+    {
+       return questionSet.get(questionSet.size()-1);
     }
 }

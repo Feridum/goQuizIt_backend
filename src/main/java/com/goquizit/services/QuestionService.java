@@ -1,21 +1,21 @@
 package com.goquizit.services;
 
-import com.goquizit.DTO.CreateUpdateAnswersDTO;
-import com.goquizit.DTO.CreateUpdateQuestionDTO;
-import com.goquizit.DTO.QuestionWithAnswersInputDTO;
-import com.goquizit.DTO.QuestionWithAnswersOutputDTO;
+import com.goquizit.DTO.*;
+import com.goquizit.exception.InvalidContentException;
 import com.goquizit.exception.ResourceNotFoundException;
+import com.goquizit.exception.UnknownRepositoryException;
 import com.goquizit.model.Answer;
 import com.goquizit.model.Question;
 import com.goquizit.model.Quiz;
 import com.goquizit.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.PersistenceException;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,103 +32,136 @@ public class QuestionService {
     QuizService quizService;
 
 
-    public Question createQuestion(@Valid Question question) {
+    public List<QuestionOutputDTO> getQuestionsByQuizId(UUID quizId) {
+        try {
+            List<Question> questions = quizService.getOne(quizId).getQuestions();
+            List<QuestionOutputDTO> outputDTOS = new ArrayList<>();
+            questions.forEach(question -> outputDTOS.add(mapQuestionToOutput(question, quizId)));
+            return outputDTOS;
+        } catch (PersistenceException e) {
+            throw new UnknownRepositoryException(e.getMessage());
+        }
+    }
+
+    //ToDO check how to get quizId - query
+    public QuestionOutputDTO getQuestionById(UUID questionId) throws ResourceNotFoundException {
+        Question question = questionRepository.findById(questionId).orElseThrow(() -> new ResourceNotFoundException("Question", "id", questionId));
+        return mapQuestionToOutput(question, question.getQuiz().getId());
+    }
+
+    public List<QuestionOutputDTO> getAllQuestions() {
+        List<Question> questions = questionRepository.findAll();
+        List<QuestionOutputDTO> outputDTOS = new ArrayList<>();
+        questions.forEach(question -> outputDTOS.add(mapQuestionToOutput(question, question.getQuizId())));
+        return outputDTOS;
+    }
+
+    public QuestionOutputDTO createQuestion(UUID quiz_id, @Valid CreateUpdateQuestionDTO createUpdateQuestionDTO) {
+        try {
+            Question question = mapDtoToQuestion(quiz_id, createUpdateQuestionDTO);
+            Quiz quiz = quizService.getOne(quiz_id);
+            quiz.getQuestions().add(question);
+            Quiz tempQuiz = quizService.save(quiz);
+            Question newQuestion = tempQuiz.getQuestions().get(tempQuiz.getQuestions().size() - 1);
+            return mapQuestionToOutput(newQuestion, quiz_id);
+        } catch (PersistenceException e) {
+            throw new UnknownRepositoryException(e.getMessage());
+        }
+    }
+
+
+    public QuestionOutputDTO updateQuestionById(UUID questionId, @Valid CreateUpdateQuestionDTO question) {
+        Question questionToUpdate = mapDtoToQuestionUpdate(questionId, question);
+        questionRepository.save(questionToUpdate);
+        return mapQuestionToOutput(questionToUpdate, questionToUpdate.getQuizId());
+    }
+
+    public ResponseEntity deleteById(UUID questionId) throws ResourceNotFoundException {
+        Question question = questionRepository.findById(questionId).orElseThrow(() -> new ResourceNotFoundException("Question", "id", questionId));
+        questionRepository.delete(question);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    public QuestionWithAnswersOutputDTO createQuestionWithAnswers(UUID quiz_id, @Valid QuestionWithAnswersInputDTO questionWithAnswersInputDTO) {
+        try {
+            CreateUpdateQuestionDTO createUpdateQuestionDTO = questionWithAnswersInputDTO.getQuestion();
+            List<CreateUpdateAnswersDTO> createUpdateAnswersDTOS = questionWithAnswersInputDTO.getAnswers();
+            Question question = mapDtoToQuestion(quiz_id, createUpdateQuestionDTO);
+            Quiz quiz = quizService.getOne(quiz_id);
+            quiz.getQuestions().add(question);
+            Quiz newQuiz = quizService.save(quiz);
+            List<AnswerOutputDTO> outputAnswerDTOS = answerService.createAnswers(createUpdateAnswersDTOS, newQuiz.getLastQuestion().getQuestionId());
+            QuestionOutputDTO outputDTO = mapQuestionToOutput(newQuiz.getLastQuestion(), quiz_id);
+            return new QuestionWithAnswersOutputDTO(outputDTO, outputAnswerDTOS);
+        } catch (PersistenceException e) {
+            throw new UnknownRepositoryException(e.getMessage());
+        }
+    }
+
+    public QuestionWithAnswersOutputDTO updateQuestionWithAnswers(UUID question_id, @Valid QuestionWithAnswersInputDTO questionWithAnswersInputDTO) {
+        try {
+            CreateUpdateQuestionDTO createUpdateQuestionDTO = questionWithAnswersInputDTO.getQuestion();
+            List<CreateUpdateAnswersDTO> createUpdateAnswersDTOS = questionWithAnswersInputDTO.getAnswers();
+            Question question = mapDtoToQuestionUpdate(question_id, createUpdateQuestionDTO);
+            question.getAnswers().forEach(answer -> answerService.delete(answer));
+            List<Answer> answers = answerService.mapDtoToAnswers(createUpdateAnswersDTOS);
+            question.setAnswers(answers);
+            Question newQuestion = questionRepository.save(question);
+            return new QuestionWithAnswersOutputDTO(mapQuestionToOutput(newQuestion, newQuestion.getQuizId()), answerService.mapAnswersToOutput(answers, question_id));
+        } catch (PersistenceException e) {
+            throw new UnknownRepositoryException(e.getMessage());
+        }
+    }
+
+    private int setDuration(UUID quiz_id, int duration) {
+        QuizOutputDTO quiz = quizService.getQuizById(quiz_id);
+        if (quiz.isKahoot()) {
+            if (duration < 1)
+                throw new InvalidContentException("Duration");
+        }
+        return duration;
+    }
+
+    public Question getOne(UUID quiestionId) {
+        return questionRepository.getOne(quiestionId);
+    }
+
+    public Question save(Question question) {
         return questionRepository.save(question);
     }
 
-    public List<Question> findByQuizId(UUID quizId) {
-        return questionRepository.findByQuizId(quizId);
+    private Question mapDtoToQuestion(UUID quiz_id, @Valid CreateUpdateQuestionDTO createUpdateQuestionDTO) {
+        Question question = new Question();
+        question.setType(createUpdateQuestionDTO.getType());
+        question.setValue(createUpdateQuestionDTO.getValue());
+        question.setDuration(setDuration(quiz_id, createUpdateQuestionDTO.getDuration()));
+        return question;
     }
 
-    public Question getQuestionById(UUID questionId) {
-        return questionRepository.findById(questionId).orElseThrow(() -> new ResourceNotFoundException("Question", "id", questionId));
-    }
-
-    public List<Question> getAllQuestions() {
-        return questionRepository.findAll();
-    }
-
-    public ResponseEntity<?> createQuestion(UUID quiz_id, @Valid CreateUpdateQuestionDTO createUpdateQuestionDTO) {
-        try
-        {
-            Question question = new Question();
-            question.setType(createUpdateQuestionDTO.getType());
-            question.setValue(createUpdateQuestionDTO.getValue());
-            question.setDuration(setDuration(quiz_id, createUpdateQuestionDTO.getDuration()));
-            question.setQuizId(quiz_id);
-            Question newQuestion = this.createQuestion(question);
-           return ResponseEntity.status(HttpStatus.CREATED).body(newQuestion);
-        }
-        catch (Exception e)
-        {
-           return ResponseEntity.status(HttpStatus.CREATED).body(e.getMessage());
-        }
-    }
-
-    public ResponseEntity<?> updateQuestionById(UUID questionId, @Valid CreateUpdateQuestionDTO question)
-    {
+    private Question mapDtoToQuestionUpdate(UUID questionId, @Valid CreateUpdateQuestionDTO question) {
         Question questionToUpdate = questionRepository.getOne(questionId);
         questionToUpdate.setValue(question.getValue());
         questionToUpdate.setType(question.getType());
         questionToUpdate.setDuration(question.getDuration());
-        questionRepository.save(questionToUpdate);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return questionToUpdate;
     }
 
-    public ResponseEntity<?> deleteById(UUID questionId) {
-        Question question = questionRepository.findById(questionId).orElseThrow(() -> new ResourceNotFoundException("Question", "id", questionId));
-        List<Answer> answers = answerService.findByQuestionId(questionId);
-        answers.forEach(answer -> answerService.deleteAnswerById(answer.getQuestionId()));
-        questionRepository.delete(question);
-        return ResponseEntity.ok().build();
-    }
-
-    public ResponseEntity<?> createQuestionWithAnswers(UUID quiz_id, @Valid QuestionWithAnswersInputDTO questionWithAnswersInputDTO)
-    {
-        try
-        {
-            CreateUpdateQuestionDTO createUpdateQuestionDTO = questionWithAnswersInputDTO.getQuestion();
-            List<CreateUpdateAnswersDTO> createUpdateAnswersDTOS = questionWithAnswersInputDTO.getAnswers();
-            Question question = (Question) this.createQuestion(quiz_id,createUpdateQuestionDTO).getBody();
-            question.setQuizId(quiz_id);
-            questionRepository.save(question);
-            final UUID questionId = question.getQuestionId();
-            List<Answer> answers =  answerService.createAnswers(createUpdateAnswersDTOS, questionId);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new QuestionWithAnswersOutputDTO(question, answers));
-        }
-        catch(Exception e)
-        {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-
-    }
-
-    public ResponseEntity<?> updateQuestionWithAnswers(UUID question_id, @Valid QuestionWithAnswersInputDTO questionWithAnswersInputDTO)
-    {
-        try
-        {
-            CreateUpdateQuestionDTO createUpdateQuestionDTO = questionWithAnswersInputDTO.getQuestion();
-            List<CreateUpdateAnswersDTO> createUpdateAnswersDTOS = questionWithAnswersInputDTO.getAnswers();
-            this.updateQuestionById(question_id,createUpdateQuestionDTO);
-            List<Answer> answersToDelete = answerService.findByQuestionId(question_id);
-            answersToDelete.forEach(answer -> answerService.deleteAnswerById(answer.getAnswerId()));
-            answerService.createAnswers(createUpdateAnswersDTOS,question_id);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }
-        catch(RuntimeException e)
-        {
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    public List<AnswerOutputDTO> getAnswersByQuestionID(UUID questionId) {
+        try {
+            List<Answer> answers = questionRepository.getOne(questionId).getAnswers();
+            return answerService.mapAnswersToOutput(answers);
+        } catch (PersistenceException e) {
+            throw new UnknownRepositoryException(e.getMessage());
         }
     }
 
-    private int setDuration(UUID quiz_id, int duration) throws Exception {
-        Quiz quiz = quizService.getQuizById(quiz_id);
-        if(quiz.getIsKahoot())
-        {
-            if(duration < 1)
-                throw new Exception("Duration must be correctly declared");
-        }
-        return duration;
+    private QuestionOutputDTO mapQuestionToOutput(Question question, UUID quizId) {
+        QuestionOutputDTO outputDTO = new QuestionOutputDTO();
+        outputDTO.setQuestionId(question.getQuestionId());
+        outputDTO.setDuration(question.getDuration());
+        outputDTO.setType(question.getType());
+        outputDTO.setValue(question.getValue());
+        outputDTO.setQuizId(quizId);
+        return outputDTO;
     }
 }
