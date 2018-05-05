@@ -1,4 +1,4 @@
-package com.goquizit.DTO;
+package com.goquizit.DTO.outputDTO;
 
 import com.goquizit.model.Question;
 import com.goquizit.model.QuizState;

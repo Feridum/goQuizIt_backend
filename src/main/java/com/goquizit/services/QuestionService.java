@@ -1,6 +1,9 @@
 package com.goquizit.services;
 
 import com.goquizit.DTO.*;
+import com.goquizit.DTO.outputDTO.AnswerOutputDTO;
+import com.goquizit.DTO.outputDTO.QuestionOutputDTO;
+import com.goquizit.DTO.outputDTO.QuizOutputDTO;
 import com.goquizit.exception.InvalidContentException;
 import com.goquizit.exception.ResourceNotFoundException;
 import com.goquizit.exception.UnknownRepositoryException;
@@ -142,7 +145,8 @@ public class QuestionService {
         Question questionToUpdate = questionRepository.getOne(questionId);
         questionToUpdate.setValue(question.getValue());
         questionToUpdate.setType(question.getType());
-        questionToUpdate.setDuration(question.getDuration());
+        if(question.getDuration() > 0)
+            questionToUpdate.setDuration(question.getDuration());
         return questionToUpdate;
     }
 

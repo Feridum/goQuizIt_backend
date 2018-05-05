@@ -1,9 +1,9 @@
-package com.goquizit.DTO;
+package com.goquizit.DTO.outputDTO;
 
-public class TokenDto {
+public class TokenOutputDto {
     String token;
 
-    public TokenDto(String token) {
+    public TokenOutputDto(String token) {
         this.token = token;
     }
 

@@ -1,7 +1,7 @@
 package com.goquizit.DTO;
 
-import com.goquizit.model.Answer;
-import com.goquizit.model.Question;
+import com.goquizit.DTO.outputDTO.AnswerOutputDTO;
+import com.goquizit.DTO.outputDTO.QuestionOutputDTO;
 
 import java.util.List;
 

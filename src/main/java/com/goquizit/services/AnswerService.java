@@ -1,6 +1,6 @@
 package com.goquizit.services;
 
-import com.goquizit.DTO.AnswerOutputDTO;
+import com.goquizit.DTO.outputDTO.AnswerOutputDTO;
 import com.goquizit.DTO.CreateUpdateAnswersDTO;
 import com.goquizit.exception.ResourceNotFoundException;
 import com.goquizit.exception.UnknownRepositoryException;

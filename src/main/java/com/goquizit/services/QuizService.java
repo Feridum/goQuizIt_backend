@@ -1,8 +1,8 @@
 package com.goquizit.services;
 
 import com.goquizit.DTO.CreateUpdateQuizDTO;
-import com.goquizit.DTO.QuizOutputDTO;
-import com.goquizit.DTO.TokenDto;
+import com.goquizit.DTO.outputDTO.QuizOutputDTO;
+import com.goquizit.DTO.outputDTO.TokenOutputDto;
 import com.goquizit.exception.InvalidContentException;
 import com.goquizit.exception.ResourceNotFoundException;
 import com.goquizit.exception.UnknownRepositoryException;
@@ -64,11 +64,14 @@ public class QuizService {
             Quiz quizToUpdate = quizRepository.getOne(quizId);
             quizToUpdate = checkQuizIsKahoot(quizToUpdate, quiz);
             quizToUpdate.setTitle(quiz.getTitle());
-            quizToUpdate.setState(quiz.getState());
-            quizToUpdate.setIsKahoot(quiz.getIsKahoot());
-            quizToUpdate.setEndDate(quiz.getEndDate());
             quizToUpdate.setOwnerId(quiz.getOwnerId());
-            quizToUpdate.setStartDate(quiz.getStartDate());
+            quizToUpdate.setIsKahoot(quiz.getIsKahoot());
+            if (quiz.getEndDate() != null)
+                quizToUpdate.setEndDate(quiz.getEndDate());
+            if (quiz.getState() != null)
+                quizToUpdate.setState(quiz.getState());
+            if (quiz.getStartDate() != null)
+                quizToUpdate.setStartDate(quiz.getStartDate());
 
             Quiz newQuiz = quizRepository.save(quizToUpdate);
             return mapQuizToOutput(newQuiz);
@@ -94,9 +97,9 @@ public class QuizService {
         return randomStringGenerator.generate(8);
     }
 
-    public TokenDto getToken(UUID quizId) throws ResourceNotFoundException {
+    public TokenOutputDto getToken(UUID quizId) throws ResourceNotFoundException {
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new ResourceNotFoundException("Quiz", "id", quizId));
-        return new TokenDto(quiz.getToken());
+        return new TokenOutputDto(quiz.getToken());
     }
 
     public Quiz getOne(UUID quizId) {
