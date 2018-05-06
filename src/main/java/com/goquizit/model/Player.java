@@ -1,6 +1,8 @@
 package com.goquizit.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -13,13 +15,13 @@ import javax.persistence.*;
 public class Player {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Type(type = "pg-uuid")
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(columnDefinition = "uuid")
     private String playerId;
 
     private Long quizId;
-
-    private String quizIdQuiz;
-
 
     public String getPlayerId() {
         return playerId;
@@ -29,7 +31,6 @@ public class Player {
         this.playerId = playerId;
     }
 
-
     public Long getQuizId() {
         return quizId;
     }
@@ -37,13 +38,4 @@ public class Player {
     public void setQuizId(Long quizId) {
         this.quizId = quizId;
     }
-
-    public String getQuizIdQuiz() {
-        return quizIdQuiz;
-    }
-
-    public void setQuizIdQuiz(String quizIdQuiz) {
-        this.quizIdQuiz = quizIdQuiz;
-    }
-
 }

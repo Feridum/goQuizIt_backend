@@ -1,10 +1,14 @@
 package com.goquizit.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "playersanswers")
@@ -14,35 +18,17 @@ import javax.validation.constraints.NotNull;
 public class PlayerAnswer {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private String answerId;
+  @Type(type = "pg-uuid")
+  @GeneratedValue(generator = "uuid2")
+  @GenericGenerator(name = "uuid2", strategy = "uuid2")
+  @Column(columnDefinition = "uuid")
+  private UUID id;
 
   @NotNull
-  private String questionId;
+  private List<Answer> answers;
 
   @NotNull
   private String value;
-
-  private String playerIdPlayer;
-  private String questionIdQuestion;
-
-
-  public String getAnswerId() {
-    return answerId;
-  }
-
-  public void setAnswerId(String answerId) {
-    this.answerId = answerId;
-  }
-
-
-  public String getQuestionId() {
-    return questionId;
-  }
-
-  public void setQuestionId(String questionId) {
-    this.questionId = questionId;
-  }
 
 
   public String getValue() {
@@ -53,22 +39,19 @@ public class PlayerAnswer {
     this.value = value;
   }
 
-
-  public String getPlayerIdPlayer() {
-    return playerIdPlayer;
+  public UUID getId() {
+    return id;
   }
 
-  public void setPlayerIdPlayer(String playerIdPlayer) {
-    this.playerIdPlayer = playerIdPlayer;
+  public void setId(UUID id) {
+    this.id = id;
   }
 
-
-  public String getQuestionIdQuestion() {
-    return questionIdQuestion;
+  public List<Answer> getAnswers() {
+    return answers;
   }
 
-  public void setQuestionIdQuestion(String questionIdQuestion) {
-    this.questionIdQuestion = questionIdQuestion;
+  public void setAnswers(List<Answer> answers) {
+    this.answers = answers;
   }
-
 }
