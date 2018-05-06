@@ -24,8 +24,8 @@ public class PlayerAnswer {
   @Column(columnDefinition = "uuid")
   private UUID id;
 
-  @NotNull
-  private List<Answer> answers;
+//  @NotNull
+ // private List<Answer> answers;
 
   @NotNull
   private String value;
@@ -47,11 +47,11 @@ public class PlayerAnswer {
     this.id = id;
   }
 
-  public List<Answer> getAnswers() {
-    return answers;
-  }
+//  public List<Answer> getAnswers() {
+//    return answers;
+//  }
 
-  public void setAnswers(List<Answer> answers) {
-    this.answers = answers;
-  }
+//  public void setAnswers(List<Answer> answers) {
+//    this.answers = answers;
+//  }
 }

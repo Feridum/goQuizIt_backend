@@ -116,6 +116,19 @@ public class QuestionService {
         }
     }
 
+    public QuestionWithAnswersOutputDTO getQuestionWithAnswers(UUID question_id) {
+        try {
+            Question question = questionRepository.getOne(question_id);
+            QuestionOutputDTO outputQuestion = mapQuestionToOutput(question,question.getQuizId());
+            List<AnswerOutputDTO> outputAnswers =  this.getAnswersByQuestionID(question_id);
+            return new QuestionWithAnswersOutputDTO(outputQuestion,outputAnswers);
+
+        }catch (PersistenceException e)
+        {
+            throw new UnknownRepositoryException(e.getMessage());
+        }
+    }
+
     private int setDuration(UUID quiz_id, int duration) {
         QuizOutputDTO quiz = quizService.getQuizById(quiz_id);
         if (quiz.isKahoot()) {
@@ -168,4 +181,6 @@ public class QuestionService {
         outputDTO.setQuizId(quizId);
         return outputDTO;
     }
+
+
 }

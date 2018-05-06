@@ -134,6 +134,11 @@ public class RESTController {
     public QuestionWithAnswersOutputDTO updateQuestionWithAnswers(@RequestBody QuestionWithAnswersInputDTO questionWithAnswersInputDTO, @PathVariable("question_id") UUID quiz_id) {
         return questionService.updateQuestionWithAnswers(quiz_id, questionWithAnswersInputDTO);
     }
+
+    @GetMapping("/quiz/{question_id}/questionWithAnswers")
+    public QuestionWithAnswersOutputDTO getQuestionWithAnswers(@PathVariable("question_id") UUID question_id) {
+        return questionService.getQuestionWithAnswers(question_id);
+    }
     //--------------------------------------------------------------------
 
     // Quiz methods
