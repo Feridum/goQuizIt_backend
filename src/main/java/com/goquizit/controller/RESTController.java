@@ -135,9 +135,9 @@ public class RESTController {
         return questionService.updateQuestionWithAnswers(quiz_id, questionWithAnswersInputDTO);
     }
 
-    @GetMapping("/quiz/{question_id}/questionWithAnswers")
-    public QuestionWithAnswersOutputDTO getQuestionWithAnswers(@PathVariable("question_id") UUID question_id) {
-        return questionService.getQuestionWithAnswers(question_id);
+    @GetMapping("/quiz/{quiz_id}/questionWithAnswers")
+    public List<QuestionWithAnswersOutputDTO> getQuestionWithAnswers(@PathVariable("quiz_id") UUID quiz_id) {
+        return questionService.getQuestionWithAnswers(quiz_id);
     }
     //--------------------------------------------------------------------
 

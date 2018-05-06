@@ -1,6 +1,9 @@
 package com.goquizit.services;
 
-import com.goquizit.DTO.*;
+import com.goquizit.DTO.CreateUpdateAnswersDTO;
+import com.goquizit.DTO.CreateUpdateQuestionDTO;
+import com.goquizit.DTO.QuestionWithAnswersInputDTO;
+import com.goquizit.DTO.QuestionWithAnswersOutputDTO;
 import com.goquizit.DTO.outputDTO.AnswerOutputDTO;
 import com.goquizit.DTO.outputDTO.QuestionOutputDTO;
 import com.goquizit.DTO.outputDTO.QuizOutputDTO;
@@ -116,15 +119,19 @@ public class QuestionService {
         }
     }
 
-    public QuestionWithAnswersOutputDTO getQuestionWithAnswers(UUID question_id) {
+    public List<QuestionWithAnswersOutputDTO> getQuestionWithAnswers(UUID quiz_id) {
         try {
-            Question question = questionRepository.getOne(question_id);
-            QuestionOutputDTO outputQuestion = mapQuestionToOutput(question,question.getQuizId());
-            List<AnswerOutputDTO> outputAnswers =  this.getAnswersByQuestionID(question_id);
-            return new QuestionWithAnswersOutputDTO(outputQuestion,outputAnswers);
-
-        }catch (PersistenceException e)
-        {
+            List<Question> questions = quizService.getOne(quiz_id).getQuestions();
+            List<QuestionWithAnswersOutputDTO> outputQuestionWithAnswers = new ArrayList<>();
+            questions.forEach(question ->
+            {
+                List<Answer> answers = question.getAnswers();
+                QuestionOutputDTO outputQuestion = mapQuestionToOutput(question, quiz_id);
+                List<AnswerOutputDTO> outputAnswers = answerService.mapAnswersToOutput(answers, question.getQuestionId());
+                outputQuestionWithAnswers.add(new QuestionWithAnswersOutputDTO(outputQuestion, outputAnswers));
+            });
+            return outputQuestionWithAnswers;
+        } catch (PersistenceException e) {
             throw new UnknownRepositoryException(e.getMessage());
         }
     }
@@ -158,7 +165,7 @@ public class QuestionService {
         Question questionToUpdate = questionRepository.getOne(questionId);
         questionToUpdate.setValue(question.getValue());
         questionToUpdate.setType(question.getType());
-        if(question.getDuration() > 0)
+        if (question.getDuration() > 0)
             questionToUpdate.setDuration(question.getDuration());
         return questionToUpdate;
     }
