@@ -1,5 +1,6 @@
 package com.goquizit.services;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.goquizit.DTO.CreateUpdateAnswersDTO;
 import com.goquizit.DTO.CreateUpdateQuestionDTO;
 import com.goquizit.DTO.QuestionWithAnswersInputDTO;
@@ -21,12 +22,13 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.PersistenceException;
 import javax.validation.Valid;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Service
-public class QuestionService {
+public class QuestionService implements Serializable{
 
     @Autowired
     QuestionRepository questionRepository;
