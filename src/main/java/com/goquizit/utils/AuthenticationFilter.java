@@ -1,6 +1,7 @@
 package com.goquizit.utils;
 
 import com.goquizit.model.User;
+import org.json.JSONObject;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -42,6 +43,11 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter{
                 .setSubject(user.getUsername())
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
-        response.addHeader(HEADER, TOKEN_PREFIX + token);
+
+        response.setContentType("application/json");
+        JSONObject res = new JSONObject();
+        res.put("access_token", token);
+        res.put("token_type", TOKEN_PREFIX);
+        response.getWriter().print(res);
     }
 }
