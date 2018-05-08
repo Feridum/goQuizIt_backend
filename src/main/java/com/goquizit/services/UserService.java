@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import javax.validation.Valid;
 
 @Service
@@ -24,6 +26,7 @@ public class UserService implements UserDetailsService {
         User user = new User();
         user.setEmail(dto.getEmail());
         user.setUsername(dto.getUsername());
+        user.setRegistrationDate(new Date());
         String encodedPassword = new BCryptPasswordEncoder().encode(dto.getPassword());
         user.setPassword(encodedPassword);
         repository.save(user);
