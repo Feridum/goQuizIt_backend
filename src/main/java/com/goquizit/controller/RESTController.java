@@ -9,7 +9,7 @@ import com.goquizit.exception.InvalidContentException;
 import com.goquizit.exception.ResourceNotFoundException;
 import com.goquizit.model.Player;
 import com.goquizit.model.QuizState;
-import com.goquizit.model.Users;
+import com.goquizit.model.User;
 import com.goquizit.repository.PlayerRepository;
 import com.goquizit.repository.QuizRepository;
 import com.goquizit.repository.UserRepository;
@@ -185,14 +185,14 @@ public class RESTController {
     //--------------------------------------------------------------------
 
     // TODO: Implement User API
-    // Users methods
+    // User methods
     @PostMapping("/users")
-    public Users createUser(@Valid @RequestBody Users users) {
+    public User createUser(@Valid @RequestBody User users) {
         return userRepository.save(users);
     }
 
     @GetMapping("/users")
-    public List<Users> getAllUsers() {
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 

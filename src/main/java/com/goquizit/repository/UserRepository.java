@@ -1,7 +1,10 @@
 package com.goquizit.repository;
 
-import com.goquizit.model.Users;
+import com.goquizit.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<Users, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
+    User findByUsername(String username);
+
+    User findByEmail(String email);
 }
