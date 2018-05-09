@@ -46,10 +46,6 @@ public class UserService implements UserDetailsService {
         return repository.findAll();
     }
 
-    public void updatePassword(String password, UUID userId) {
-        repository.updatePassword(password, userId);
-    }
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = repository.findByUsername(username);

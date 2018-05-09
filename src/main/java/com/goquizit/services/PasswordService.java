@@ -71,7 +71,7 @@ public class PasswordService {
         PasswordResetToken token = tokenRepository.findByToken(form.getToken());
         User user = token.getUser();
         String updatedPassword = passwordEncoder.encode(form.getPassword());
-        userService.updatePassword(updatedPassword, user.getUserId());
+        userService.changeUserPassword(updatedPassword, user);
         tokenRepository.delete(token);
         return user;
     }
