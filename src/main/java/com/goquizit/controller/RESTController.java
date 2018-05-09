@@ -4,7 +4,7 @@ import com.goquizit.DTO.*;
 import com.goquizit.DTO.outputDTO.AnswerOutputDTO;
 import com.goquizit.DTO.outputDTO.QuestionOutputDTO;
 import com.goquizit.DTO.outputDTO.QuizOutputDTO;
-import com.goquizit.DTO.outputDTO.TokenOutputDto;
+import com.goquizit.DTO.outputDTO.TokenOutputDTO;
 import com.goquizit.exception.InvalidContentException;
 import com.goquizit.exception.ResourceNotFoundException;
 import com.goquizit.model.Player;
@@ -168,7 +168,7 @@ public class RESTController {
     }
 
     @GetMapping("/quiz/{quiz_id}/token")
-    public TokenOutputDto getQuizToken(@PathVariable(value = "quiz_id") UUID quizId) throws ResourceNotFoundException {
+    public TokenOutputDTO getQuizToken(@PathVariable(value = "quiz_id") UUID quizId) throws ResourceNotFoundException {
         return quizService.getToken(quizId);
     }
 
