@@ -8,9 +8,6 @@ public class PasswordResetDTO {
     private String password;
 
     @NotEmpty
-    private String confirmPassword;
-
-    @NotEmpty
     private String token;
 
     public String getPassword() {
@@ -19,14 +16,6 @@ public class PasswordResetDTO {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
     }
 
     public String getToken() {
