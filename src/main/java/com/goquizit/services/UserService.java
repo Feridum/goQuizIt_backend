@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.Date;
+import java.util.UUID;
 import javax.validation.Valid;
 
 @Service
@@ -46,6 +46,10 @@ public class UserService implements UserDetailsService {
         return repository.findAll();
     }
 
+    public void updatePassword(String password, UUID userId) {
+        repository.updatePassword(password, userId);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = repository.findByUsername(username);
@@ -55,7 +59,4 @@ public class UserService implements UserDetailsService {
         }
 
         return user;
-    }
-
-
-}
+    }}
