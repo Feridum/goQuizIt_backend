@@ -1,4 +1,4 @@
-package com.goquizit.model;
+package com.goquizit.utils;
 
 import java.util.Map;
 

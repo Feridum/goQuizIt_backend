@@ -1,7 +1,7 @@
 package com.goquizit.controller;
 
 import com.goquizit.DTO.PasswordForgotDTO;
-import com.goquizit.model.Mail;
+import com.goquizit.utils.Mail;
 import com.goquizit.model.User;
 import com.goquizit.repository.PasswordResetTokenRepository;
 import com.goquizit.services.EmailService;

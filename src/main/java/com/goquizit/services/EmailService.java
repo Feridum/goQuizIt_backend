@@ -1,9 +1,8 @@
 package com.goquizit.services;
 
-import com.goquizit.model.Mail;
+import com.goquizit.utils.Mail;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
