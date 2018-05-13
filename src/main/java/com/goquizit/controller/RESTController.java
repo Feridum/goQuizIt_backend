@@ -16,6 +16,7 @@ import com.goquizit.repository.UserRepository;
 import com.goquizit.services.AnswerService;
 import com.goquizit.services.QuestionService;
 import com.goquizit.services.QuizService;
+import com.goquizit.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,9 @@ public class RESTController {
 
     @Autowired
     QuizService quizService;
+
+    @Autowired
+    UserService userService;
 
     // TODO: refactor to service
     @Autowired
@@ -194,6 +198,11 @@ public class RESTController {
     @GetMapping("/users")
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    @PostMapping("/register")
+    public User create(CreateUserDTO dto) {
+        return userService.create(dto);
     }
 
 }

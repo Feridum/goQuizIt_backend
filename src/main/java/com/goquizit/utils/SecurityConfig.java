@@ -51,6 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new AuthorizationFilter(authenticationManager(), userService))
                 .authorizeRequests()
                 .antMatchers(
+                        "/api/register",
                         "/api/forgot-password**",
                         "/api/reset-password**").permitAll()
                 .anyRequest().authenticated();
