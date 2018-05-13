@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "4aae4383-0e4e-4d23-890e-22c1612ab9a8",
+		"_postman_id": "7a1d2c60-3487-4a8d-ae0e-1825db0ca05a",
 		"name": "GoQuizIt",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -10,7 +10,10 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:8082/api/quiz",
 					"protocol": "http",
@@ -21,6 +24,209 @@
 					"path": [
 						"api",
 						"quiz"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get Quiz by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8082/api/quiz/d2022f44-a27a-4417-97c9-cddf1e341276",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"quiz",
+						"d2022f44-a27a-4417-97c9-cddf1e341276"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get Quiz by state",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8082/api/quiz/state/INACTIVE",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"quiz",
+						"state",
+						"INACTIVE"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get quiz token",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8082/api/quiz/4fb309cd-5cd9-4640-9e69-2d4d229d2104/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"quiz",
+						"4fb309cd-5cd9-4640-9e69-2d4d229d2104",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all questions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8082/api/questions/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"questions",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get question by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8082/api/question/59414d1f-6674-4559-adb3-1ca938e0e34d",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"question",
+						"59414d1f-6674-4559-adb3-1ca938e0e34d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get quiz questions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8082/api/quiz/39360596-90f6-49a5-90ac-d8d59014773c/questions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"quiz",
+						"39360596-90f6-49a5-90ac-d8d59014773c",
+						"questions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all answers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8082/api/answers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"answers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get question answers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8082/api/question/fe343857-a937-4b32-aec0-c283dee75660/answers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"question",
+						"fe343857-a937-4b32-aec0-c283dee75660",
+						"answers"
 					]
 				}
 			},
@@ -51,7 +257,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"token\": \"abc\",\n\t\"title\": \"title2\",\n\t\"state\": \"state\",\n\t\"isKahoot\": false,\n\t\"ownerId\": \"123456\"\n}"
+					"raw": "{\n\t\"title\": \"test4\",\n\t\"isKahoot\": true,\n\t\"ownerId\": \"xyz\",\n\t\"startDate\": \"45\",\n\t\"endDate\": \"45\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8082/api/quiz/",
@@ -64,58 +270,6 @@
 						"api",
 						"quiz",
 						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "update quiz",
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"token\": \"abc\",\n\t\"title\": \"update title\",\n\t\"state\": \"state\",\n\t\"isKahoot\": false,\n\t\"ownerId\": \"123456\"\n}"
-				},
-				"url": {
-					"raw": "http://localhost:8082/api/quiz/0612566d-3a87-4c96-a8fe-898c1a5b4bab",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8082",
-					"path": [
-						"api",
-						"quiz",
-						"0612566d-3a87-4c96-a8fe-898c1a5b4bab"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "delete quiz",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"body": {},
-				"url": {
-					"raw": "http://localhost:8082/api/quiz/0612566d-3a87-4c96-a8fe-898c1a5b4bab",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8082",
-					"path": [
-						"api",
-						"quiz",
-						"0612566d-3a87-4c96-a8fe-898c1a5b4bab"
 					]
 				}
 			},
@@ -143,10 +297,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"value\": \"My fiewrst question1gr111e\",\n\t\"duration\": 140,\n\t\"type\": \"SINGLE_CHOICE\"\n}\n\n"
+					"raw": "{\n\t\"value\": \"11111My last question1gr111asde\",\n\t\"duration\": 140,\n\t\"type\": \"SINGLE_CHOICE\"\n}\n\n"
 				},
 				"url": {
-					"raw": "http://localhost:8082/api/quiz/ca5bb07b-c82e-4c1c-a1de-7ef884cc39a2/questions/",
+					"raw": "http://localhost:8082/api/quiz/325c510e-2f75-41f0-b750-e7ba7f39a828/questions/",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -155,76 +309,9 @@
 					"path": [
 						"api",
 						"quiz",
-						"ca5bb07b-c82e-4c1c-a1de-7ef884cc39a2",
+						"325c510e-2f75-41f0-b750-e7ba7f39a828",
 						"questions",
 						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "get quiz questions",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {},
-				"url": {
-					"raw": "http://localhost:8082/api/quiz/0612566d-3a87-4c96-a8fe-898c1a5b4bab/questions",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8082",
-					"path": [
-						"api",
-						"quiz",
-						"0612566d-3a87-4c96-a8fe-898c1a5b4bab",
-						"questions"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "get all questions",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {},
-				"url": {
-					"raw": "http://localhost:8082/api/questions/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8082",
-					"path": [
-						"api",
-						"questions",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "delete question",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"body": {},
-				"url": {
-					"raw": "http://localhost:8082/api/question/60fb4e35-e2fd-4016-b136-eb6fb92baaff",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8082",
-					"path": [
-						"api",
-						"question",
-						"60fb4e35-e2fd-4016-b136-eb6fb92baaff"
 					]
 				}
 			},
@@ -245,7 +332,7 @@
 					"raw": "[\n\t{\n\t\"value\" : \"odpowiedz1\",\n\t\"isPositive\": true\n\t}, \n\t{\n\t\"value\" : \"odpowiedz2\",\n\t\"isPositive\": false\n\t}\n]"
 				},
 				"url": {
-					"raw": "http://localhost:8082/api//question/648227e3-3d50-4395-8456-ebcfd44126c3/answers",
+					"raw": "http://localhost:8082/api/question/fe343857-a937-4b32-aec0-c283dee75660/answers",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -253,9 +340,8 @@
 					"port": "8082",
 					"path": [
 						"api",
-						"",
 						"question",
-						"648227e3-3d50-4395-8456-ebcfd44126c3",
+						"fe343857-a937-4b32-aec0-c283dee75660",
 						"answers"
 					]
 				}
@@ -263,13 +349,21 @@
 			"response": []
 		},
 		{
-			"name": "get all answers",
+			"name": "add question with answers",
 			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"question\": \n\t{\n\t\"value\": \"1dsfsadf1My fiewrst question1gr111e\",\n\t\"duration\": 149,\n\t\"type\": \"SINGLE_CHOICE\"\n\t},\n\t\"answers\": [\n\t{\n\t\"value\" : \"odpowiedz1\",\n\t\"isPositive\": true\n\t}, \n\t{\n\t\"value\" : \"odpowiedz2\",\n\t\"isPositive\": false\n\t}\n\t]\n}"
+				},
 				"url": {
-					"raw": "http://localhost:8082/api/answers",
+					"raw": "http://localhost:8082/api/quiz/00085e3f-063d-4e92-ad14-e62ffdc9125d/questionWithAnswers",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -277,14 +371,16 @@
 					"port": "8082",
 					"path": [
 						"api",
-						"answers"
+						"quiz",
+						"00085e3f-063d-4e92-ad14-e62ffdc9125d",
+						"questionWithAnswers"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "put answer",
+			"name": "update quiz",
 			"request": {
 				"method": "PUT",
 				"header": [
@@ -295,10 +391,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\"questionId\": \"65b2fdbb-af11-44d9-82c4-809ddc155587\",\n\"value\": \"Jak najbardziej\",\n\"isPositive\": false\n}"
+					"raw": "{\n\t\"title\": \"update 2 title\",\n\t\"state\": \"ACTIVE\",\n\t\"isKahoot\": false,\n\t\"ownerId\": \"123456\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8082/api/answers/5b71b46d-a383-4161-9912-3e2e68c1c5cd",
+					"raw": "http://localhost:8082/api/quiz/d2022f44-a27a-4417-97c9-cddf1e341276",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -306,8 +402,116 @@
 					"port": "8082",
 					"path": [
 						"api",
-						"answers",
-						"5b71b46d-a383-4161-9912-3e2e68c1c5cd"
+						"quiz",
+						"d2022f44-a27a-4417-97c9-cddf1e341276"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update quiz state",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8082/api/quiz/d2022f44-a27a-4417-97c9-cddf1e341276/patch/INACTIVE",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"quiz",
+						"d2022f44-a27a-4417-97c9-cddf1e341276",
+						"patch",
+						"INACTIVE"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update question with answers",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"question\": \n\t{\n\t\"value\": \"1111My seconf question1gr111e\",\n\t\"duration\": 10,\n\t\"type\": \"SINGLE_CHOICE\"\n\t},\n\t\"answers\": [\n\t{\n\t\"value\" : \"odpowiedz3\",\n\t\"isPositive\": true\n\t}, \n\t{\n\t\"value\" : \"odpowiedz4\",\n\t\"isPositive\": false\n\t}\n\t]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8082/api/quiz/fe343857-a937-4b32-aec0-c283dee75660/questionWithAnswers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"quiz",
+						"fe343857-a937-4b32-aec0-c283dee75660",
+						"questionWithAnswers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete quiz",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8082/api/quiz/d2022f44-a27a-4417-97c9-cddf1e341276",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"quiz",
+						"d2022f44-a27a-4417-97c9-cddf1e341276"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete question",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8082/api/question/78b7500a-411a-4909-af79-2711e30a18b1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"question",
+						"78b7500a-411a-4909-af79-2711e30a18b1"
 					]
 				}
 			},
@@ -318,9 +522,12 @@
 			"request": {
 				"method": "DELETE",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
-					"raw": "http://localhost:8082/api/answer/f03081b3-5709-45c4-b523-0b6d0ec9522a",
+					"raw": "http://localhost:8082/api/answer/48e1e561-e235-47c1-a85f-23247d523933",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -329,9 +536,240 @@
 					"path": [
 						"api",
 						"answer",
-						"f03081b3-5709-45c4-b523-0b6d0ec9522a"
+						"48e1e561-e235-47c1-a85f-23247d523933"
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "post login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huTm93In0.GKUUmiqKgT5pA98TbCHz6hLi6oW__86d-hkSUA3TJUB14gt0E2Nuh1Fn8QuldVj2S95mA1baUfWaHniPvVh-tQ",
+						"disabled": true
+					},
+					{
+						"key": "username",
+						"value": "johnNo",
+						"disabled": true
+					},
+					{
+						"key": "password",
+						"value": "totallysecure",
+						"disabled": true
+					},
+					{
+						"key": "",
+						"value": "j.bartoszuk@op.pl",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "password",
+							"value": "paczki123",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "confirmPassword",
+							"value": "newtotallysecure3",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "$2a$10$5m.U1pZuuCv3di4g0rtuUebjhhKiFwUmXC0dp4SU4nX8aSDAEy3kq\n",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "email",
+							"value": "jasixterjo@gmail.com",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "username",
+							"value": "Paczek",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8082/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post forgot-password",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huTm93In0.GKUUmiqKgT5pA98TbCHz6hLi6oW__86d-hkSUA3TJUB14gt0E2Nuh1Fn8QuldVj2S95mA1baUfWaHniPvVh-tQ",
+						"disabled": true
+					},
+					{
+						"key": "username",
+						"value": "johnNow",
+						"disabled": true
+					},
+					{
+						"key": "password",
+						"value": "totallySecure",
+						"disabled": true
+					},
+					{
+						"key": "email",
+						"value": "j.bartoszuk@op.pl",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "johnNow",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "totallySecure",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "confirmPassword",
+							"value": "totallySecure",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "email",
+							"value": "TwojAdresZBazyDanych@gmail.com",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8082/api/forgot-password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"forgot-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post reset-password TEMPLATE",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huTm93In0.GKUUmiqKgT5pA98TbCHz6hLi6oW__86d-hkSUA3TJUB14gt0E2Nuh1Fn8QuldVj2S95mA1baUfWaHniPvVh-tQ",
+						"disabled": true
+					},
+					{
+						"key": "username",
+						"value": "johnNo",
+						"disabled": true
+					},
+					{
+						"key": "password",
+						"value": "totallysecure",
+						"disabled": true
+					},
+					{
+						"key": "",
+						"value": "j.bartoszuk@op.pl",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "password",
+							"value": "paczki321",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "confirmPassword",
+							"value": "newtotallysecure3",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "$2a$10$5m.U1pZuuCv3di4g0rtuUebjhhKiFwUmXC0dp4SU4nX8aSDAEy3kq\n",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "email",
+							"value": "jasixterjo@gmail.com",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8082/api/reset-password?token=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"reset-password"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": ""
+						}
+					]
+				},
+				"description": "COPY TOKEN (OR WHOLE LINK) FROM EMAIL"
 			},
 			"response": []
 		}
