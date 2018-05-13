@@ -2,7 +2,7 @@ package com.goquizit.services;
 
 import com.goquizit.DTO.CreateUpdateQuizDTO;
 import com.goquizit.DTO.outputDTO.QuizOutputDTO;
-import com.goquizit.DTO.outputDTO.TokenOutputDto;
+import com.goquizit.DTO.outputDTO.TokenOutputDTO;
 import com.goquizit.exception.InvalidContentException;
 import com.goquizit.exception.ResourceNotFoundException;
 import com.goquizit.exception.UnknownRepositoryException;
@@ -97,9 +97,9 @@ public class QuizService {
         return randomStringGenerator.generate(8);
     }
 
-    public TokenOutputDto getToken(UUID quizId) throws ResourceNotFoundException {
+    public TokenOutputDTO getToken(UUID quizId) throws ResourceNotFoundException {
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new ResourceNotFoundException("Quiz", "id", quizId));
-        return new TokenOutputDto(quiz.getToken());
+        return new TokenOutputDTO(quiz.getToken());
     }
 
     public Quiz getOne(UUID quizId) {

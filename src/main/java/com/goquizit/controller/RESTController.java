@@ -4,18 +4,19 @@ import com.goquizit.DTO.*;
 import com.goquizit.DTO.outputDTO.AnswerOutputDTO;
 import com.goquizit.DTO.outputDTO.QuestionOutputDTO;
 import com.goquizit.DTO.outputDTO.QuizOutputDTO;
-import com.goquizit.DTO.outputDTO.TokenOutputDto;
+import com.goquizit.DTO.outputDTO.TokenOutputDTO;
 import com.goquizit.exception.InvalidContentException;
 import com.goquizit.exception.ResourceNotFoundException;
 import com.goquizit.model.Player;
 import com.goquizit.model.QuizState;
-import com.goquizit.model.Users;
+import com.goquizit.model.User;
 import com.goquizit.repository.PlayerRepository;
 import com.goquizit.repository.QuizRepository;
 import com.goquizit.repository.UserRepository;
 import com.goquizit.services.AnswerService;
 import com.goquizit.services.QuestionService;
 import com.goquizit.services.QuizService;
+import com.goquizit.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,9 @@ public class RESTController {
 
     @Autowired
     QuizService quizService;
+
+    @Autowired
+    UserService userService;
 
     // TODO: refactor to service
     @Autowired
@@ -168,7 +172,7 @@ public class RESTController {
     }
 
     @GetMapping("/quiz/{quiz_id}/token")
-    public TokenOutputDto getQuizToken(@PathVariable(value = "quiz_id") UUID quizId) throws ResourceNotFoundException {
+    public TokenOutputDTO getQuizToken(@PathVariable(value = "quiz_id") UUID quizId) throws ResourceNotFoundException {
         return quizService.getToken(quizId);
     }
 
@@ -185,15 +189,20 @@ public class RESTController {
     //--------------------------------------------------------------------
 
     // TODO: Implement User API
-    // Users methods
+    // User methods
     @PostMapping("/users")
-    public Users createUser(@Valid @RequestBody Users users) {
+    public User createUser(@Valid @RequestBody User users) {
         return userRepository.save(users);
     }
 
     @GetMapping("/users")
-    public List<Users> getAllUsers() {
+    public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    @PostMapping("/register")
+    public User create(CreateUserDTO dto) {
+        return userService.create(dto);
     }
 
 }
