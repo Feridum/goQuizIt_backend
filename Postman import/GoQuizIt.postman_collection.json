@@ -546,28 +546,7 @@
 			"name": "post login",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huTm93In0.GKUUmiqKgT5pA98TbCHz6hLi6oW__86d-hkSUA3TJUB14gt0E2Nuh1Fn8QuldVj2S95mA1baUfWaHniPvVh-tQ",
-						"disabled": true
-					},
-					{
-						"key": "username",
-						"value": "johnNo",
-						"disabled": true
-					},
-					{
-						"key": "password",
-						"value": "totallysecure",
-						"disabled": true
-					},
-					{
-						"key": "",
-						"value": "j.bartoszuk@op.pl",
-						"disabled": true
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "formdata",
 					"formdata": [
@@ -576,27 +555,6 @@
 							"value": "paczki123",
 							"description": "",
 							"type": "text"
-						},
-						{
-							"key": "confirmPassword",
-							"value": "newtotallysecure3",
-							"description": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "password",
-							"value": "$2a$10$5m.U1pZuuCv3di4g0rtuUebjhhKiFwUmXC0dp4SU4nX8aSDAEy3kq\n",
-							"description": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "email",
-							"value": "jasixterjo@gmail.com",
-							"description": "",
-							"type": "text",
-							"disabled": true
 						},
 						{
 							"key": "username",
@@ -624,55 +582,13 @@
 			"name": "post forgot-password",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huTm93In0.GKUUmiqKgT5pA98TbCHz6hLi6oW__86d-hkSUA3TJUB14gt0E2Nuh1Fn8QuldVj2S95mA1baUfWaHniPvVh-tQ",
-						"disabled": true
-					},
-					{
-						"key": "username",
-						"value": "johnNow",
-						"disabled": true
-					},
-					{
-						"key": "password",
-						"value": "totallySecure",
-						"disabled": true
-					},
-					{
-						"key": "email",
-						"value": "j.bartoszuk@op.pl",
-						"disabled": true
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "formdata",
 					"formdata": [
 						{
-							"key": "username",
-							"value": "johnNow",
-							"description": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "password",
-							"value": "totallySecure",
-							"description": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "confirmPassword",
-							"value": "totallySecure",
-							"description": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
 							"key": "email",
-							"value": "TwojAdresZBazyDanych@gmail.com",
+							"value": "mailZbazyDanych@gmail.com",
 							"description": "",
 							"type": "text"
 						}
@@ -697,57 +613,15 @@
 			"name": "post reset-password TEMPLATE",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huTm93In0.GKUUmiqKgT5pA98TbCHz6hLi6oW__86d-hkSUA3TJUB14gt0E2Nuh1Fn8QuldVj2S95mA1baUfWaHniPvVh-tQ",
-						"disabled": true
-					},
-					{
-						"key": "username",
-						"value": "johnNo",
-						"disabled": true
-					},
-					{
-						"key": "password",
-						"value": "totallysecure",
-						"disabled": true
-					},
-					{
-						"key": "",
-						"value": "j.bartoszuk@op.pl",
-						"disabled": true
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "formdata",
 					"formdata": [
 						{
 							"key": "password",
-							"value": "paczki321",
+							"value": "newPassword",
 							"description": "",
 							"type": "text"
-						},
-						{
-							"key": "confirmPassword",
-							"value": "newtotallysecure3",
-							"description": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "password",
-							"value": "$2a$10$5m.U1pZuuCv3di4g0rtuUebjhhKiFwUmXC0dp4SU4nX8aSDAEy3kq\n",
-							"description": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "email",
-							"value": "jasixterjo@gmail.com",
-							"description": "",
-							"type": "text",
-							"disabled": true
 						}
 					]
 				},
@@ -770,6 +644,49 @@
 					]
 				},
 				"description": "COPY TOKEN (OR WHOLE LINK) FROM EMAIL"
+			},
+			"response": []
+		},
+		{
+			"name": "post register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "password",
+							"value": "Jarek123",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "jasixterjo@gmail.com",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "Jarek",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8082/api/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"register"
+					]
+				}
 			},
 			"response": []
 		}
