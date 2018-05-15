@@ -1,6 +1,7 @@
 package com.goquizit.utils;
 
 import com.goquizit.model.User;
+import org.apache.logging.log4j.core.util.IOUtils;
 import org.json.JSONObject;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,7 +14,9 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
+import com.google.gson.Gson;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter{
     private AuthenticationManager authenticationManager;
@@ -29,11 +32,38 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter{
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
 
-        UsernamePasswordAuthenticationToken token =  new UsernamePasswordAuthenticationToken(username, password);
-        return authenticationManager.authenticate(token);
+        if ("application/json".equals(request.getHeader("Content-Type"))) {
+            LoginRequest loginRequest = this.getLoginRequest(request);
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
+            return authenticationManager.authenticate(token);
+        }
+        else{
+            return super.attemptAuthentication(request, response);
+        }
+    }
+
+    private LoginRequest getLoginRequest(HttpServletRequest request) {
+        BufferedReader reader = null;
+        LoginRequest loginRequest = null;
+        try {
+            reader = request.getReader();
+            Gson gson = new Gson();
+            loginRequest = gson.fromJson(reader, LoginRequest.class);
+        } catch (IOException ex) {
+            logger.error(null, ex);
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException ex) {
+                logger.error(null, ex);
+            }
+        }
+
+        if (loginRequest == null) {
+            loginRequest = new LoginRequest();
+        }
+        return loginRequest;
     }
 
     @Override
