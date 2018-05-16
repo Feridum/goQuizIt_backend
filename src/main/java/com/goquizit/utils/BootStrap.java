@@ -20,12 +20,6 @@ public class BootStrap {
     @EventListener(ApplicationReadyEvent.class)
     public void init() {
         CreateUserDTO defUser = new CreateUserDTO("paczki@lozaaei.slack.com", "Paczek", "paczki123");
-        try {
-            userService.loadUserByUsername(defUser.getUsername());
-            log.info("Creating new bootstrap user skipped. User " + defUser.getUsername() + " already exists.");
-        } catch (UsernameNotFoundException e) {
-            userService.create(defUser);
-            log.info(defUser);
-        }
+        userService.addUser(defUser);
     }
 }

@@ -6,6 +6,7 @@ import com.goquizit.model.User;
 import com.goquizit.services.PasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,13 +21,13 @@ public class PasswordController {
 
     @RequestMapping("/api/forgot-password")
     @PostMapping
-    public PasswordForgotDTO processForgotPasswordForm(@Valid PasswordForgotDTO form, HttpServletRequest request) {
+    public PasswordForgotDTO processForgotPasswordForm(@Valid @RequestBody PasswordForgotDTO form, HttpServletRequest request) {
         return passwordService.processForgotPasswordForm(form, request);
     }
 
     @RequestMapping("/api/reset-password")
     @PostMapping
-    public User handlePasswordReset(@Valid PasswordResetDTO form) {
+    public User handlePasswordReset(@Valid @RequestBody PasswordResetDTO form) {
         return passwordService.handlePasswordReset(form);
     }
 }
