@@ -201,7 +201,7 @@ public class RESTController {
     }
 
     @PostMapping("/register")
-    public User create(CreateUserDTO dto) {
+    public User create(@Valid @RequestBody CreateUserDTO dto) {
         return userService.create(dto);
     }
 

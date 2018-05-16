@@ -7,14 +7,13 @@ public final class LoginRequest {
 
     @Override
     public String toString() {
-        return "[Username : "+String.valueOf(username)+"][password :"+String.valueOf(password)+"]";
+        return "[username : "+String.valueOf(username)+"][password :"+String.valueOf(password)+"]";
     }
 
     public LoginRequest(String username, String password) {
         this.username = username;
         this.password = password;
     }
-
 
     public LoginRequest(){
         this("", "");
