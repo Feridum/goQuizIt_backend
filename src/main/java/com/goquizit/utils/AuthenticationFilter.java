@@ -10,15 +10,17 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
+
 import com.google.gson.Gson;
 
-public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter{
+public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private AuthenticationManager authenticationManager;
 
     static final String SECRET = "Secret";
@@ -37,8 +39,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter{
             LoginRequest loginRequest = this.getLoginRequest(request);
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
             return authenticationManager.authenticate(token);
-        }
-        else{
+        } else {
             return super.attemptAuthentication(request, response);
         }
     }
@@ -68,7 +69,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter{
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        User user = (User)authResult.getPrincipal();
+        User user = (User) authResult.getPrincipal();
         String token = Jwts.builder()
                 .setSubject(user.getUsername())
                 .signWith(SignatureAlgorithm.HS512, SECRET)

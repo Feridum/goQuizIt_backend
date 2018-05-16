@@ -7,7 +7,7 @@ public final class LoginRequest {
 
     @Override
     public String toString() {
-        return "[username : "+String.valueOf(username)+"][password :"+String.valueOf(password)+"]";
+        return "[username : " + String.valueOf(username) + "][password :" + String.valueOf(password) + "]";
     }
 
     public LoginRequest(String username, String password) {
@@ -15,7 +15,7 @@ public final class LoginRequest {
         this.password = password;
     }
 
-    public LoginRequest(){
+    public LoginRequest() {
         this("", "");
     }
 
@@ -31,19 +31,15 @@ public final class LoginRequest {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     @Override
     public boolean equals(Object o) {
-        if(this == o) return true;
-        if(o == null || getClass() != o.getClass()) return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        LoginRequest that = (LoginRequest)o;
+        LoginRequest that = (LoginRequest) o;
 
-        if(password != null ? !password.equals(that.password) : that.password != null) return false;
-        if(username != null ? !username.equals(that.username) : that.username != null) return false;
+        if (password != null ? !password.equals(that.password) : that.password != null) return false;
+        if (username != null ? !username.equals(that.username) : that.username != null) return false;
 
         return true;
     }

@@ -28,32 +28,32 @@ public class UserService implements UserDetailsService {
     private UserRepository repository;
 
     public User addUser(@Valid CreateUserDTO dto) {
-        if(checkIfAlreadyExists(dto)) {
+        if (checkIfAlreadyExists(dto)) {
             log.info("Added new user '" + dto.getUsername() + "'.");
             return create(dto);
-        }else {
+        } else {
             log.info("Creating new user skipped. User '" + dto.getUsername() + "' already exists.");
             return null;
         }
     }
 
     public boolean checkIfAlreadyExists(@Valid CreateUserDTO dto) {
-        if(findByEmail(dto.getEmail()) != null || findByUsername(dto.getUsername()) != null) {
+        if (findByEmail(dto.getEmail()) != null || findByUsername(dto.getUsername()) != null) {
             return false;
-        }else {
+        } else {
             return true;
         }
     }
 
     public User create(@Valid CreateUserDTO dto) {
-            User user = new User();
-            user.setEmail(dto.getEmail());
-            user.setUsername(dto.getUsername());
-            user.setRegistrationDate(new Date());
-            String encodedPassword = new BCryptPasswordEncoder().encode(dto.getPassword());
-            user.setPassword(encodedPassword);
-            repository.save(user);
-            return user;
+        User user = new User();
+        user.setEmail(dto.getEmail());
+        user.setUsername(dto.getUsername());
+        user.setRegistrationDate(new Date());
+        String encodedPassword = new BCryptPasswordEncoder().encode(dto.getPassword());
+        user.setPassword(encodedPassword);
+        repository.save(user);
+        return user;
     }
 
     public void changeUserPassword(String updatedPassword, User user) {
@@ -69,10 +69,6 @@ public class UserService implements UserDetailsService {
         return repository.findByUsername(username);
     }
 
-    public Iterable<User> findAll() {
-        return repository.findAll();
-    }
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = repository.findByUsername(username);
@@ -82,4 +78,5 @@ public class UserService implements UserDetailsService {
         }
 
         return user;
-    }}
+    }
+}
