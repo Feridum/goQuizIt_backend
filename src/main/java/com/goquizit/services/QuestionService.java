@@ -50,7 +50,6 @@ public class QuestionService implements Serializable {
         }
     }
 
-    //ToDO check how to get quizId - query
     public QuestionOutputDTO getQuestionById(UUID questionId) throws ResourceNotFoundException {
         Question question = questionRepository.findById(questionId).orElseThrow(() -> new ResourceNotFoundException("Question", "id", questionId));
         return mapQuestionToOutput(question, question.getQuiz().getId());
@@ -67,6 +66,7 @@ public class QuestionService implements Serializable {
         try {
             Question question = mapDtoToQuestion(quiz_id, createUpdateQuestionDTO);
             Quiz quiz = quizService.getOne(quiz_id);
+            question.setIndex(quiz.getQuestionSet().size());
             quiz.getQuestions().add(question);
             Quiz tempQuiz = quizService.save(quiz);
             Question newQuestion = tempQuiz.getQuestions().get(tempQuiz.getQuestions().size() - 1);
@@ -83,6 +83,8 @@ public class QuestionService implements Serializable {
         return mapQuestionToOutput(questionToUpdate, questionToUpdate.getQuizId());
     }
 
+    //TODO reindex questions
+    //TODO get next question after obtain answers from player
     public ResponseEntity deleteById(UUID questionId) throws ResourceNotFoundException {
         Question question = questionRepository.findById(questionId).orElseThrow(() -> new ResourceNotFoundException("Question", "id", questionId));
         questionRepository.delete(question);
@@ -180,15 +182,22 @@ public class QuestionService implements Serializable {
         }
     }
 
-    private QuestionOutputDTO mapQuestionToOutput(Question question, UUID quizId) {
+    public QuestionOutputDTO mapQuestionToOutput(Question question, UUID quizId) {
         QuestionOutputDTO outputDTO = new QuestionOutputDTO();
         outputDTO.setQuestionId(question.getQuestionId());
         outputDTO.setDuration(question.getDuration());
         outputDTO.setType(question.getType());
         outputDTO.setValue(question.getValue());
         outputDTO.setQuizId(quizId);
+        outputDTO.setIndex(question.getIndex());
         return outputDTO;
     }
+    public Question findByQuizIdAndIndex(UUID quizId, int index)
+    {
+        return questionRepository.findByQuizAndIndex(quizId,index);
+    }
 
-
+    public int getNumberOfQuestinsByQuizId(UUID quizId) {
+        return questionRepository.getNumberOfQuestionsByQuizId(quizId);
+    }
 }

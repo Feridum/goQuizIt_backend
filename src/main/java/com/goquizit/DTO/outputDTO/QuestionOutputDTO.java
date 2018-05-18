@@ -16,6 +16,8 @@ public class QuestionOutputDTO {
 
     private UUID quizId;
 
+    private int index;
+
     public UUID getQuestionId() {
         return questionId;
     }
@@ -54,5 +56,13 @@ public class QuestionOutputDTO {
 
     public void setQuizId(UUID quizId) {
         this.quizId = quizId;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 }

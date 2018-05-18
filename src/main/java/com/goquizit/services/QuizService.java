@@ -8,6 +8,7 @@ import com.goquizit.exception.InvalidContentException;
 import com.goquizit.exception.ResourceNotFoundException;
 import com.goquizit.exception.ResponseException;
 import com.goquizit.exception.UnknownRepositoryException;
+import com.goquizit.model.Question;
 import com.goquizit.model.Quiz;
 import com.goquizit.model.QuizState;
 import com.goquizit.model.User;
@@ -50,7 +51,7 @@ public class QuizService {
         UUID ownerId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUserId();
         Quiz newQuiz = userService.saveQuiz(quiz);
         System.out.println(newQuiz.getTitle());
-        return mapQuizToOutput(newQuiz,ownerId);
+        return mapQuizToOutput(newQuiz, ownerId);
     }
 
     public List<QuizOutputDTO> getAllQuizzes() {
@@ -136,39 +137,42 @@ public class QuizService {
     public QuizOutputDTO getByToken(String token) {
         Quiz quiz = quizRepository.findByToken(token);
         QuizOutputDTO outputDTO = mapQuizToOutput(quiz);
-        if(quiz.getState() == QuizState.ACTIVE)
+        if (quiz.getState() == QuizState.ACTIVE)
             return outputDTO;
         else throw new ResponseException("Quiz is not activated");
     }
 
     public QuestionOutputDTO getQuestionByQuizIdByIndex(UUID quizId, int index) {
-        List<QuestionOutputDTO> questions = questionService.getQuestionsByQuizId(quizId);
-        if (questions.isEmpty())
+        checkCountOfQuestions(quizId, index);
+        Question question = questionService.findByQuizIdAndIndex(quizId, index);
+        return questionService.mapQuestionToOutput(question,quizId);
+    }
+
+    private void checkCountOfQuestions(UUID quizId, int index) {
+        int numberOfQuestion = questionService.getNumberOfQuestinsByQuizId(quizId);
+        if (numberOfQuestion == 0)
             throw new ResponseException("Quiz have no questions yet.");
-        else if (index < 0 || index >= questions.size())
+        else if (index < 0 || index >= numberOfQuestion)
             throw new ResponseException("Question with index: " + index + " does not exist for guiz id: " + quizId);
-        return questions.get(index);
     }
 
     private QuizOutputDTO mapQuizToOutput(Quiz quiz) {
-        QuizOutputDTO outputDTO = new QuizOutputDTO();
-        outputDTO.setId(quiz.getId());
-        outputDTO.setEndDate(quiz.getEndDate());
-        outputDTO.setKahoot(quiz.getIsKahoot());
+        QuizOutputDTO outputDTO = transQuizToOutput(quiz);
         outputDTO.setOwnerId(quiz.getOwner().getUserId());
-        outputDTO.setTitle(quiz.getTitle());
-        outputDTO.setStartDate(quiz.getStartDate());
-        outputDTO.setState(quiz.getState());
-        outputDTO.setToken(quiz.getToken());
         return outputDTO;
     }
 
     private QuizOutputDTO mapQuizToOutput(Quiz quiz, UUID ownerId) {
+        QuizOutputDTO outputDTO = transQuizToOutput(quiz);
+        outputDTO.setOwnerId(ownerId);
+        return outputDTO;
+    }
+
+    private QuizOutputDTO transQuizToOutput(Quiz quiz) {
         QuizOutputDTO outputDTO = new QuizOutputDTO();
         outputDTO.setId(quiz.getId());
         outputDTO.setEndDate(quiz.getEndDate());
         outputDTO.setKahoot(quiz.getIsKahoot());
-        outputDTO.setOwnerId(ownerId);
         outputDTO.setTitle(quiz.getTitle());
         outputDTO.setStartDate(quiz.getStartDate());
         outputDTO.setState(quiz.getState());
