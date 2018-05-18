@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "7a1d2c60-3487-4a8d-ae0e-1825db0ca05a",
+		"_postman_id": "1711e370-ad4a-4de4-81ec-53128808d2ba",
 		"name": "GoQuizIt",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -8,6 +8,16 @@
 		{
 			"name": "get all quizzes",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJQYWN6ZWsifQ.LIhnB0wjjL4gdOFkQUU-a6z2cBPrxYhaRY-I6PbmD030UbIzFU39QbMzI0nxxeVSzlrvEG8zvv4BM6nGa1Y4cg",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"body": {
@@ -107,6 +117,39 @@
 			"response": []
 		},
 		{
+			"name": "get quiz by token",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJQYWN6ZWsifQ.LIhnB0wjjL4gdOFkQUU-a6z2cBPrxYhaRY-I6PbmD030UbIzFU39QbMzI0nxxeVSzlrvEG8zvv4BM6nGa1Y4cg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8082/api/quiz/token/CAuIhxU8",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"quiz",
+						"token",
+						"CAuIhxU8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "get all questions",
 			"request": {
 				"method": "GET",
@@ -151,6 +194,40 @@
 						"api",
 						"question",
 						"59414d1f-6674-4559-adb3-1ca938e0e34d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get question by quizId and index",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJQYWN6ZWsifQ.LIhnB0wjjL4gdOFkQUU-a6z2cBPrxYhaRY-I6PbmD030UbIzFU39QbMzI0nxxeVSzlrvEG8zvv4BM6nGa1Y4cg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8082/api/quiz/e27f48fc-ccc9-481c-9388-41acc06583ea/questionNumber/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"quiz",
+						"e27f48fc-ccc9-481c-9388-41acc06583ea",
+						"questionNumber",
+						"1"
 					]
 				}
 			},
@@ -236,7 +313,14 @@
 			"name": "add quiz",
 			"request": {
 				"auth": {
-					"type": "bearer"
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJQYWN6ZWsifQ.LIhnB0wjjL4gdOFkQUU-a6z2cBPrxYhaRY-I6PbmD030UbIzFU39QbMzI0nxxeVSzlrvEG8zvv4BM6nGa1Y4cg",
+							"type": "string"
+						}
+					]
 				},
 				"method": "POST",
 				"header": [
@@ -247,7 +331,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJQYWN6ZWsifQ.LIhnB0wjjL4gdOFkQUU-a6z2cBPrxYhaRY-I6PbmD030UbIzFU39QbMzI0nxxeVSzlrvEG8zvv4BM6nGa1Y4cg",
 						"disabled": true
 					},
 					{
@@ -257,7 +341,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"title\": \"test4\",\n\t\"isKahoot\": true,\n\t\"ownerId\": \"xyz\",\n\t\"startDate\": \"45\",\n\t\"endDate\": \"45\"\n}"
+					"raw": "{\n\t\"title\": \"test4\",\n\t\"isKahoot\": true,\n\t\"startDate\": \"45\",\n\t\"endDate\": \"45\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8082/api/quiz/",
@@ -546,23 +630,15 @@
 			"name": "post login",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
 				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "password",
-							"value": "paczki123",
-							"description": "",
-							"type": "text"
-						},
-						{
-							"key": "username",
-							"value": "Paczek",
-							"description": "",
-							"type": "text"
-						}
-					]
+					"mode": "raw",
+					"raw": "{\n\t\"password\":\"paczki123\",\n\t\"username\": \"Paczek\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8082/login",
@@ -589,7 +665,6 @@
 						{
 							"key": "email",
 							"value": "mailZbazyDanych@gmail.com",
-							"description": "",
 							"type": "text"
 						}
 					]
@@ -620,7 +695,6 @@
 						{
 							"key": "password",
 							"value": "newPassword",
-							"description": "",
 							"type": "text"
 						}
 					]
@@ -658,19 +732,16 @@
 						{
 							"key": "password",
 							"value": "Jarek123",
-							"description": "",
 							"type": "text"
 						},
 						{
 							"key": "email",
 							"value": "jasixterjo@gmail.com",
-							"description": "",
 							"type": "text"
 						},
 						{
 							"key": "username",
 							"value": "Jarek",
-							"description": "",
 							"type": "text"
 						}
 					]
