@@ -14,9 +14,6 @@ public class CreateUpdateQuizDTO {
     @NotNull
     private boolean isKahoot;
 
-    @NotNull
-    private String ownerId;
-
     private Date startDate;
 
     private Date endDate;
@@ -62,13 +59,5 @@ public class CreateUpdateQuizDTO {
 
     public void setIsKahoot(boolean isKahoot) {
         this.isKahoot = isKahoot;
-    }
-
-    public String getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
     }
 }

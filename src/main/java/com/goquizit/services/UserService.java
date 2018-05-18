@@ -1,10 +1,12 @@
 package com.goquizit.services;
 
 import com.goquizit.DTO.CreateUserDTO;
+import com.goquizit.model.Quiz;
 import com.goquizit.model.User;
 import com.goquizit.repository.UserRepository;
 import com.goquizit.utils.BootStrap;
 import org.apache.logging.log4j.Logger;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -78,5 +80,15 @@ public class UserService implements UserDetailsService {
         }
 
         return user;
+    }
+
+    public Quiz saveQuiz(Quiz quiz)
+    {
+        UUID userId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUserId();
+        User user = repository.getOne(userId);
+        user.getQuizList().add(quiz);
+        User updatedUser = repository.save(user);
+        int index = updatedUser.getQuizList().size() -1;
+        return updatedUser.getQuizList().get(index);
     }
 }

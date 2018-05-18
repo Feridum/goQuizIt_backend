@@ -1,10 +1,8 @@
 package com.goquizit.DTO.outputDTO;
 
-import com.goquizit.model.Question;
 import com.goquizit.model.QuizState;
 
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 public class QuizOutputDTO {
@@ -23,7 +21,8 @@ public class QuizOutputDTO {
 
     private Date endDate;
 
-    private String ownerId;
+    private UUID ownerId;
+
 
     public UUID getId() {
         return id;
@@ -81,11 +80,11 @@ public class QuizOutputDTO {
         this.endDate = endDate;
     }
 
-    public String getOwnerId() {
+    public UUID getOwnerId() {
         return ownerId;
     }
 
-    public void setOwnerId(String ownerId) {
+    public void setOwnerId(UUID ownerId) {
         this.ownerId = ownerId;
     }
 }

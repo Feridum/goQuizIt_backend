@@ -84,4 +84,8 @@ public class Question {
     public UUID getQuizId() {
         return this.quiz.getId();
     }
+
+    public void setQuiz(Quiz quiz) {
+        this.quiz = quiz;
+    }
 }

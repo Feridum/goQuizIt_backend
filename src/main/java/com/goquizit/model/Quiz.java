@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "QUIZ")
+@Table(name = "quiz")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"createdAt", "updatedAt"})
 public class Quiz {
@@ -29,6 +29,9 @@ public class Quiz {
     @JoinColumn(name = "quiz")
     private List<Question> questionSet;
 
+    @ManyToOne
+    private User owner;
+
     private String title;
 
     @Enumerated(EnumType.STRING)
@@ -40,7 +43,6 @@ public class Quiz {
 
     private Date endDate;
 
-    private String ownerId;
 
     public UUID getId() {
         return id;
@@ -98,14 +100,6 @@ public class Quiz {
         this.startDate = startDate;
     }
 
-    public String getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
-    }
-
     public List<Question> getQuestions() {
         return questionSet;
     }
@@ -114,8 +108,19 @@ public class Quiz {
         this.questionSet = questionSet;
     }
 
-    public Question getLastQuestion()
-    {
-       return questionSet.get(questionSet.size()-1);
+    public Question getLastQuestion() {
+        return questionSet.get(questionSet.size() - 1);
+    }
+
+    public List<Question> getQuestionSet() {
+        return questionSet;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User user) {
+        this.owner = user;
     }
 }

@@ -6,6 +6,7 @@ import org.hibernate.annotations.Type;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Table(name = "players")
@@ -19,23 +20,23 @@ public class Player {
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(columnDefinition = "uuid")
-    private String playerId;
+    private UUID playerId;
 
-    private Long quizId;
+    private UUID quizId;
 
-    public String getPlayerId() {
+    public UUID getPlayerId() {
         return playerId;
     }
 
-    public void setPlayerId(String playerId) {
+    public void setPlayerId(UUID playerId) {
         this.playerId = playerId;
     }
 
-    public Long getQuizId() {
+    public UUID getQuizId() {
         return quizId;
     }
 
-    public void setQuizId(Long quizId) {
+    public void setQuizId(UUID quizId) {
         this.quizId = quizId;
     }
 }

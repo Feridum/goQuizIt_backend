@@ -1,6 +1,5 @@
 package com.goquizit.services;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.goquizit.DTO.CreateUpdateAnswersDTO;
 import com.goquizit.DTO.CreateUpdateQuestionDTO;
 import com.goquizit.DTO.QuestionWithAnswersInputDTO;
@@ -28,7 +27,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class QuestionService implements Serializable{
+public class QuestionService implements Serializable {
 
     @Autowired
     QuestionRepository questionRepository;

@@ -186,6 +186,18 @@ public class RESTController {
         return ResponseEntity.status(HttpStatus.OK).body(quizService.getByState(quizState));
     }
 
+    @GetMapping("/quiz/token/{token}")
+    public ResponseEntity getQuizByToken(@PathVariable(value = "token") String token)
+    {
+        return ResponseEntity.status(HttpStatus.OK).body(quizService.getByToken(token));
+    }
+
+    @GetMapping("/quiz/{quiz_id}/questionNumber/{number}")
+    public ResponseEntity getQuestionByQuizIdByIndex(@PathVariable(value = "quiz_id") UUID quizId, @PathVariable(value = "number") int index)
+    {
+        return ResponseEntity.status(HttpStatus.OK).body(quizService.getQuestionByQuizIdByIndex(quizId, index));
+    }
+
     //--------------------------------------------------------------------
 
     // TODO: Implement User API

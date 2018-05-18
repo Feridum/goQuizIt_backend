@@ -15,4 +15,6 @@ import java.util.UUID;
 public interface QuizRepository extends JpaRepository<Quiz, UUID> {
 
     List<Quiz> findByState(QuizState state);
+
+    Quiz findByToken(String token);
 }

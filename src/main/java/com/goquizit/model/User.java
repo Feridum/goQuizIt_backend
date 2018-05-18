@@ -30,11 +30,12 @@ public class User implements UserDetails {
     @CreatedDate
     private Date registrationDate;
 
-    private String isLoggedIn;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner")
+    private List<Quiz> quizList;
 
     public User() {
     }
-
 
     public UUID getUserId() {
         return userId;
@@ -76,13 +77,12 @@ public class User implements UserDetails {
         this.registrationDate = registrationDate;
     }
 
-
-    public String getIsLoggedIn() {
-        return isLoggedIn;
+    public List<Quiz> getQuizList() {
+        return quizList;
     }
 
-    public void setIsLoggedIn(String isLoggedIn) {
-        this.isLoggedIn = isLoggedIn;
+    public void setQuizList(List<Quiz> quizList) {
+        this.quizList = quizList;
     }
 
     @Override
