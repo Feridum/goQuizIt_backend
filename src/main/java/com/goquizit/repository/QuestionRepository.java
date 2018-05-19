@@ -12,7 +12,7 @@ import java.util.UUID;
 public interface QuestionRepository extends JpaRepository<Question, UUID> {
 
     @Query(value = "select * from question where quiz = :quizId and index = :index", nativeQuery = true)
-    Question findByQuizAndIndex(@Param("quizId") UUID quizId, @Param("index") int index);
+    Question findByQuizIdAndIndex(@Param("quizId") UUID quizId, @Param("index") int index);
 
     @Query(value = "select count(*) from question where quiz = :quizId", nativeQuery = true)
     int getNumberOfQuestionsByQuizId(@Param("quizId") UUID quizId);

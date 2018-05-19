@@ -98,4 +98,9 @@ public class Question {
     public void setIndex(int index) {
         this.index = index;
     }
+
+    public void decrementIndex()
+    {
+        --index;
+    }
 }

@@ -88,7 +88,20 @@ public class QuestionService implements Serializable {
     public ResponseEntity deleteById(UUID questionId) throws ResourceNotFoundException {
         Question question = questionRepository.findById(questionId).orElseThrow(() -> new ResourceNotFoundException("Question", "id", questionId));
         questionRepository.delete(question);
+        this.reindexingQuestionsByQuizId(question.getIndex(), question.getQuiz().getId());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    private void reindexingQuestionsByQuizId(int index, UUID quizId) {
+        Quiz quiz = quizService.getOne(quizId);
+        List<Question> questions = quiz.getQuestionSet();
+        questions.forEach(question ->
+        {
+            if (question.getIndex() > index)
+                question.decrementIndex();
+        });
+        quiz.setQuestionSet(questions);
+        quizService.save(quiz);
     }
 
     public QuestionWithAnswersOutputDTO createQuestionWithAnswers(UUID quiz_id, @Valid QuestionWithAnswersInputDTO questionWithAnswersInputDTO) {
@@ -192,9 +205,9 @@ public class QuestionService implements Serializable {
         outputDTO.setIndex(question.getIndex());
         return outputDTO;
     }
-    public Question findByQuizIdAndIndex(UUID quizId, int index)
-    {
-        return questionRepository.findByQuizAndIndex(quizId,index);
+
+    public Question findByQuizIdAndIndex(UUID quizId, int index) {
+        return questionRepository.findByQuizIdAndIndex(quizId, index);
     }
 
     public int getNumberOfQuestinsByQuizId(UUID quizId) {
