@@ -22,6 +22,8 @@ import java.util.UUID;
 /**
  * Main controller of the application.
  */
+//TODO Split to few smaller class
+//TODO All method should return ResponseEntity class
 @RestController
 @RequestMapping("/api")
 public class RESTController {

@@ -160,8 +160,12 @@ public class QuestionService implements Serializable {
         return duration;
     }
 
-    public Question getOne(UUID quiestionId) {
-        return questionRepository.getOne(quiestionId);
+    public Question getOne(UUID questionId) {
+        try {
+            return questionRepository.getOne(questionId);
+        } catch (PersistenceException e) {
+            throw new UnknownRepositoryException(e.getMessage());
+        }
     }
 
     public Question save(Question question) {
@@ -177,7 +181,7 @@ public class QuestionService implements Serializable {
     }
 
     private Question mapDtoToQuestionUpdate(UUID questionId, @Valid CreateUpdateQuestionDTO question) {
-        Question questionToUpdate = questionRepository.getOne(questionId);
+        Question questionToUpdate = this.getOne(questionId);
         questionToUpdate.setValue(question.getValue());
         questionToUpdate.setType(question.getType());
         if (question.getDuration() > 0)
@@ -187,7 +191,7 @@ public class QuestionService implements Serializable {
 
     public List<AnswerOutputDTO> getAnswersByQuestionID(UUID questionId) {
         try {
-            List<Answer> answers = questionRepository.getOne(questionId).getAnswers();
+            List<Answer> answers = this.getOne(questionId).getAnswers();
             return answerService.mapAnswersToOutput(answers);
         } catch (PersistenceException e) {
             throw new UnknownRepositoryException(e.getMessage());
@@ -209,7 +213,7 @@ public class QuestionService implements Serializable {
         return questionRepository.findByQuizIdAndIndex(quizId, index);
     }
 
-    public int getNumberOfQuestinsByQuizId(UUID quizId) {
+    public int getNumberOfQuestionsByQuizId(UUID quizId) {
         return questionRepository.getNumberOfQuestionsByQuizId(quizId);
     }
 }

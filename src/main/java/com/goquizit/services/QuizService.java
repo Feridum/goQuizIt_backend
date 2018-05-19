@@ -69,7 +69,7 @@ public class QuizService {
 
     public QuizOutputDTO updateQuizById(UUID quizId, @Valid CreateUpdateQuizDTO quiz) {
         try {
-            Quiz quizToUpdate = quizRepository.getOne(quizId);
+            Quiz quizToUpdate = this.getOne(quizId);
             quizToUpdate = checkQuizIsKahoot(quizToUpdate, quiz);
             quizToUpdate.setTitle(quiz.getTitle());
             quizToUpdate.setIsKahoot(quiz.getIsKahoot());
@@ -121,7 +121,7 @@ public class QuizService {
     }
 
     public QuizOutputDTO changeState(UUID quizId, @Valid QuizState quizState) {
-        Quiz quiz = quizRepository.getOne(quizId);
+        Quiz quiz = this.getOne(quizId);
         quiz.setState(quizState);
         Quiz newQuiz = quizRepository.save(quiz);
         return mapQuizToOutput(newQuiz);
@@ -137,20 +137,27 @@ public class QuizService {
 
     public QuizOutputDTO getByToken(String token) {
         Quiz quiz = quizRepository.findByToken(token);
+        checkQuizNullable(token, quiz);
         QuizOutputDTO outputDTO = mapQuizToOutput(quiz);
         if (quiz.getState() == QuizState.ACTIVE)
             return outputDTO;
         else throw new ResponseException("Quiz is not activated");
     }
 
+    private void checkQuizNullable(String token, Quiz quiz) {
+        if (quiz == null)
+            throw new ResourceNotFoundException("Quiz", "token", token);
+    }
+
     public QuestionOutputDTO getQuestionByQuizIdByIndex(UUID quizId, int index) {
+        this.getOne(quizId);
         checkCountOfQuestions(quizId, index);
         Question question = questionService.findByQuizIdAndIndex(quizId, index);
         return questionService.mapQuestionToOutput(question, quizId);
     }
 
     private void checkCountOfQuestions(UUID quizId, int index) {
-        int numberOfQuestion = questionService.getNumberOfQuestinsByQuizId(quizId);
+        int numberOfQuestion = questionService.getNumberOfQuestionsByQuizId(quizId);
         if (numberOfQuestion == 0)
             throw new ResponseException("Quiz have no questions yet.");
         else if (index < 0 || index >= numberOfQuestion)
