@@ -341,7 +341,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"title\": \"test4\",\n\t\"isKahoot\": true,\n\t\"startDate\": \"45\",\n\t\"endDate\": \"45\"\n}"
+					"raw": "{\n\t\"title\": \"test4\",\n\t\"isKahoot\": true,\n\t\"startDate\": \"45\",\n\t\"endDate\": \"45\",\n\t\"mailRequired\": false,\n    \"telephoneNumberRequired\": false\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8082/api/quiz/",
@@ -464,8 +464,59 @@
 			"response": []
 		},
 		{
+			"name": "add player by quizId",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJQYWN6ZWsifQ.LIhnB0wjjL4gdOFkQUU-a6z2cBPrxYhaRY-I6PbmD030UbIzFU39QbMzI0nxxeVSzlrvEG8zvv4BM6nGa1Y4cg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"name1\",\n\t\"surname\": \"surname1\",\n\t\"mail\": \"sdfasd@o2.pl\",\n    \"telephoneNumber\": \"asfsd\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8082/api/quiz/253eb2dd-9002-4262-bba0-4040b999b33b/players",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"quiz",
+						"253eb2dd-9002-4262-bba0-4040b999b33b",
+						"players"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "update quiz",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJQYWN6ZWsifQ.LIhnB0wjjL4gdOFkQUU-a6z2cBPrxYhaRY-I6PbmD030UbIzFU39QbMzI0nxxeVSzlrvEG8zvv4BM6nGa1Y4cg",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [
 					{
@@ -475,10 +526,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"title\": \"update 2 title\",\n\t\"state\": \"ACTIVE\",\n\t\"isKahoot\": false,\n\t\"ownerId\": \"123456\"\n}"
+					"raw": "{\n\t\"title\": \"update 2 title\",\n\t\"state\": \"ACTIVE\",\n\t\"isKahoot\": false,\n\t\"ownerId\": \"123456\",\n\t\"mailRequired\": true,\n    \"telephoneNumberRequired\": false\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8082/api/quiz/d2022f44-a27a-4417-97c9-cddf1e341276",
+					"raw": "http://localhost:8082/api/quiz/253eb2dd-9002-4262-bba0-4040b999b33b",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -487,7 +538,7 @@
 					"path": [
 						"api",
 						"quiz",
-						"d2022f44-a27a-4417-97c9-cddf1e341276"
+						"253eb2dd-9002-4262-bba0-4040b999b33b"
 					]
 				}
 			},
@@ -496,6 +547,16 @@
 		{
 			"name": "update quiz state",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJQYWN6ZWsifQ.LIhnB0wjjL4gdOFkQUU-a6z2cBPrxYhaRY-I6PbmD030UbIzFU39QbMzI0nxxeVSzlrvEG8zvv4BM6nGa1Y4cg",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [],
 				"body": {
@@ -503,7 +564,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8082/api/quiz/d2022f44-a27a-4417-97c9-cddf1e341276/patch/INACTIVE",
+					"raw": "http://localhost:8082/api/quiz/253eb2dd-9002-4262-bba0-4040b999b33b/patch/ACTIVE",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -512,9 +573,9 @@
 					"path": [
 						"api",
 						"quiz",
-						"d2022f44-a27a-4417-97c9-cddf1e341276",
+						"253eb2dd-9002-4262-bba0-4040b999b33b",
 						"patch",
-						"INACTIVE"
+						"ACTIVE"
 					]
 				}
 			},
