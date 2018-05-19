@@ -21,6 +21,12 @@ public class CreateUpdateQuizDTO {
     @Enumerated(EnumType.STRING)
     private QuizState state;
 
+    @NotNull
+    private boolean mailRequired;
+
+    @NotNull
+    private boolean telephoneNumberRequired;
+
     public QuizState getState() {
         return state;
     }
@@ -59,5 +65,21 @@ public class CreateUpdateQuizDTO {
 
     public void setIsKahoot(boolean isKahoot) {
         this.isKahoot = isKahoot;
+    }
+
+    public boolean isMailRequired() {
+        return mailRequired;
+    }
+
+    public void setMailRequired(boolean mailRequired) {
+        this.mailRequired = mailRequired;
+    }
+
+    public boolean isTelephoneNumberRequired() {
+        return telephoneNumberRequired;
+    }
+
+    public void setTelephoneNumberRequired(boolean telephoneNumberRequired) {
+        this.telephoneNumberRequired = telephoneNumberRequired;
     }
 }

@@ -29,6 +29,10 @@ public class Quiz {
     @JoinColumn(name = "quiz")
     private List<Question> questionSet;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "quiz")
+    private List<Player> players;
+
     @ManyToOne
     private User owner;
 
@@ -43,6 +47,9 @@ public class Quiz {
 
     private Date endDate;
 
+    private boolean mailRequired;
+
+    private boolean telephoneNumberRequired;
 
     public UUID getId() {
         return id;
@@ -122,5 +129,29 @@ public class Quiz {
 
     public void setOwner(User user) {
         this.owner = user;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
+    }
+
+    public boolean isMailRequired() {
+        return mailRequired;
+    }
+
+    public void setMailRequired(boolean mailRequired) {
+        this.mailRequired = mailRequired;
+    }
+
+    public boolean isTelephoneNumberRequired() {
+        return telephoneNumberRequired;
+    }
+
+    public void setTelephoneNumberRequired(boolean telephoneNumberRequired) {
+        this.telephoneNumberRequired = telephoneNumberRequired;
     }
 }

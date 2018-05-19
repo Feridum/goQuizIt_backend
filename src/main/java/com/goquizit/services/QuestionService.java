@@ -83,7 +83,6 @@ public class QuestionService implements Serializable {
         return mapQuestionToOutput(questionToUpdate, questionToUpdate.getQuizId());
     }
 
-    //TODO reindex questions
     //TODO get next question after obtain answers from player
     public ResponseEntity deleteById(UUID questionId) throws ResourceNotFoundException {
         Question question = questionRepository.findById(questionId).orElseThrow(() -> new ResourceNotFoundException("Question", "id", questionId));

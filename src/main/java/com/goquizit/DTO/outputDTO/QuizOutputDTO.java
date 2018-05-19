@@ -23,6 +23,10 @@ public class QuizOutputDTO {
 
     private UUID ownerId;
 
+    private boolean mailRequired;
+
+    private boolean telephoneNumberRequired;
+
 
     public UUID getId() {
         return id;
@@ -86,5 +90,21 @@ public class QuizOutputDTO {
 
     public void setOwnerId(UUID ownerId) {
         this.ownerId = ownerId;
+    }
+
+    public boolean isMailRequired() {
+        return mailRequired;
+    }
+
+    public void setMailRequired(boolean mailRequired) {
+        this.mailRequired = mailRequired;
+    }
+
+    public boolean isTelephoneNumberRequired() {
+        return telephoneNumberRequired;
+    }
+
+    public void setTelephoneNumberRequired(boolean telephoneNumberRequired) {
+        this.telephoneNumberRequired = telephoneNumberRequired;
     }
 }

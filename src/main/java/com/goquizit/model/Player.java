@@ -6,10 +6,11 @@ import org.hibernate.annotations.Type;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "players")
+@Table(name = "player")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"createdAt", "updatedAt"},
         allowGetters = true)
@@ -22,7 +23,20 @@ public class Player {
     @Column(columnDefinition = "uuid")
     private UUID playerId;
 
-    private UUID quizId;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "player")
+    private List<PlayerAnswer> playerAnswers;
+
+    private String name;
+
+    private String surname;
+
+    private String telephoneNumber;
+
+    private String mail;
+
+    @ManyToOne
+    private Quiz quiz;
 
     public UUID getPlayerId() {
         return playerId;
@@ -32,11 +46,51 @@ public class Player {
         this.playerId = playerId;
     }
 
-    public UUID getQuizId() {
-        return quizId;
+    public List<PlayerAnswer> getPlayerAnswers() {
+        return playerAnswers;
     }
 
-    public void setQuizId(UUID quizId) {
-        this.quizId = quizId;
+    public void setPlayerAnswers(List<PlayerAnswer> playerAnswers) {
+        this.playerAnswers = playerAnswers;
+    }
+
+    public Quiz getQuiz() {
+        return quiz;
+    }
+
+    public void setQuiz(Quiz quiz) {
+        this.quiz = quiz;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getTelephoneNumber() {
+        return telephoneNumber;
+    }
+
+    public void setTelephoneNumber(String telephoneNumber) {
+        this.telephoneNumber = telephoneNumber;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 }

@@ -73,13 +73,14 @@ public class QuizService {
             quizToUpdate = checkQuizIsKahoot(quizToUpdate, quiz);
             quizToUpdate.setTitle(quiz.getTitle());
             quizToUpdate.setIsKahoot(quiz.getIsKahoot());
+            quizToUpdate.setMailRequired(quiz.isMailRequired());
+            quizToUpdate.setTelephoneNumberRequired(quiz.isTelephoneNumberRequired());
             if (quiz.getEndDate() != null)
                 quizToUpdate.setEndDate(quiz.getEndDate());
             if (quiz.getState() != null)
                 quizToUpdate.setState(quiz.getState());
             if (quiz.getStartDate() != null)
                 quizToUpdate.setStartDate(quiz.getStartDate());
-
             Quiz newQuiz = quizRepository.save(quizToUpdate);
             return mapQuizToOutput(newQuiz);
         } catch (PersistenceException e) {
@@ -145,7 +146,7 @@ public class QuizService {
     public QuestionOutputDTO getQuestionByQuizIdByIndex(UUID quizId, int index) {
         checkCountOfQuestions(quizId, index);
         Question question = questionService.findByQuizIdAndIndex(quizId, index);
-        return questionService.mapQuestionToOutput(question,quizId);
+        return questionService.mapQuestionToOutput(question, quizId);
     }
 
     private void checkCountOfQuestions(UUID quizId, int index) {
@@ -177,6 +178,8 @@ public class QuizService {
         outputDTO.setStartDate(quiz.getStartDate());
         outputDTO.setState(quiz.getState());
         outputDTO.setToken(quiz.getToken());
+        outputDTO.setTelephoneNumberRequired(quiz.isTelephoneNumberRequired());
+        outputDTO.setMailRequired(quiz.isMailRequired());
         return outputDTO;
     }
 

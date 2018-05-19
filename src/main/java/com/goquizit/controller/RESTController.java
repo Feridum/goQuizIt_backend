@@ -7,16 +7,9 @@ import com.goquizit.DTO.outputDTO.QuizOutputDTO;
 import com.goquizit.DTO.outputDTO.TokenOutputDTO;
 import com.goquizit.exception.InvalidContentException;
 import com.goquizit.exception.ResourceNotFoundException;
-import com.goquizit.model.Player;
 import com.goquizit.model.QuizState;
 import com.goquizit.model.User;
-import com.goquizit.repository.PlayerRepository;
-import com.goquizit.repository.QuizRepository;
-import com.goquizit.repository.UserRepository;
-import com.goquizit.services.AnswerService;
-import com.goquizit.services.QuestionService;
-import com.goquizit.services.QuizService;
-import com.goquizit.services.UserService;
+import com.goquizit.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,15 +38,8 @@ public class RESTController {
     @Autowired
     UserService userService;
 
-    // TODO: refactor to service
     @Autowired
-    PlayerRepository playerRepository;
-
-    // TODO: refactor to service
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    QuizRepository quizRepository;
+    PlayerService playerService;
 
 
     // Answers methods
@@ -84,16 +70,10 @@ public class RESTController {
 
     //--------------------------------------------------------------------
 
-    // TODO: Implement Player API
     // Players methods
-    @PostMapping("/players")
-    public Player createPlayer(@Valid @RequestBody Player player) {
-        return playerRepository.save(player);
-    }
-
-    @GetMapping("/players")
-    public List<Player> getAllPlayers() {
-        return playerRepository.findAll();
+    @PostMapping("/quiz/{quiz_id}/players")
+    public QuestionWithPlayerIdDTO createPlayer(@PathVariable(value = "quiz_id") UUID quiz_id, @Valid @RequestBody PlayerDTO player) {
+        return playerService.create(player, quiz_id);
     }
 
     //--------------------------------------------------------------------
@@ -187,34 +167,21 @@ public class RESTController {
     }
 
     @GetMapping("/quiz/token/{token}")
-    public ResponseEntity getQuizByToken(@PathVariable(value = "token") String token)
-    {
+    public ResponseEntity getQuizByToken(@PathVariable(value = "token") String token) {
         return ResponseEntity.status(HttpStatus.OK).body(quizService.getByToken(token));
     }
 
     @GetMapping("/quiz/{quiz_id}/questionNumber/{number}")
-    public ResponseEntity getQuestionByQuizIdByIndex(@PathVariable(value = "quiz_id") UUID quizId, @PathVariable(value = "number") int index)
-    {
+    public ResponseEntity getQuestionByQuizIdByIndex(@PathVariable(value = "quiz_id") UUID quizId, @PathVariable(value = "number") int index) {
         return ResponseEntity.status(HttpStatus.OK).body(quizService.getQuestionByQuizIdByIndex(quizId, index));
     }
 
     //--------------------------------------------------------------------
 
-    // TODO: Implement User API
     // User methods
-    @PostMapping("/users")
-    public User createUser(@Valid @RequestBody User users) {
-        return userRepository.save(users);
-    }
-
-    @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
 
     @PostMapping("/register")
     public User addUser(@Valid @RequestBody CreateUserDTO dto) {
         return userService.addUser(dto);
     }
-
 }
