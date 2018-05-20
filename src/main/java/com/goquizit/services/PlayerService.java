@@ -1,7 +1,8 @@
 package com.goquizit.services;
 
 import com.goquizit.DTO.PlayerDTO;
-import com.goquizit.DTO.QuestionWithPlayerIdDTO;
+import com.goquizit.DTO.QuestionWithAnswersAndPlayerIdDTO;
+import com.goquizit.DTO.outputDTO.AnswerToPlayerOutputDTO;
 import com.goquizit.DTO.outputDTO.QuestionOutputDTO;
 import com.goquizit.exception.ResponseException;
 import com.goquizit.exception.UnknownRepositoryException;
@@ -34,8 +35,11 @@ public class PlayerService {
     @Autowired
     QuestionService questionService;
 
+    @Autowired
+    AnswerService answerService;
 
-    public QuestionWithPlayerIdDTO create(@Valid PlayerDTO player, @Valid UUID quizId) {
+
+    public QuestionWithAnswersAndPlayerIdDTO create(@Valid PlayerDTO player, @Valid UUID quizId) {
         try {
             Player newPlayer = this.mapCreatePlayerDTOToPlayer(player);
             Quiz quiz = quizService.getOne(quizId);
@@ -43,13 +47,16 @@ public class PlayerService {
             quiz.getPlayers().add(newPlayer);
             checkRequiredField(player, quiz);
             checkNumberOfQuestionAndQuizState(quiz);
-            Quiz tempQuiz = quizService.save(quiz);
             Question question = quiz.getQuestionSet().get(0);
 
             QuestionOutputDTO outputQuestionDTO = questionService.mapQuestionToOutput(question, quizId);
+            List<AnswerToPlayerOutputDTO> answers = answerService.mapAnswersToPlayerToOutput(question.getAnswers());
+            if(answers.isEmpty())
+                throw new ResponseException("Question have not any answers");
+            Quiz tempQuiz = quizService.save(quiz);
             UUID playerId = tempQuiz.getPlayers().get(tempQuiz.getPlayers().size() - 1).getPlayerId();
 
-            QuestionWithPlayerIdDTO outputDTO = new QuestionWithPlayerIdDTO(playerId, outputQuestionDTO);
+            QuestionWithAnswersAndPlayerIdDTO outputDTO = new QuestionWithAnswersAndPlayerIdDTO(playerId, outputQuestionDTO,answers);
             return outputDTO;
         }catch (EntityNotFoundException e)
         {

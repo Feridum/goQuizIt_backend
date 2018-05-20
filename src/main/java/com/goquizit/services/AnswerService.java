@@ -2,6 +2,7 @@ package com.goquizit.services;
 
 import com.goquizit.DTO.outputDTO.AnswerOutputDTO;
 import com.goquizit.DTO.CreateUpdateAnswersDTO;
+import com.goquizit.DTO.outputDTO.AnswerToPlayerOutputDTO;
 import com.goquizit.exception.ResourceNotFoundException;
 import com.goquizit.exception.UnknownRepositoryException;
 import com.goquizit.model.Answer;
@@ -90,6 +91,19 @@ public class AnswerService {
         });
         return outputDTOs;
     }
+    public List<AnswerToPlayerOutputDTO> mapAnswersToPlayerToOutput(List<Answer> answers) {
+        List<AnswerToPlayerOutputDTO> outputDTOs = new ArrayList<>();
+        answers.forEach(answer ->
+        {
+            AnswerToPlayerOutputDTO outputDTO = new AnswerToPlayerOutputDTO();
+            outputDTO.setAnswerId(answer.getAnswerId());
+            outputDTO.setValue(answer.getValue());
+            outputDTO.setQuestionId(answer.getQuestionId());
+            outputDTOs.add(outputDTO);
+        });
+        return outputDTOs;
+    }
+
 
     private AnswerOutputDTO mapAnswerToOutput(Answer answer) {
         AnswerOutputDTO outputDTO = new AnswerOutputDTO();
