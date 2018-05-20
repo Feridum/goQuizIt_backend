@@ -173,6 +173,8 @@ public class QuestionService implements Serializable {
 
     private Question mapDtoToQuestion(UUID quiz_id, @Valid CreateUpdateQuestionDTO createUpdateQuestionDTO) {
         Question question = new Question();
+        if(createUpdateQuestionDTO.getType() == null)
+            throw new InvalidContentException("Type");
         question.setType(createUpdateQuestionDTO.getType());
         question.setValue(createUpdateQuestionDTO.getValue());
         question.setDuration(setDuration(quiz_id, createUpdateQuestionDTO.getDuration()));

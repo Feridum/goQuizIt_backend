@@ -410,7 +410,7 @@
 					"raw": "{\n\t\"question\": \n\t{\n\t\"value\": \"1dsfsadf1My fiewrst question1gr111e\",\n\t\"duration\": 149,\n\t\"type\": \"SINGLE_CHOICE\"\n\t},\n\t\"answers\": [\n\t{\n\t\"value\" : \"odpowiedz1\",\n\t\"isPositive\": true\n\t}, \n\t{\n\t\"value\" : \"odpowiedz2\",\n\t\"isPositive\": false\n\t}\n\t]\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8082/api/quiz/253eb2dd-9002-4262-bba0-4040b999b33b/questionWithAnswers",
+					"raw": "http://localhost:8082/api/quiz/a1396cec-4e6d-45f0-a75d-25d07f83801a/questionWithAnswers",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -419,7 +419,7 @@
 					"path": [
 						"api",
 						"quiz",
-						"253eb2dd-9002-4262-bba0-4040b999b33b",
+						"a1396cec-4e6d-45f0-a75d-25d07f83801a",
 						"questionWithAnswers"
 					]
 				}
@@ -429,16 +429,6 @@
 		{
 			"name": "add player by quizId",
 			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJQYWN6ZWsifQ.LIhnB0wjjL4gdOFkQUU-a6z2cBPrxYhaRY-I6PbmD030UbIzFU39QbMzI0nxxeVSzlrvEG8zvv4BM6nGa1Y4cg",
-							"type": "string"
-						}
-					]
-				},
 				"method": "POST",
 				"header": [
 					{
@@ -451,7 +441,7 @@
 					"raw": "{\n\t\"name\": \"name1\",\n\t\"surname\": \"surname1\",\n\t\"mail\": \"sdfasd@o2.pl\",\n    \"telephoneNumber\": \"asfsd\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8082/api/players/quiz/253eb2dd-9002-4262-bba0-4040b999b33b",
+					"raw": "http://localhost:8082/api/players/quiz/a1396cec-4e6d-45f0-a75d-25d07f83801a",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -461,7 +451,7 @@
 						"api",
 						"players",
 						"quiz",
-						"253eb2dd-9002-4262-bba0-4040b999b33b"
+						"a1396cec-4e6d-45f0-a75d-25d07f83801a"
 					]
 				}
 			},
@@ -547,6 +537,16 @@
 		{
 			"name": "update question with answers",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJQYWN6ZWsifQ.LIhnB0wjjL4gdOFkQUU-a6z2cBPrxYhaRY-I6PbmD030UbIzFU39QbMzI0nxxeVSzlrvEG8zvv4BM6nGa1Y4cg",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [
 					{
@@ -559,7 +559,7 @@
 					"raw": "{\n\t\"question\": \n\t{\n\t\"value\": \"1111My seconf question1gr111e\",\n\t\"duration\": 10,\n\t\"type\": \"SINGLE_CHOICE\"\n\t},\n\t\"answers\": [\n\t{\n\t\"value\" : \"odpowiedz3\",\n\t\"isPositive\": true\n\t}, \n\t{\n\t\"value\" : \"odpowiedz4\",\n\t\"isPositive\": false\n\t}\n\t]\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8082/api/quiz/fe343857-a937-4b32-aec0-c283dee75660/questionWithAnswers",
+					"raw": "http://localhost:8082/api/quiz/84220e75-256b-4e63-88fe-f6bc4b0a6e45/questionWithAnswers",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -568,7 +568,7 @@
 					"path": [
 						"api",
 						"quiz",
-						"fe343857-a937-4b32-aec0-c283dee75660",
+						"84220e75-256b-4e63-88fe-f6bc4b0a6e45",
 						"questionWithAnswers"
 					]
 				}
