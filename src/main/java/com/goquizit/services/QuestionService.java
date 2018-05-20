@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceException;
 import javax.validation.Valid;
 import java.io.Serializable;
@@ -55,13 +56,6 @@ public class QuestionService implements Serializable {
         return mapQuestionToOutput(question, question.getQuiz().getId());
     }
 
-    public List<QuestionOutputDTO> getAllQuestions() {
-        List<Question> questions = questionRepository.findAll();
-        List<QuestionOutputDTO> outputDTOS = new ArrayList<>();
-        questions.forEach(question -> outputDTOS.add(mapQuestionToOutput(question, question.getQuizId())));
-        return outputDTOS;
-    }
-
     public QuestionOutputDTO createQuestion(UUID quiz_id, @Valid CreateUpdateQuestionDTO createUpdateQuestionDTO) {
         try {
             Question question = mapDtoToQuestion(quiz_id, createUpdateQuestionDTO);
@@ -92,6 +86,7 @@ public class QuestionService implements Serializable {
     }
 
     private void reindexingQuestionsByQuizId(int index, UUID quizId) {
+        try{
         Quiz quiz = quizService.getOne(quizId);
         List<Question> questions = quiz.getQuestionSet();
         questions.forEach(question ->
@@ -101,6 +96,10 @@ public class QuestionService implements Serializable {
         });
         quiz.setQuestionSet(questions);
         quizService.save(quiz);
+        }catch (EntityNotFoundException e)
+        {
+            throw new UnknownRepositoryException(e.getMessage());
+        }
     }
 
     public QuestionWithAnswersOutputDTO createQuestionWithAnswers(UUID quiz_id, @Valid QuestionWithAnswersInputDTO questionWithAnswersInputDTO) {
@@ -181,12 +180,17 @@ public class QuestionService implements Serializable {
     }
 
     private Question mapDtoToQuestionUpdate(UUID questionId, @Valid CreateUpdateQuestionDTO question) {
+        try{
         Question questionToUpdate = this.getOne(questionId);
         questionToUpdate.setValue(question.getValue());
         questionToUpdate.setType(question.getType());
         if (question.getDuration() > 0)
             questionToUpdate.setDuration(question.getDuration());
         return questionToUpdate;
+        }catch (EntityNotFoundException e)
+        {
+            throw new UnknownRepositoryException(e.getMessage());
+        }
     }
 
     public List<AnswerOutputDTO> getAnswersByQuestionID(UUID questionId) {
