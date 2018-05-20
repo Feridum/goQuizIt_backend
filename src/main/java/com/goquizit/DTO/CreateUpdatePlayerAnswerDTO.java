@@ -6,5 +6,13 @@ import java.util.List;
 
 public class CreateUpdatePlayerAnswerDTO {
 
-    List<Answer> answersGivenByUser;
+    List<PlayerAnswerDTO> answersGivenByUser;
+
+    public List<PlayerAnswerDTO> getAnswersGivenByUser() {
+        return answersGivenByUser;
+    }
+
+    public void setAnswersGivenByUser(List<PlayerAnswerDTO> answersGivenByUser) {
+        this.answersGivenByUser = answersGivenByUser;
+    }
 }

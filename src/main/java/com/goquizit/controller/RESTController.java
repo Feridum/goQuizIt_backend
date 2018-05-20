@@ -88,22 +88,19 @@ public class RESTController {
 
     // PlayerAnswer methoods
 
-    @GetMapping("/players/{player_id}/quiz/{quiz_id}/question/{question_id}/answers")
+    @GetMapping("/players/{player_id}/question/{question_id}/answers")
     public ResponseEntity<List<PlayerAnswerOutputDTO>> getPlayerAnswersByQuestionId(@PathVariable(value = "player_id") UUID player_id,
-                                                                                    @PathVariable(value = "quiz_id") UUID quiz_id,
-                                                                                    @PathVariable(value = "question_id") UUID question_id,
-                                                                                    @Valid @RequestBody CreateUpdatePlayerAnswerDTO createUpdatePlayerAnswerDTO) {
+                                                                                    @PathVariable(value = "question_id") UUID question_id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(playerAnswerService.getPlayerAnswersByQuestionId(player_id, quiz_id, question_id));
+                .body(playerAnswerService.getPlayerAnswersByQuestionId(player_id, question_id));
     }
 
-    @PutMapping("/players/{player_id}/quiz/{quiz_id}/question/{question_id}/answers")
+    @PutMapping("/players/{player_id}/question/{question_id}/answers")
     public ResponseEntity<List<PlayerAnswerOutputDTO>> updatePlayerAnswersByQuestionId(@PathVariable(value = "player_id") UUID player_id,
-                                                          @PathVariable(value = "quiz_id") UUID quiz_id,
-                                                          @PathVariable(value = "question_id") UUID question_id,
-                                                          @Valid @RequestBody CreateUpdatePlayerAnswerDTO createUpdatePlayerAnswerDTO) {
+                                                                                       @PathVariable(value = "question_id") UUID question_id,
+                                                                                       @Valid @RequestBody CreateUpdatePlayerAnswerDTO createUpdatePlayerAnswerDTO) {
         return ResponseEntity.status(HttpStatus.OK)
-            .body(playerAnswerService.updatePlayerAnswersByQuestionId(player_id, quiz_id, question_id));
+            .body(playerAnswerService.updatePlayerAnswersByQuestionId(player_id, question_id, createUpdatePlayerAnswerDTO));
     }
 
     //--------------------------------------------------------------------
