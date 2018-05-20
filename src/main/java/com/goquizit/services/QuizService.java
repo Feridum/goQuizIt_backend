@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceException;
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -110,7 +111,7 @@ public class QuizService {
 
     public Quiz getOne(UUID quizId) {
         try {
-            return quizRepository.getOne(quizId);
+           return quizRepository.getOne(quizId);
         } catch (PersistenceException e) {
             throw new UnknownRepositoryException(e.getMessage());
         }

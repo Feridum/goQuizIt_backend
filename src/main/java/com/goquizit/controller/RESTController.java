@@ -73,7 +73,7 @@ public class RESTController {
     //--------------------------------------------------------------------
 
     // Players methods
-    @PostMapping("/quiz/{quiz_id}/players")
+    @PostMapping("/players/quiz/{quiz_id}")
     public QuestionWithPlayerIdDTO createPlayer(@PathVariable(value = "quiz_id") UUID quiz_id, @Valid @RequestBody PlayerDTO player) {
         return playerService.create(player, quiz_id);
     }
