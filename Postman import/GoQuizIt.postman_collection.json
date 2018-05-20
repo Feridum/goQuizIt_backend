@@ -150,31 +150,6 @@
 			"response": []
 		},
 		{
-			"name": "get all questions",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"url": {
-					"raw": "http://localhost:8082/api/questions/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8082",
-					"path": [
-						"api",
-						"questions",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "get question by id",
 			"request": {
 				"method": "GET",
@@ -260,30 +235,6 @@
 			"response": []
 		},
 		{
-			"name": "get all answers",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"url": {
-					"raw": "http://localhost:8082/api/answers",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8082",
-					"path": [
-						"api",
-						"answers"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "get question answers",
 			"request": {
 				"method": "GET",
@@ -304,6 +255,39 @@
 						"question",
 						"fe343857-a937-4b32-aec0-c283dee75660",
 						"answers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get question with answers by quizID",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJQYWN6ZWsifQ.LIhnB0wjjL4gdOFkQUU-a6z2cBPrxYhaRY-I6PbmD030UbIzFU39QbMzI0nxxeVSzlrvEG8zvv4BM6nGa1Y4cg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8082/api/quiz/253eb2dd-9002-4262-bba0-4040b999b33b/questionWithAnswers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"quiz",
+						"253eb2dd-9002-4262-bba0-4040b999b33b",
+						"questionWithAnswers"
 					]
 				}
 			},
@@ -402,39 +386,18 @@
 			"response": []
 		},
 		{
-			"name": "add answers to question",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "[\n\t{\n\t\"value\" : \"odpowiedz1\",\n\t\"isPositive\": true\n\t}, \n\t{\n\t\"value\" : \"odpowiedz2\",\n\t\"isPositive\": false\n\t}\n]"
-				},
-				"url": {
-					"raw": "http://localhost:8082/api/question/fe343857-a937-4b32-aec0-c283dee75660/answers",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8082",
-					"path": [
-						"api",
-						"question",
-						"fe343857-a937-4b32-aec0-c283dee75660",
-						"answers"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "add question with answers",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJQYWN6ZWsifQ.LIhnB0wjjL4gdOFkQUU-a6z2cBPrxYhaRY-I6PbmD030UbIzFU39QbMzI0nxxeVSzlrvEG8zvv4BM6nGa1Y4cg",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [
 					{
@@ -447,7 +410,7 @@
 					"raw": "{\n\t\"question\": \n\t{\n\t\"value\": \"1dsfsadf1My fiewrst question1gr111e\",\n\t\"duration\": 149,\n\t\"type\": \"SINGLE_CHOICE\"\n\t},\n\t\"answers\": [\n\t{\n\t\"value\" : \"odpowiedz1\",\n\t\"isPositive\": true\n\t}, \n\t{\n\t\"value\" : \"odpowiedz2\",\n\t\"isPositive\": false\n\t}\n\t]\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8082/api/quiz/00085e3f-063d-4e92-ad14-e62ffdc9125d/questionWithAnswers",
+					"raw": "http://localhost:8082/api/quiz/253eb2dd-9002-4262-bba0-4040b999b33b/questionWithAnswers",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -456,7 +419,7 @@
 					"path": [
 						"api",
 						"quiz",
-						"00085e3f-063d-4e92-ad14-e62ffdc9125d",
+						"253eb2dd-9002-4262-bba0-4040b999b33b",
 						"questionWithAnswers"
 					]
 				}
@@ -488,7 +451,7 @@
 					"raw": "{\n\t\"name\": \"name1\",\n\t\"surname\": \"surname1\",\n\t\"mail\": \"sdfasd@o2.pl\",\n    \"telephoneNumber\": \"asfsd\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8082/api/quiz/253eb2dd-9002-4262-bba0-4040b999b33b/players",
+					"raw": "http://localhost:8082/api/players/quiz/253eb2dd-9002-4262-bba0-4040b999b33b",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -496,9 +459,9 @@
 					"port": "8082",
 					"path": [
 						"api",
+						"players",
 						"quiz",
-						"253eb2dd-9002-4262-bba0-4040b999b33b",
-						"players"
+						"253eb2dd-9002-4262-bba0-4040b999b33b"
 					]
 				}
 			},
