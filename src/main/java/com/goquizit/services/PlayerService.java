@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -20,6 +22,9 @@ public class PlayerService {
 
     @Autowired
     PlayerRepository playerRepository;
+
+    @Autowired
+    PlayerService playerService;
 
     @Autowired
     QuizService quizService;
@@ -44,6 +49,18 @@ public class PlayerService {
         return outputDTO;
     }
 
+    public List<PlayerDTO> getPlayersByQuizId(@Valid UUID quizId) {
+        Quiz quiz = quizService.getOne(quizId);
+        List<Player> playerList  = quiz.getPlayers();
+        List<PlayerDTO> playerDTOList = new ArrayList<>();
+
+        for (Player p : playerList) {
+            playerDTOList.add(playerService.mapPlayerToPlayerDTO(p));
+        }
+
+        return playerDTOList;
+    }
+
     private void checkRequiredField(@Valid PlayerDTO player, Quiz quiz) {
         if (quiz.isMailRequired() && player.getMail() == null)
             throw new ResponseException("Mail is required.");
@@ -66,4 +83,14 @@ public class PlayerService {
         newPlayer.setTelephoneNumber(player.getTelephoneNumber());
         return newPlayer;
     }
+
+    private PlayerDTO mapPlayerToPlayerDTO(@Valid Player player) {
+        PlayerDTO playerDTO = new PlayerDTO();
+        playerDTO.setMail(player.getMail());
+        playerDTO.setName(player.getName());
+        playerDTO.setSurname(player.getSurname());
+        playerDTO.setTelephoneNumber(player.getTelephoneNumber());
+        return playerDTO;
+    }
+
 }

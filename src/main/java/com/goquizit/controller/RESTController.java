@@ -1,10 +1,7 @@
 package com.goquizit.controller;
 
 import com.goquizit.DTO.*;
-import com.goquizit.DTO.outputDTO.AnswerOutputDTO;
-import com.goquizit.DTO.outputDTO.QuestionOutputDTO;
-import com.goquizit.DTO.outputDTO.QuizOutputDTO;
-import com.goquizit.DTO.outputDTO.TokenOutputDTO;
+import com.goquizit.DTO.outputDTO.*;
 import com.goquizit.exception.InvalidContentException;
 import com.goquizit.exception.ResourceNotFoundException;
 import com.goquizit.model.QuizState;
@@ -16,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.xml.ws.Response;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,6 +40,9 @@ public class RESTController {
 
     @Autowired
     PlayerService playerService;
+
+    @Autowired
+    PlayerAnswerService playerAnswerService;
 
 
     // Answers methods
@@ -76,6 +77,33 @@ public class RESTController {
     @PostMapping("/quiz/{quiz_id}/players")
     public QuestionWithPlayerIdDTO createPlayer(@PathVariable(value = "quiz_id") UUID quiz_id, @Valid @RequestBody PlayerDTO player) {
         return playerService.create(player, quiz_id);
+    }
+
+    @GetMapping("/quiz/{quiz_id}/players")
+    public ResponseEntity<List<PlayerDTO>> getPlayersByQuizId(@PathVariable(value = "quiz_id") UUID quiz_id) {
+        return ResponseEntity.status(HttpStatus.OK).body(playerService.getPlayersByQuizId(quiz_id));
+    }
+
+    //--------------------------------------------------------------------
+
+    // PlayerAnswer methoods
+
+    @GetMapping("/players/{player_id}/quiz/{quiz_id}/question/{question_id}/answers")
+    public ResponseEntity<List<PlayerAnswerOutputDTO>> getPlayerAnswersByQuestionId(@PathVariable(value = "player_id") UUID player_id,
+                                                                                    @PathVariable(value = "quiz_id") UUID quiz_id,
+                                                                                    @PathVariable(value = "question_id") UUID question_id,
+                                                                                    @Valid @RequestBody CreateUpdatePlayerAnswerDTO createUpdatePlayerAnswerDTO) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(playerAnswerService.getPlayerAnswersByQuestionId(player_id, quiz_id, question_id));
+    }
+
+    @PutMapping("/players/{player_id}/quiz/{quiz_id}/question/{question_id}/answers")
+    public ResponseEntity<List<PlayerAnswerOutputDTO>> updatePlayerAnswersByQuestionId(@PathVariable(value = "player_id") UUID player_id,
+                                                          @PathVariable(value = "quiz_id") UUID quiz_id,
+                                                          @PathVariable(value = "question_id") UUID question_id,
+                                                          @Valid @RequestBody CreateUpdatePlayerAnswerDTO createUpdatePlayerAnswerDTO) {
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(playerAnswerService.updatePlayerAnswersByQuestionId(player_id, quiz_id, question_id));
     }
 
     //--------------------------------------------------------------------
