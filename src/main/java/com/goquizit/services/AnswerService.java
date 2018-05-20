@@ -37,10 +37,6 @@ public class AnswerService {
         }
     }
 
-    public List<AnswerOutputDTO> getAllAnswers() {
-        return mapAnswersToOutput(answerRepository.findAll());
-    }
-
     public AnswerOutputDTO getAnswerById(UUID answerId) throws ResourceNotFoundException {
         Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new ResourceNotFoundException("Answer", "id", answerId));
         return mapAnswerToOutput(answer);

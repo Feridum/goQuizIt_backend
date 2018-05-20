@@ -56,13 +56,6 @@ public class QuestionService implements Serializable {
         return mapQuestionToOutput(question, question.getQuiz().getId());
     }
 
-    public List<QuestionOutputDTO> getAllQuestions() {
-        List<Question> questions = questionRepository.findAll();
-        List<QuestionOutputDTO> outputDTOS = new ArrayList<>();
-        questions.forEach(question -> outputDTOS.add(mapQuestionToOutput(question, question.getQuizId())));
-        return outputDTOS;
-    }
-
     public QuestionOutputDTO createQuestion(UUID quiz_id, @Valid CreateUpdateQuestionDTO createUpdateQuestionDTO) {
         try {
             Question question = mapDtoToQuestion(quiz_id, createUpdateQuestionDTO);

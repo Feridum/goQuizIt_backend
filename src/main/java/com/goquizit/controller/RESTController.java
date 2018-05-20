@@ -45,19 +45,9 @@ public class RESTController {
 
 
     // Answers methods
-    @PostMapping("/question/{question_id}/answers")
-    public List<AnswerOutputDTO> createAnswers(@Valid @RequestBody List<CreateUpdateAnswersDTO> answers, @PathVariable("question_id") UUID questionId) {
-        return answerService.createAnswers(answers, questionId);
-    }
-
     @GetMapping("/question/{question_id}/answers")
     public List<AnswerOutputDTO> getAnswersByQuestionId(@PathVariable("question_id") UUID questionId) {
         return questionService.getAnswersByQuestionID(questionId);
-    }
-
-    @GetMapping("/answers")
-    public List<AnswerOutputDTO> getAllAnswers() {
-        return answerService.getAllAnswers();
     }
 
     @GetMapping("/answer/{answer_id}")
@@ -84,11 +74,6 @@ public class RESTController {
     @PostMapping("/quiz/{quiz_id}/questions")
     public QuestionOutputDTO createQuestion(@PathVariable(value = "quiz_id") UUID quiz_id, @Valid @RequestBody CreateUpdateQuestionDTO question) {
         return questionService.createQuestion(quiz_id, question);
-    }
-
-    @GetMapping("/questions")
-    public List<QuestionOutputDTO> getAllQuestions() {
-        return questionService.getAllQuestions();
     }
 
     @GetMapping("/quiz/{quiz_id}/questions")
