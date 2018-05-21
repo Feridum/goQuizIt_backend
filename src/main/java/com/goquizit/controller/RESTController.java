@@ -1,5 +1,6 @@
 package com.goquizit.controller;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.goquizit.DTO.*;
 import com.goquizit.DTO.outputDTO.AnswerOutputDTO;
 import com.goquizit.DTO.outputDTO.QuestionOutputDTO;
@@ -67,7 +68,7 @@ public class RESTController {
 
     // Players methods
     @PostMapping("/players/{player_id}/question/{question_id}/answers")
-    public ResponseEntity createPlayerAnswer(@PathVariable(value = "player_id") UUID player_id, @PathVariable(value = "question_id") UUID question_id, @Valid @RequestBody List<CreateUpdatePlayerAnswerDTO> playerAnswerDTOS) {
+    public ResponseEntity createPlayerAnswer(@PathVariable(value = "player_id") UUID player_id, @PathVariable(value = "question_id") UUID question_id, @Valid @RequestBody CreateUpdatePlayerAnswerDTO playerAnswerDTOS) {
         return ResponseEntity.status(HttpStatus.CREATED).body(playerAnswerService.createPlayerAnswer(player_id,question_id, playerAnswerDTOS));
     }
 

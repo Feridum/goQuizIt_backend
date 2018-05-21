@@ -34,12 +34,11 @@ public class PlayerAnswerService {
     @Autowired
     private AnswerService answerService;
 
-    public QuestionWithAnswersAndPlayerIdDTO createPlayerAnswer(UUID player_id, UUID question_id, @Valid @JsonProperty("answers") List<CreateUpdatePlayerAnswerDTO> playerAnswerDTOS) {
+    public QuestionWithAnswersAndPlayerIdDTO createPlayerAnswer(UUID player_id, UUID question_id, @Valid @JsonProperty("answers") CreateUpdatePlayerAnswerDTO playerAnswerDTOS) {
         try {
             Player player = playerService.getOne(player_id);
             Question question = questionService.getOne(question_id);
-            playerAnswerDTOS.forEach(playerAnswer ->
-                    this.createPlayerAnswerByDTO(playerAnswer, question, player));
+            this.createPlayerAnswerByDTO(playerAnswerDTOS, question, player);
 
             return prepareNextQuestionWithAnswers(player_id, question);
         } catch (PersistenceException e) {
@@ -63,13 +62,17 @@ public class PlayerAnswerService {
             throw new ResponseException("Quiz have no more questions.");
     }
 
-    public PlayerAnswer createPlayerAnswerByDTO(CreateUpdatePlayerAnswerDTO createUpdatePlayerAnswerDTO, Question question, Player player) {
-        PlayerAnswer playerAnswer = new PlayerAnswer();
-        playerAnswer.setQuestion(question);
-        playerAnswer.setAnswerID(createUpdatePlayerAnswerDTO.getId());
-        playerAnswer.setValue("answer");
-        player.getPlayerAnswers().add(playerAnswer);
-        Player updatePlayer = playerService.save(player);
-        return updatePlayer.getLastPlayerAnswer();
+    public void createPlayerAnswerByDTO(CreateUpdatePlayerAnswerDTO createUpdatePlayerAnswerDTOs, Question question, Player player) {
+        createUpdatePlayerAnswerDTOs.getId().forEach(playerAnswerId -> {
+            if(!answerService.checkAnswerIdInQuestion(playerAnswerId,question.getQuestionId()))
+                throw new ResponseException("There is no answer with that id: " + playerAnswerId);
+            PlayerAnswer playerAnswer = new PlayerAnswer();
+            playerAnswer.setQuestion(question);
+            playerAnswer.setAnswerID(playerAnswerId);
+            playerAnswer.setValue("answer");
+            player.getPlayerAnswers().add(playerAnswer);
+            Player updatePlayer = playerService.save(player);
+            updatePlayer.getLastPlayerAnswer();
+        });
     }
 }
