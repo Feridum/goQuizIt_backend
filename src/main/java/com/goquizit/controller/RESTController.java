@@ -144,7 +144,7 @@ public class RESTController {
     }
 
     @PutMapping("/quiz/{quiz_id}/patch/{quiz_state}")
-    public ResponseEntity getQuizToken(@PathVariable(value = "quiz_id") UUID quizId, @PathVariable(value = "quiz_state") QuizState quizState) {
+    public ResponseEntity changeStateByQuizId(@PathVariable(value = "quiz_id") UUID quizId, @PathVariable(value = "quiz_state") QuizState quizState) {
         return ResponseEntity.status(HttpStatus.OK).body(quizService.changeState(quizId, quizState));
     }
 
