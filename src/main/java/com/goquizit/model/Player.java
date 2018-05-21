@@ -1,6 +1,7 @@
 package com.goquizit.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.goquizit.exception.ResponseException;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -92,5 +93,12 @@ public class Player {
 
     public void setMail(String mail) {
         this.mail = mail;
+    }
+
+    public PlayerAnswer getLastPlayerAnswer() {
+        int index = playerAnswers.size();
+        if (index == 0)
+            throw new ResponseException("Can not get Answer");
+        else return playerAnswers.get(index-1);
     }
 }

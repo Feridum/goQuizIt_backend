@@ -4,6 +4,7 @@ import com.goquizit.DTO.PlayerDTO;
 import com.goquizit.DTO.QuestionWithAnswersAndPlayerIdDTO;
 import com.goquizit.DTO.outputDTO.AnswerToPlayerOutputDTO;
 import com.goquizit.DTO.outputDTO.QuestionOutputDTO;
+import com.goquizit.exception.ResourceNotFoundException;
 import com.goquizit.exception.ResponseException;
 import com.goquizit.exception.UnknownRepositoryException;
 import com.goquizit.model.Player;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.PersistenceException;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -39,7 +41,6 @@ public class PlayerService {
         try {
             Player newPlayer = this.mapCreatePlayerDTOToPlayer(player);
             Quiz quiz = quizService.getOne(quizId);
-            System.out.println(quiz);
             quiz.getPlayers().add(newPlayer);
             checkRequiredField(player, quiz);
             checkNumberOfQuestionAndQuizState(quiz);
@@ -47,15 +48,14 @@ public class PlayerService {
 
             QuestionOutputDTO outputQuestionDTO = questionService.mapQuestionToOutput(question, quizId);
             List<AnswerToPlayerOutputDTO> answers = answerService.mapAnswersToPlayerToOutput(question.getAnswers());
-            if(answers.isEmpty())
+            if (answers.isEmpty())
                 throw new ResponseException("Question have not any answers");
             Quiz tempQuiz = quizService.save(quiz);
             UUID playerId = tempQuiz.getPlayers().get(tempQuiz.getPlayers().size() - 1).getPlayerId();
 
-            QuestionWithAnswersAndPlayerIdDTO outputDTO = new QuestionWithAnswersAndPlayerIdDTO(playerId, outputQuestionDTO,answers);
+            QuestionWithAnswersAndPlayerIdDTO outputDTO = new QuestionWithAnswersAndPlayerIdDTO(playerId, outputQuestionDTO, answers);
             return outputDTO;
-        }catch (EntityNotFoundException e)
-        {
+        } catch (EntityNotFoundException e) {
             throw new UnknownRepositoryException(e.getMessage());
         }
     }
@@ -81,5 +81,17 @@ public class PlayerService {
         newPlayer.setSurname(player.getSurname());
         newPlayer.setTelephoneNumber(player.getTelephoneNumber());
         return newPlayer;
+    }
+
+    public Player getOne(UUID playerId) {
+        try {
+            return playerRepository.getOne(playerId);
+        } catch (PersistenceException e) {
+            throw new UnknownRepositoryException(e.getMessage());
+        }
+    }
+
+    public Player save(Player player) {
+        return playerRepository.save(player);
     }
 }

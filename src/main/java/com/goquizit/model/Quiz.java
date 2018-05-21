@@ -1,6 +1,7 @@
 package com.goquizit.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.goquizit.exception.ResponseException;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -111,16 +112,19 @@ public class Quiz {
         return questionSet;
     }
 
-    public void setQuestionSet(List<Question> questionSet) {
-        this.questionSet = questionSet;
-    }
-
     public Question getLastQuestion() {
-        return questionSet.get(questionSet.size() - 1);
+        int index = questionSet.size();
+        if (index == 0)
+            throw new ResponseException("Can not get question");
+        else return questionSet.get(index-1);
     }
 
     public List<Question> getQuestionSet() {
         return questionSet;
+    }
+
+    public void setQuestionSet(List<Question> questionSet) {
+        this.questionSet = questionSet;
     }
 
     public User getOwner() {

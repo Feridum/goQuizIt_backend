@@ -31,6 +31,10 @@ public class Question {
     @ManyToOne
     private Quiz quiz;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "question")
+    private List<PlayerAnswer> playerAnswers;
+
     @Enumerated(EnumType.STRING)
     private QuestionState type;
 
@@ -75,6 +79,10 @@ public class Question {
         return quiz;
     }
 
+    public void setQuiz(Quiz quiz) {
+        this.quiz = quiz;
+    }
+
     public List<Answer> getAnswers() {
         return answers;
     }
@@ -87,10 +95,6 @@ public class Question {
         return this.quiz.getId();
     }
 
-    public void setQuiz(Quiz quiz) {
-        this.quiz = quiz;
-    }
-
     public int getIndex() {
         return index;
     }
@@ -99,8 +103,15 @@ public class Question {
         this.index = index;
     }
 
-    public void decrementIndex()
-    {
+    public void decrementIndex() {
         --index;
+    }
+
+    public List<PlayerAnswer> getPlayerAnswers() {
+        return playerAnswers;
+    }
+
+    public void setPlayerAnswers(List<PlayerAnswer> playerAnswers) {
+        this.playerAnswers = playerAnswers;
     }
 }

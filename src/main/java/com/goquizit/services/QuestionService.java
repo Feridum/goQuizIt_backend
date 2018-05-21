@@ -59,15 +59,21 @@ public class QuestionService implements Serializable {
     public QuestionOutputDTO createQuestion(UUID quiz_id, @Valid CreateUpdateQuestionDTO createUpdateQuestionDTO) {
         try {
             Question question = mapDtoToQuestion(quiz_id, createUpdateQuestionDTO);
-            Quiz quiz = quizService.getOne(quiz_id);
-            question.setIndex(quiz.getQuestionSet().size());
-            quiz.getQuestions().add(question);
-            Quiz tempQuiz = quizService.save(quiz);
-            Question newQuestion = tempQuiz.getQuestions().get(tempQuiz.getQuestions().size() - 1);
+
+            Question newQuestion = createQuestionByDTO(quiz_id, question);
+
             return mapQuestionToOutput(newQuestion, quiz_id);
         } catch (PersistenceException e) {
             throw new UnknownRepositoryException(e.getMessage());
         }
+    }
+
+    private Question createQuestionByDTO(UUID quiz_id, Question question) {
+        Quiz quiz = quizService.getOne(quiz_id);
+        question.setIndex(quiz.getQuestionSet().size());
+        quiz.getQuestions().add(question);
+        Quiz tempQuiz = quizService.save(quiz);
+        return tempQuiz.getLastQuestion();
     }
 
 
@@ -107,11 +113,10 @@ public class QuestionService implements Serializable {
             CreateUpdateQuestionDTO createUpdateQuestionDTO = questionWithAnswersInputDTO.getQuestion();
             List<CreateUpdateAnswersDTO> createUpdateAnswersDTOS = questionWithAnswersInputDTO.getAnswers();
             Question question = mapDtoToQuestion(quiz_id, createUpdateQuestionDTO);
-            Quiz quiz = quizService.getOne(quiz_id);
-            quiz.getQuestions().add(question);
-            Quiz newQuiz = quizService.save(quiz);
-            List<AnswerOutputDTO> outputAnswerDTOS = answerService.createAnswers(createUpdateAnswersDTOS, newQuiz.getLastQuestion().getQuestionId());
-            QuestionOutputDTO outputDTO = mapQuestionToOutput(newQuiz.getLastQuestion(), quiz_id);
+            Question newQuestion = createQuestionByDTO(quiz_id,question);
+            List<AnswerOutputDTO> outputAnswerDTOS = answerService.createAnswers(createUpdateAnswersDTOS, newQuestion.getQuestionId());
+
+            QuestionOutputDTO outputDTO = mapQuestionToOutput(newQuestion, quiz_id);
             return new QuestionWithAnswersOutputDTO(outputDTO, outputAnswerDTOS);
         } catch (PersistenceException e) {
             throw new UnknownRepositoryException(e.getMessage());

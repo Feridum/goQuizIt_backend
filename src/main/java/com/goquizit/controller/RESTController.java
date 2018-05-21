@@ -43,6 +43,9 @@ public class RESTController {
     @Autowired
     PlayerService playerService;
 
+    @Autowired
+    PlayerAnswerService playerAnswerService;
+
 
     // Answers methods
     @GetMapping("/question/{question_id}/answers")
@@ -63,13 +66,20 @@ public class RESTController {
     //--------------------------------------------------------------------
 
     // Players methods
+    @PostMapping("/players/{player_id}/question/{question_id}/answers")
+    public ResponseEntity createPlayerAnswer(@PathVariable(value = "player_id") UUID player_id, @PathVariable(value = "question_id") UUID question_id, @Valid @RequestBody List<CreateUpdatePlayerAnswerDTO> playerAnswerDTOS) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(playerAnswerService.createPlayerAnswer(player_id,question_id, playerAnswerDTOS));
+    }
+
+    //--------------------------------------------------------------------
+
+    //PlayerAnswer methods
     @PostMapping("/players/quiz/{quiz_id}")
     public QuestionWithAnswersAndPlayerIdDTO createPlayer(@PathVariable(value = "quiz_id") UUID quiz_id, @Valid @RequestBody PlayerDTO player) {
         return playerService.create(player, quiz_id);
     }
 
     //--------------------------------------------------------------------
-
     // Questions methods
     @PostMapping("/quiz/{quiz_id}/questions")
     public QuestionOutputDTO createQuestion(@PathVariable(value = "quiz_id") UUID quiz_id, @Valid @RequestBody CreateUpdateQuestionDTO question) {

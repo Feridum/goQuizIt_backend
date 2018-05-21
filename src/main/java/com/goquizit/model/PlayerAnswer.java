@@ -29,6 +29,11 @@ public class PlayerAnswer {
     @ManyToOne
     private Player player;
 
+    @ManyToOne
+    private Question question;
+
+    private UUID answerID;
+
 
     public String getValue() {
         return value;
@@ -52,5 +57,22 @@ public class PlayerAnswer {
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+
+    }
+
+    public UUID getAnswerID() {
+        return answerID;
+    }
+
+    public void setAnswerID(UUID answerID) {
+        this.answerID = answerID;
     }
 }
