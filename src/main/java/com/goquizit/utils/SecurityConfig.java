@@ -55,8 +55,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/register",
                         "/api/forgot-password**",
                         "/api/reset-password**",
+                        "/api/players/**",
+                        "/v2/api-docs",
+                        "/configuration/ui",
+                        "/swagger-resources",
+                        "/configuration/security",
                         "/swagger-ui.html",
-                        "/api/players/**").permitAll()
+                        "/webjars/**",
+                        "/swagger-resources/configuration/ui",
+                        "/swagger-ui.html").permitAll()
                 .anyRequest().authenticated();
 
     }
