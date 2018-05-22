@@ -1,0 +1,9 @@
+guru/springframework/converters/ProductToProductForm.class
+guru/springframework/commands/ProductForm.class
+guru/springframework/services/ProductService.class
+guru/springframework/converters/ProductFormToProduct.class
+guru/springframework/services/ProductServiceImpl.class
+guru/springframework/domain/Product.class
+guru/springframework/SpringBootPostgreSQLApplication.class
+guru/springframework/repositories/ProductRepository.class
+guru/springframework/controllers/ProductController.class
