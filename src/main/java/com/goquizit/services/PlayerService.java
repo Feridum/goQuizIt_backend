@@ -3,8 +3,8 @@ package com.goquizit.services;
 import com.goquizit.DTO.PlayerDTO;
 import com.goquizit.DTO.QuestionWithAnswersAndPlayerIdDTO;
 import com.goquizit.DTO.outputDTO.AnswerToPlayerOutputDTO;
+import com.goquizit.DTO.outputDTO.PlayerOutputDTO;
 import com.goquizit.DTO.outputDTO.QuestionOutputDTO;
-import com.goquizit.exception.ResourceNotFoundException;
 import com.goquizit.exception.ResponseException;
 import com.goquizit.exception.UnknownRepositoryException;
 import com.goquizit.model.Player;
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceException;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -93,5 +94,28 @@ public class PlayerService {
 
     public Player save(Player player) {
         return playerRepository.save(player);
+    }
+
+    public List<PlayerOutputDTO> getPlayersByQuizId(UUID quizId) {
+        try {
+            Quiz quiz = quizService.getOne(quizId);
+            List<Player> players = quiz.getPlayers();
+            List<PlayerOutputDTO> playerOutputDTOS = new ArrayList<>();
+            players.forEach(player -> playerOutputDTOS.add(this.mapPlayerToOutputDTO(player)));
+            return playerOutputDTOS;
+        } catch (EntityNotFoundException e) {
+            throw new UnknownRepositoryException(e.getMessage());
+        }
+    }
+
+    public PlayerOutputDTO mapPlayerToOutputDTO(Player player) {
+        PlayerOutputDTO playerOutputDTO = new PlayerOutputDTO();
+        playerOutputDTO.setName(player.getName());
+        playerOutputDTO.setSurname(player.getSurname());
+        if (player.getMail() != null)
+            playerOutputDTO.setMail(player.getMail());
+        if (player.getTelephoneNumber() != null)
+            playerOutputDTO.setTelephoneNumber(player.getTelephoneNumber());
+        return playerOutputDTO;
     }
 }

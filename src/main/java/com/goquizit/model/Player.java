@@ -95,10 +95,10 @@ public class Player {
         this.mail = mail;
     }
 
-    public PlayerAnswer getLastPlayerAnswer() {
-        int index = playerAnswers.size();
-        if (index == 0)
-            throw new ResponseException("Can not get Answer");
-        else return playerAnswers.get(index-1);
-    }
+//    public PlayerAnswer getLastPlayerAnswer() {
+//        int index = playerAnswers.size();
+//        if (index == 0)
+//            throw new ResponseException("Can not get Answer");
+//        else return playerAnswers.get(index-1);
+//    }
 }

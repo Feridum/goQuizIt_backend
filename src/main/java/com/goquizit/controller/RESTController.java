@@ -1,11 +1,7 @@
 package com.goquizit.controller;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.goquizit.DTO.*;
-import com.goquizit.DTO.outputDTO.AnswerOutputDTO;
-import com.goquizit.DTO.outputDTO.QuestionOutputDTO;
-import com.goquizit.DTO.outputDTO.QuizOutputDTO;
-import com.goquizit.DTO.outputDTO.TokenOutputDTO;
+import com.goquizit.DTO.outputDTO.*;
 import com.goquizit.exception.InvalidContentException;
 import com.goquizit.exception.ResourceNotFoundException;
 import com.goquizit.model.QuizState;
@@ -66,18 +62,24 @@ public class RESTController {
 
     //--------------------------------------------------------------------
 
-    // Players methods
+
+    //PlayerAnswer methods
     @PostMapping("/players/{player_id}/question/{question_id}/answers")
     public ResponseEntity createPlayerAnswer(@PathVariable(value = "player_id") UUID player_id, @PathVariable(value = "question_id") UUID question_id, @Valid @RequestBody CreateUpdatePlayerAnswerDTO playerAnswerDTOS) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(playerAnswerService.createPlayerAnswer(player_id,question_id, playerAnswerDTOS));
+        return ResponseEntity.status(HttpStatus.CREATED).body(playerAnswerService.createPlayerAnswer(player_id, question_id, playerAnswerDTOS));
     }
 
     //--------------------------------------------------------------------
 
-    //PlayerAnswer methods
+    // Players methods
     @PostMapping("/players/quiz/{quiz_id}")
     public QuestionWithAnswersAndPlayerIdDTO createPlayer(@PathVariable(value = "quiz_id") UUID quiz_id, @Valid @RequestBody PlayerDTO player) {
         return playerService.create(player, quiz_id);
+    }
+
+    @GetMapping("/quiz/{quiz_id}/players")
+    public List<PlayerOutputDTO> getPlayersByQuizId(@PathVariable(value = "quiz_id") UUID quiz_id) {
+        return playerService.getPlayersByQuizId(quiz_id);
     }
 
     //--------------------------------------------------------------------
