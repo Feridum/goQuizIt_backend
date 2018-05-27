@@ -284,6 +284,72 @@
 			"response": []
 		},
 		{
+			"name": "get players by QuizID",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhYmMifQ.fZTmSPba_SWNI_SPDowlkYtXcUENQK824R7V8iQrXhusy-6QAdT6lnlWlw7GQioDKrUj_mck6bFy1VU1UMEupg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8082/api/quiz/9dc8d5c0-6588-4115-99ad-d623794fcb54/players",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"quiz",
+						"9dc8d5c0-6588-4115-99ad-d623794fcb54",
+						"players"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get quiz summary",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJQYWN6ZWsifQ.LIhnB0wjjL4gdOFkQUU-a6z2cBPrxYhaRY-I6PbmD030UbIzFU39QbMzI0nxxeVSzlrvEG8zvv4BM6nGa1Y4cg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8082/api/quiz/f44ca584-bf59-46bd-868e-1fcac32c241d/summary",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"quiz",
+						"f44ca584-bf59-46bd-868e-1fcac32c241d",
+						"summary"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "add quiz",
 			"request": {
 				"auth": {
@@ -397,10 +463,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"question\": \n\t{\n\t\"value\": \"1dsfsadf1My fiewrst question1gr111e\",\n\t\"duration\": 149,\n\t\"type\": \"SINGLE_CHOICE\"\n\t},\n\t\"answers\": [\n\t{\n\t\"value\" : \"odpowiedz1\",\n\t\"isPositive\": true\n\t}, \n\t{\n\t\"value\" : \"odpowiedz2\",\n\t\"isPositive\": false\n\t}\n\t]\n}"
+					"raw": "{\n\t\"question\": \n\t{\n\t\"value\": \"Pytanie1\",\n\t\"duration\": 149,\n\t\"type\": \"SINGLE_CHOICE\"\n\t},\n\t\"answers\": [\n\t{\n\t\"value\" : \"odpowiedz1\",\n\t\"isPositive\": true\n\t}, \n\t{\n\t\"value\" : \"odpowiedz2\",\n\t\"isPositive\": true\n\t}\n\t]\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8082/api/quiz/a1396cec-4e6d-45f0-a75d-25d07f83801a/questionWithAnswers",
+					"raw": "http://localhost:8082/api/quiz/f44ca584-bf59-46bd-868e-1fcac32c241d/questionWithAnswers",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -409,7 +475,7 @@
 					"path": [
 						"api",
 						"quiz",
-						"a1396cec-4e6d-45f0-a75d-25d07f83801a",
+						"f44ca584-bf59-46bd-868e-1fcac32c241d",
 						"questionWithAnswers"
 					]
 				}
@@ -431,7 +497,7 @@
 					"raw": "{\n\t\"name\": \"name1\",\n\t\"surname\": \"surname1\",\n\t\"mail\": \"sdfasd@o2.pl\",\n    \"telephoneNumber\": \"asfsd\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8082/api/players/quiz/a1396cec-4e6d-45f0-a75d-25d07f83801a",
+					"raw": "http://localhost:8082/api/players/quiz/f44ca584-bf59-46bd-868e-1fcac32c241d",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -441,7 +507,7 @@
 						"api",
 						"players",
 						"quiz",
-						"a1396cec-4e6d-45f0-a75d-25d07f83801a"
+						"f44ca584-bf59-46bd-868e-1fcac32c241d"
 					]
 				}
 			},
@@ -459,10 +525,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"id\": [\r\n    \"ec66e847-c18b-499d-b176-251653748323\",\"7281f052-827b-45e6-a342-962f9e3f61a5\"\r\n  ]\r\n}"
+					"raw": "{\r\n  \"id\": [\r\n    \"8211a165-3c6c-484f-ba63-43f650e1f9d4\", \"9b285445-e57d-43ee-afda-6ff1f0df2008\"\r\n  ]\r\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8082/api/players/e3463597-3d2b-4128-8e74-779827a75bfd/question/e490849a-1fbe-4dda-8c96-76b460e4b5c7/answers",
+					"raw": "http://localhost:8082/api/players/c4b40091-1352-4151-a7d5-f085c1c1a179/question/f7678448-404b-4459-8269-80c26de90e76/answers",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -471,9 +537,9 @@
 					"path": [
 						"api",
 						"players",
-						"e3463597-3d2b-4128-8e74-779827a75bfd",
+						"c4b40091-1352-4151-a7d5-f085c1c1a179",
 						"question",
-						"e490849a-1fbe-4dda-8c96-76b460e4b5c7",
+						"f7678448-404b-4459-8269-80c26de90e76",
 						"answers"
 					]
 				}
@@ -540,7 +606,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8082/api/quiz/253eb2dd-9002-4262-bba0-4040b999b33b/patch/ACTIVE",
+					"raw": "http://localhost:8082/api/quiz/f44ca584-bf59-46bd-868e-1fcac32c241d/patch/ACTIVE",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -549,7 +615,7 @@
 					"path": [
 						"api",
 						"quiz",
-						"253eb2dd-9002-4262-bba0-4040b999b33b",
+						"f44ca584-bf59-46bd-868e-1fcac32c241d",
 						"patch",
 						"ACTIVE"
 					]
@@ -772,26 +838,15 @@
 			"name": "post register",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
 				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "password",
-							"value": "Jarek123",
-							"type": "text"
-						},
-						{
-							"key": "email",
-							"value": "jasixterjo@gmail.com",
-							"type": "text"
-						},
-						{
-							"key": "username",
-							"value": "Jarek",
-							"type": "text"
-						}
-					]
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"abc\",\n\t\"email\": \"abc@gmail.com\",\n\t\"password\": \"12345678\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8082/api/register",

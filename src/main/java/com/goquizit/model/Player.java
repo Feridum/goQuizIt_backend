@@ -32,6 +32,8 @@ public class Player {
 
     private String surname;
 
+    private int result;
+
     private String telephoneNumber;
 
     private String mail;
@@ -95,10 +97,22 @@ public class Player {
         this.mail = mail;
     }
 
+    public int getResult() {
+        return result;
+    }
+
+    public void incrementPoints(){
+        this.result++;
+    }
+
 //    public PlayerAnswer getLastPlayerAnswer() {
 //        int index = playerAnswers.size();
 //        if (index == 0)
 //            throw new ResponseException("Can not get Answer");
 //        else return playerAnswers.get(index-1);
 //    }
+
+    public void setResult(int result) {
+        this.result = result;
+    }
 }

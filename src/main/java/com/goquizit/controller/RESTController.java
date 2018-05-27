@@ -176,6 +176,11 @@ public class RESTController {
         return ResponseEntity.status(HttpStatus.OK).body(quizService.getQuestionByQuizIdByIndex(quizId, index));
     }
 
+    @GetMapping("/quiz/{quiz_id}/summary")
+    public ResponseEntity getQuizSummary(@PathVariable(value = "quiz_id") UUID quizId) {
+        return ResponseEntity.status(HttpStatus.OK).body(quizService.getQuizSummary(quizId));
+    }
+
     //--------------------------------------------------------------------
 
     // User methods

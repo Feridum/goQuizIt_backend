@@ -12,6 +12,7 @@ import com.goquizit.model.Player;
 import com.goquizit.model.PlayerAnswer;
 import com.goquizit.model.Question;
 import com.goquizit.model.Quiz;
+import com.goquizit.repository.PlayerAnswerRepository;
 import org.hibernate.result.NoMoreReturnsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import javax.persistence.PersistenceException;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 @Service
@@ -36,6 +38,9 @@ public class PlayerAnswerService {
     @Autowired
     private AnswerService answerService;
 
+    @Autowired
+    private PlayerAnswerRepository playerAnswerRepository;
+//TODO add validation multiselect answers!!!
     public Object createPlayerAnswer(UUID player_id, UUID question_id, @Valid @JsonProperty("answers") CreateUpdatePlayerAnswerDTO playerAnswerDTOS) {
         try {
             Player player = playerService.getOne(player_id);
@@ -68,15 +73,46 @@ public class PlayerAnswerService {
     }
 
     public void createPlayerAnswerByDTO(CreateUpdatePlayerAnswerDTO createUpdatePlayerAnswerDTOs, Question question, Player player) {
+        this.getByQuestion(question); //TODO delete duplicate playerAnswers after update !!!
         createUpdatePlayerAnswerDTOs.getId().forEach(playerAnswerId -> {
             if (!answerService.checkAnswerIdInQuestion(playerAnswerId, question.getQuestionId()))
                 throw new ResponseException("There is no answer with that id: " + playerAnswerId);
             PlayerAnswer playerAnswer = new PlayerAnswer();
             playerAnswer.setQuestion(question);
             playerAnswer.setAnswerID(playerAnswerId);
-            playerAnswer.setValue("answer");
+            playerAnswer.setValue(answerService.getOne(playerAnswerId).getValue());
             player.getPlayerAnswers().add(playerAnswer);
+            if ((checkIfAddPoint(createUpdatePlayerAnswerDTOs, question.getQuestionId())).get())
+                player.incrementPoints();
+
             playerService.save(player);
         });
+    }
+
+    private AtomicBoolean checkIfAddPoint(CreateUpdatePlayerAnswerDTO createUpdatePlayerAnswerDTOs, UUID questionId) {
+        AtomicBoolean correctAnswer = new AtomicBoolean(true);
+        List<UUID> correctAnswers =  answerService.getCorrectAnswers(questionId);
+        if(correctAnswers.size() == createUpdatePlayerAnswerDTOs.getId().size())
+        {
+            correctAnswers.forEach(answer -> {
+                if (!createUpdatePlayerAnswerDTOs.getId().contains(answer))
+                    correctAnswer.set(false);
+            });
+        }
+        return correctAnswer;
+    }
+
+    public List<PlayerAnswer> getPlayerAnswersByByPlayerAndQuestion(UUID questionId, UUID playerId)
+    {
+        return playerAnswerRepository.getPlayerAnswersByByPlayerAndQuestion(questionId, playerId);
+    }
+
+
+    public void getByQuestion(Question question) {
+        try {
+            playerAnswerRepository.getByQuestion(question);
+        } catch (PersistenceException e) {
+            throw new UnknownRepositoryException(e.getMessage());
+        }
     }
 }

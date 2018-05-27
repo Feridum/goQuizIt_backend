@@ -9,6 +9,7 @@ import com.goquizit.DTO.outputDTO.QuestionOutputDTO;
 import com.goquizit.DTO.outputDTO.QuizOutputDTO;
 import com.goquizit.exception.InvalidContentException;
 import com.goquizit.exception.ResourceNotFoundException;
+import com.goquizit.exception.ResponseException;
 import com.goquizit.exception.UnknownRepositoryException;
 import com.goquizit.model.Answer;
 import com.goquizit.model.Question;
@@ -26,6 +27,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 public class QuestionService implements Serializable {
@@ -111,6 +113,7 @@ public class QuestionService implements Serializable {
         try {
             CreateUpdateQuestionDTO createUpdateQuestionDTO = questionWithAnswersInputDTO.getQuestion();
             List<CreateUpdateAnswersDTO> createUpdateAnswersDTOS = questionWithAnswersInputDTO.getAnswers();
+            checkPositiveAnswer(createUpdateAnswersDTOS);
             Question question = mapDtoToQuestion(quiz_id, createUpdateQuestionDTO);
             Question newQuestion = createQuestionByDTO(quiz_id,question);
             List<AnswerOutputDTO> outputAnswerDTOS = answerService.createAnswers(createUpdateAnswersDTOS, newQuestion.getQuestionId());
@@ -120,6 +123,16 @@ public class QuestionService implements Serializable {
         } catch (PersistenceException e) {
             throw new UnknownRepositoryException(e.getMessage());
         }
+    }
+
+    private void checkPositiveAnswer(List<CreateUpdateAnswersDTO> createUpdateAnswersDTOS) {
+        AtomicBoolean isPositiveAnswer = new AtomicBoolean(false);
+        createUpdateAnswersDTOS.forEach(answer -> {
+            if(answer.getIsPositive())
+                isPositiveAnswer.set(true);
+        });
+       if (isPositiveAnswer.get() == false)
+           throw new ResponseException("At least one answer should be positive");
     }
 
     public QuestionWithAnswersOutputDTO updateQuestionWithAnswers(UUID question_id, @Valid QuestionWithAnswersInputDTO questionWithAnswersInputDTO) {

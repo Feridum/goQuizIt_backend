@@ -6,7 +6,6 @@ public class CreateUpdateAnswersDTO {
     @NotNull
     private String value;
 
-    @NotNull
     private boolean isPositive;
 
     public String getValue() {
@@ -17,11 +16,11 @@ public class CreateUpdateAnswersDTO {
         this.value = value;
     }
 
-    public boolean isPositive() {
+    public boolean getIsPositive() {
         return isPositive;
     }
 
-    public void setPositive(boolean positive) {
+    public void setIsPositive(boolean positive) {
         isPositive = positive;
     }
 }

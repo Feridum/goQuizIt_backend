@@ -54,7 +54,7 @@ public class AnswerService {
         for (int i = 0; i < createUpdateAnswersDTOS.size(); ++i) {
             Answer newAnswer = new Answer();
             newAnswer.setValue(createUpdateAnswersDTOS.get(i).getValue());
-            newAnswer.setIsPositive(createUpdateAnswersDTOS.get(i).isPositive());
+            newAnswer.setIsPositive(createUpdateAnswersDTOS.get(i).getIsPositive());
             answers.add(newAnswer);
         }
         return answers;
@@ -121,4 +121,21 @@ public class AnswerService {
         else
             return true;
     }
+
+    public List<UUID> getCorrectAnswers(UUID questionId) {
+        List<Answer> answers = answerRepository.getCorrectAnswers(questionId);
+        List<UUID> answersUUID = new ArrayList<>();
+        answers.forEach(answer -> answersUUID.add(answer.getAnswerId()));
+        return answersUUID;
+    }
+
+    public Answer getOne(UUID playerAnswerId) {
+        try {
+            return answerRepository.getOne(playerAnswerId);
+        } catch (PersistenceException e) {
+            throw new UnknownRepositoryException(e.getMessage());
+        }
+    }
+
+
 }

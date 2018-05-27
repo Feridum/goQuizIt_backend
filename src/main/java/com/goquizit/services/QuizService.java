@@ -1,17 +1,13 @@
 package com.goquizit.services;
 
+import com.goquizit.DTO.AnswersToSummaryDTO;
 import com.goquizit.DTO.CreateUpdateQuizDTO;
-import com.goquizit.DTO.outputDTO.QuestionOutputDTO;
-import com.goquizit.DTO.outputDTO.QuizOutputDTO;
-import com.goquizit.DTO.outputDTO.TokenOutputDTO;
+import com.goquizit.DTO.outputDTO.*;
 import com.goquizit.exception.InvalidContentException;
 import com.goquizit.exception.ResourceNotFoundException;
 import com.goquizit.exception.ResponseException;
 import com.goquizit.exception.UnknownRepositoryException;
-import com.goquizit.model.Question;
-import com.goquizit.model.Quiz;
-import com.goquizit.model.QuizState;
-import com.goquizit.model.User;
+import com.goquizit.model.*;
 import com.goquizit.repository.QuizRepository;
 import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;
@@ -39,6 +35,15 @@ public class QuizService {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    PlayerService playerService;
+
+    @Autowired
+    AnswerService answerService;
+
+    @Autowired
+    PlayerAnswerService playerAnswerService;
 
 
     public QuizOutputDTO createQuiz(@Valid CreateUpdateQuizDTO createQuizDTO) {
@@ -202,5 +207,32 @@ public class QuizService {
             }
         }
         return quiz;
+    }
+
+    public List<SummaryDTO> getQuizSummary(UUID quizId) {
+        try{
+            List<SummaryDTO> summaryDTOS = new ArrayList<>();
+            Quiz quiz = this.getOne(quizId);
+            List<QuestionOutputDTO> questions = questionService.getQuestionsByQuizId(quizId);
+            List<Player> players = quiz.getPlayers();
+            for(Player player :players)
+            {
+                PlayerOutputDTO playerOutput = playerService.mapPlayerToOutputDTO(player);
+                List<AnswersToSummaryDTO> answersToSummary = new ArrayList<>();
+                for(QuestionOutputDTO question: questions)
+                {
+                    List<String> answersContent = new ArrayList<>();
+                    List<PlayerAnswer> answersByQuestionID = playerAnswerService.getPlayerAnswersByByPlayerAndQuestion(question.getQuestionId(),player.getPlayerId());
+                    answersByQuestionID.forEach(answerOutputDTO -> answersContent.add(answerOutputDTO.getValue()));
+                    answersToSummary.add(new AnswersToSummaryDTO(question.getValue(),answersContent));
+                }
+                summaryDTOS.add(new SummaryDTO(playerOutput, quiz.getTitle(), answersToSummary,questions.size(),player.getResult()));
+            }
+
+            return summaryDTOS;
+        }catch (PersistenceException e)
+        {
+            throw new UnknownRepositoryException(e.getMessage());
+        }
     }
 }
