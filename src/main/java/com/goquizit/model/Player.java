@@ -105,6 +105,10 @@ public class Player {
         this.result++;
     }
 
+    public void decrementPoints(){
+        this.result--;
+    }
+
 //    public PlayerAnswer getLastPlayerAnswer() {
 //        int index = playerAnswers.size();
 //        if (index == 0)

@@ -40,7 +40,8 @@ public class PlayerAnswerService {
 
     @Autowired
     private PlayerAnswerRepository playerAnswerRepository;
-//TODO add validation multiselect answers!!!
+
+    //TODO add validation multiselect answers!!!
     public Object createPlayerAnswer(UUID player_id, UUID question_id, @Valid @JsonProperty("answers") CreateUpdatePlayerAnswerDTO playerAnswerDTOS) {
         try {
             Player player = playerService.getOne(player_id);
@@ -50,7 +51,7 @@ public class PlayerAnswerService {
             return this.prepareNextQuestionWithAnswers(player_id, question);
         } catch (NoMoreReturnsException e) {
             return new FinishedQuiz();
-        }catch (PersistenceException e) {
+        } catch (PersistenceException e) {
             throw new UnknownRepositoryException(e.getMessage());
         }
     }
@@ -73,7 +74,7 @@ public class PlayerAnswerService {
     }
 
     public void createPlayerAnswerByDTO(CreateUpdatePlayerAnswerDTO createUpdatePlayerAnswerDTOs, Question question, Player player) {
-        this.getByQuestion(question); //TODO delete duplicate playerAnswers after update !!!
+        removeOldPlayerAnswers(question, player);
         createUpdatePlayerAnswerDTOs.getId().forEach(playerAnswerId -> {
             if (!answerService.checkAnswerIdInQuestion(playerAnswerId, question.getQuestionId()))
                 throw new ResponseException("There is no answer with that id: " + playerAnswerId);
@@ -82,35 +83,52 @@ public class PlayerAnswerService {
             playerAnswer.setAnswerID(playerAnswerId);
             playerAnswer.setValue(answerService.getOne(playerAnswerId).getValue());
             player.getPlayerAnswers().add(playerAnswer);
-            if ((checkIfAddPoint(createUpdatePlayerAnswerDTOs, question.getQuestionId())).get())
-                player.incrementPoints();
-
-            playerService.save(player);
         });
+        if ((checkIfIncrementPoints(createUpdatePlayerAnswerDTOs, question.getQuestionId())).get())
+            player.incrementPoints();
+
+        playerService.save(player);
     }
 
-    private AtomicBoolean checkIfAddPoint(CreateUpdatePlayerAnswerDTO createUpdatePlayerAnswerDTOs, UUID questionId) {
+    private void removeOldPlayerAnswers(Question question, Player player) {
+        List<PlayerAnswer> playerOldAnswers = this.getByQuestion(question);
+        playerOldAnswers.forEach(playerOldAnswer -> player.getPlayerAnswers().remove(playerOldAnswer));
+
         AtomicBoolean correctAnswer = new AtomicBoolean(true);
-        List<UUID> correctAnswers =  answerService.getCorrectAnswers(questionId);
-        if(correctAnswers.size() == createUpdatePlayerAnswerDTOs.getId().size())
-        {
+        List<UUID> correctAnswers = answerService.getCorrectAnswers(question.getQuestionId());
+        if (correctAnswers.size() == playerOldAnswers.size()) {
+            correctAnswers.forEach(answer -> {
+                if (!playerOldAnswers.contains(answer))
+                    correctAnswer.set(false);
+            });
+        } else correctAnswer.set(false);
+
+        if (!correctAnswer.get())
+            player.decrementPoints();
+        playerService.save(player);
+    }
+
+    private AtomicBoolean checkIfIncrementPoints(CreateUpdatePlayerAnswerDTO createUpdatePlayerAnswerDTOs, UUID questionId) {
+        AtomicBoolean correctAnswer = new AtomicBoolean(true);
+        List<UUID> correctAnswers = answerService.getCorrectAnswers(questionId);
+        if (correctAnswers.size() == createUpdatePlayerAnswerDTOs.getId().size()) {
             correctAnswers.forEach(answer -> {
                 if (!createUpdatePlayerAnswerDTOs.getId().contains(answer))
                     correctAnswer.set(false);
             });
-        }
+        } else correctAnswer.set(false);
+
         return correctAnswer;
     }
 
-    public List<PlayerAnswer> getPlayerAnswersByByPlayerAndQuestion(UUID questionId, UUID playerId)
-    {
+    public List<PlayerAnswer> getPlayerAnswersByByPlayerAndQuestion(UUID questionId, UUID playerId) {
         return playerAnswerRepository.getPlayerAnswersByByPlayerAndQuestion(questionId, playerId);
     }
 
 
-    public void getByQuestion(Question question) {
+    public List<PlayerAnswer> getByQuestion(Question question) {
         try {
-            playerAnswerRepository.getByQuestion(question);
+            return playerAnswerRepository.getByQuestion(question);
         } catch (PersistenceException e) {
             throw new UnknownRepositoryException(e.getMessage());
         }
