@@ -3,26 +3,31 @@ package com.goquizit.services;
 import com.goquizit.DTO.AnswersToSummaryDTO;
 import com.goquizit.DTO.CreateUpdateQuizDTO;
 import com.goquizit.DTO.outputDTO.*;
-import com.goquizit.exception.InvalidContentException;
-import com.goquizit.exception.ResourceNotFoundException;
-import com.goquizit.exception.ResponseException;
-import com.goquizit.exception.UnknownRepositoryException;
+import com.goquizit.exception.*;
 import com.goquizit.model.*;
 import com.goquizit.repository.QuizRepository;
+import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceException;
 import javax.validation.Valid;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import com.itextpdf.text.*;
 
 @Service
 public class QuizService {
@@ -230,9 +235,68 @@ public class QuizService {
             }
 
             return summaryDTOS;
-        }catch (PersistenceException e)
-        {
+        }
+        catch (PersistenceException e) {
             throw new UnknownRepositoryException(e.getMessage());
         }
     }
+
+    public ByteArrayInputStream getQuizPDF(UUID quizId) {
+        try {
+            Quiz quiz = this.getOne(quizId);
+
+            if (quiz == null) {
+                throw new PersistenceException();
+            }
+
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            Document document = new Document();
+            PdfWriter.getInstance(document, byteArrayOutputStream);
+
+            document.open();
+
+            // Hardcoded text for application name and quiz Id
+            Phrase titlePhrase = new Phrase();
+            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 24, BaseColor.BLUE);
+            titlePhrase.add(new Chunk("GoQuizIt" + Chunk.NEWLINE + Chunk.NEWLINE, titleFont));
+
+            Phrase quizRepresentationPhrase = new Phrase();
+            Font font = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, BaseColor.BLACK);
+            Font descFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
+            quizRepresentationPhrase.add(new Chunk("Quiz id: ", descFont));
+            quizRepresentationPhrase.add(new Chunk(quiz.getId().toString(), font));
+            quizRepresentationPhrase.add(new Chunk(Chunk.NEWLINE));
+
+            Paragraph titleParagraph = new Paragraph();
+            titleParagraph.add(titlePhrase);
+            titleParagraph.setAlignment(Element.ALIGN_CENTER);
+
+            Paragraph quizPresentationParagraph = new Paragraph();
+            quizPresentationParagraph.setAlignment(Element.ALIGN_CENTER);
+            quizPresentationParagraph.add(quizRepresentationPhrase);
+
+            document.add(titleParagraph);
+            document.add(quizPresentationParagraph);
+
+//             TODO: generate PDF depending on data from getQuizSummaryEndpoint
+//            List<SummaryDTO> summaryDTOS = getQuizSummary(quizId);
+//            for (SummaryDTO summaryDTO : summaryDTOS) {
+//                Chunk chunkQuiz = new Chunk(summaryDTO.getQuiz(), font);
+//                Chunk chunkPoints = new Chunk(summaryDTO.getPoint(), font);
+//                document.add(chunkQuiz);
+//                document.add(chunkPoints);
+//            }
+
+            document.close();
+
+            return new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+        }
+        catch (PersistenceException e) {
+            throw new UnknownRepositoryException(e.getMessage());
+        }
+        catch (DocumentException e) {
+            throw new DocumentGenerationException(e.getMessage());
+        }
+    }
+
 }

@@ -8,7 +8,10 @@ import com.goquizit.model.QuizState;
 import com.goquizit.model.User;
 import com.goquizit.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -179,6 +182,18 @@ public class RESTController {
     @GetMapping("/quiz/{quiz_id}/summary")
     public ResponseEntity getQuizSummary(@PathVariable(value = "quiz_id") UUID quizId) {
         return ResponseEntity.status(HttpStatus.OK).body(quizService.getQuizSummary(quizId));
+    }
+
+    @GetMapping("/quiz/{quiz_id}/pdf")
+    public ResponseEntity getQuizPDF(@PathVariable(value = "quiz_id") UUID quizId) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "inline; filename=" + "quizReport.pdf");
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(quizService.getQuizPDF(quizId)));
     }
 
     //--------------------------------------------------------------------
