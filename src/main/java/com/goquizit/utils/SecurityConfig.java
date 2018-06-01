@@ -56,6 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/reset-password**",
                         "/api/players/**",
                         "/api/quiz/token/**",
+                        "/api/quiz/**/pdf",
                         "/v2/api-docs",
                         "/configuration/ui",
                         "/swagger-resources",
@@ -63,7 +64,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/swagger-ui.html",
                         "/webjars/**",
                         "/swagger-resources/configuration/ui",
-                        "/swagger-ui.html").permitAll()
+                        "/swagger-ui.html")
+                .permitAll()
                 .anyRequest().authenticated();
 
     }
