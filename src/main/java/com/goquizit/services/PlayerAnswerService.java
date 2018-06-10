@@ -8,10 +8,7 @@ import com.goquizit.DTO.outputDTO.FinishedQuiz;
 import com.goquizit.DTO.outputDTO.QuestionOutputDTO;
 import com.goquizit.exception.ResponseException;
 import com.goquizit.exception.UnknownRepositoryException;
-import com.goquizit.model.Player;
-import com.goquizit.model.PlayerAnswer;
-import com.goquizit.model.Question;
-import com.goquizit.model.Quiz;
+import com.goquizit.model.*;
 import com.goquizit.repository.PlayerAnswerRepository;
 import org.hibernate.result.NoMoreReturnsException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +37,7 @@ public class PlayerAnswerService {
 
     @Autowired
     private PlayerAnswerRepository playerAnswerRepository;
-
-    //TODO add validation multiselect answers!!!
+    
     public Object createPlayerAnswer(UUID player_id, UUID question_id, @Valid @JsonProperty("answers") CreateUpdatePlayerAnswerDTO playerAnswerDTOS) {
         try {
             Player player = playerService.getOne(player_id);
@@ -58,12 +54,17 @@ public class PlayerAnswerService {
 
     private QuestionWithAnswersAndPlayerIdDTO prepareNextQuestionWithAnswers(UUID player_id, Question question) {
         int actualIndex = question.getIndex();
-        checkQuestionIndex(question, actualIndex);
+        this.checkQuestionIndex(question, actualIndex);
         QuestionOutputDTO nextQuestionDTO = quizService.getQuestionByQuizIdByIndex(question.getQuizId(), ++actualIndex);
         Question nextQuestion = questionService.getOne(nextQuestionDTO.getQuestionId());
         List<AnswerToPlayerOutputDTO> answers = answerService.mapAnswersToPlayerToOutput(nextQuestion.getAnswers());
-        if (answers.isEmpty())
-            throw new ResponseException("Question have not any answers");
+
+        QuestionState questionState;
+        if (answers.isEmpty() && (nextQuestion.getType().equals(QuestionState.SINGLE_CHOICE) ||
+                nextQuestion.getType().equals(QuestionState.MULTIPLE_CHOICE)))  {
+            throw new ResponseException("prepareNextQuestionWithAnswers: Question have not any answers");
+        }
+
         return new QuestionWithAnswersAndPlayerIdDTO(player_id, nextQuestionDTO, answers);
     }
 
@@ -77,7 +78,7 @@ public class PlayerAnswerService {
         removeOldPlayerAnswers(question, player);
         createUpdatePlayerAnswerDTOs.getId().forEach(playerAnswerId -> {
             if (!answerService.checkAnswerIdInQuestion(playerAnswerId, question.getQuestionId()))
-                throw new ResponseException("There is no answer with that id: " + playerAnswerId);
+                throw new ResponseException("createPlayerAnswerByDTO: There is no answer with that id: " + playerAnswerId);
 
             PlayerAnswer playerAnswer = new PlayerAnswer();
             playerAnswer.setQuestion(question);

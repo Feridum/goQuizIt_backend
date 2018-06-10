@@ -168,7 +168,7 @@ public class QuestionService implements Serializable {
         });
 
         int positiveAnswers = amountOfPositiveAnswers.intValue();
-        
+
         if (positiveAnswers < 2 || positiveAnswers > 4) {
             throw new ResponseException("There should be min 2 and man 4 positive answers");
         }
