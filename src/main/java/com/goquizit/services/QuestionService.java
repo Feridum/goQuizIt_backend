@@ -13,6 +13,7 @@ import com.goquizit.exception.ResponseException;
 import com.goquizit.exception.UnknownRepositoryException;
 import com.goquizit.model.Answer;
 import com.goquizit.model.Question;
+import com.goquizit.model.QuestionState;
 import com.goquizit.model.Quiz;
 import com.goquizit.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+
+import static com.goquizit.model.QuestionState.*;
 
 @Service
 public class QuestionService implements Serializable {
@@ -113,7 +118,22 @@ public class QuestionService implements Serializable {
         try {
             CreateUpdateQuestionDTO createUpdateQuestionDTO = questionWithAnswersInputDTO.getQuestion();
             List<CreateUpdateAnswersDTO> createUpdateAnswersDTOS = questionWithAnswersInputDTO.getAnswers();
-            checkPositiveAnswer(createUpdateAnswersDTOS);
+
+            switch (createUpdateQuestionDTO.getType()) {
+                case SINGLE_CHOICE:
+                    this.checkPositiveAnswerSingleChoice(createUpdateAnswersDTOS);
+                    break;
+                case MULTIPLE_CHOICE:
+                    this.checkPositiveAnswersInMultipleChoice(createUpdateAnswersDTOS);
+                    break;
+                case OPEN:
+                    break;
+                case AXIS:
+                case DATE:
+                default:
+                    break;
+            }
+
             Question question = mapDtoToQuestion(quiz_id, createUpdateQuestionDTO);
             Question newQuestion = createQuestionByDTO(quiz_id,question);
             List<AnswerOutputDTO> outputAnswerDTOS = answerService.createAnswers(createUpdateAnswersDTOS, newQuestion.getQuestionId());
@@ -125,14 +145,33 @@ public class QuestionService implements Serializable {
         }
     }
 
-    private void checkPositiveAnswer(List<CreateUpdateAnswersDTO> createUpdateAnswersDTOS) {
+    private void checkPositiveAnswerSingleChoice(List<CreateUpdateAnswersDTO> createUpdateAnswersDTOS) {
         AtomicBoolean isPositiveAnswer = new AtomicBoolean(false);
         createUpdateAnswersDTOS.forEach(answer -> {
             if(answer.getIsPositive())
                 isPositiveAnswer.set(true);
         });
-       if (isPositiveAnswer.get() == false)
+
+       if (!isPositiveAnswer.get()) {
            throw new ResponseException("At least one answer should be positive");
+       }
+    }
+
+    private void checkPositiveAnswersInMultipleChoice(List<CreateUpdateAnswersDTO> createUpdateAnswersDTOS) {
+        AtomicBoolean areAnswersOkay = new AtomicBoolean(false);
+        AtomicInteger amountOfPositiveAnswers = new AtomicInteger(0);
+
+        createUpdateAnswersDTOS.forEach(answer -> {
+            if(answer.getIsPositive()) {
+                amountOfPositiveAnswers.getAndIncrement();
+            }
+        });
+
+        int positiveAnswers = amountOfPositiveAnswers.intValue();
+        
+        if (positiveAnswers < 2 || positiveAnswers > 4) {
+            throw new ResponseException("There should be min 2 and man 4 positive answers");
+        }
     }
 
     public QuestionWithAnswersOutputDTO updateQuestionWithAnswers(UUID question_id, @Valid QuestionWithAnswersInputDTO questionWithAnswersInputDTO) {

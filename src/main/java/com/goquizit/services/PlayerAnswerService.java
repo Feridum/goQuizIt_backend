@@ -46,8 +46,8 @@ public class PlayerAnswerService {
         try {
             Player player = playerService.getOne(player_id);
             Question question = questionService.getOne(question_id);
-            this.createPlayerAnswerByDTO(playerAnswerDTOS, question, player);
 
+            this.createPlayerAnswerByDTO(playerAnswerDTOS, question, player);
             return this.prepareNextQuestionWithAnswers(player_id, question);
         } catch (NoMoreReturnsException e) {
             return new FinishedQuiz();
@@ -78,6 +78,7 @@ public class PlayerAnswerService {
         createUpdatePlayerAnswerDTOs.getId().forEach(playerAnswerId -> {
             if (!answerService.checkAnswerIdInQuestion(playerAnswerId, question.getQuestionId()))
                 throw new ResponseException("There is no answer with that id: " + playerAnswerId);
+
             PlayerAnswer playerAnswer = new PlayerAnswer();
             playerAnswer.setQuestion(question);
             playerAnswer.setAnswerID(playerAnswerId);
@@ -101,10 +102,18 @@ public class PlayerAnswerService {
                 if (!playerOldAnswers.contains(answer))
                     correctAnswer.set(false);
             });
-        } else correctAnswer.set(false);
+        }
+        else {
+            correctAnswer.set(false);
+        }
 
-        if (!correctAnswer.get())
+        if (!correctAnswer.get()) {
             player.decrementPoints();
+
+            if (player.getResult() < 0) {
+                player.setResult(0);
+            }
+        }
         playerService.save(player);
     }
 
