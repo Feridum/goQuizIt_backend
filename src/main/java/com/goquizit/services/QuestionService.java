@@ -268,6 +268,7 @@ public class QuestionService implements Serializable {
         outputDTO.setValue(question.getValue());
         outputDTO.setQuizId(quizId);
         outputDTO.setIndex(question.getIndex());
+        outputDTO.setAnswers(answerService.mapAnswersToOutput(question.getAnswers()));
         return outputDTO;
     }
 

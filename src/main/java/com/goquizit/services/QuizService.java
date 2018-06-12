@@ -215,22 +215,32 @@ public class QuizService {
     }
 
     public List<SummaryDTO> getQuizSummary(UUID quizId) {
-        try{
+        try {
             List<SummaryDTO> summaryDTOS = new ArrayList<>();
             Quiz quiz = this.getOne(quizId);
             List<QuestionOutputDTO> questions = questionService.getQuestionsByQuizId(quizId);
             List<Player> players = quiz.getPlayers();
-            for(Player player :players)
-            {
+
+            for (Player player : players) {
                 PlayerOutputDTO playerOutput = playerService.mapPlayerToOutputDTO(player);
                 List<AnswersToSummaryDTO> answersToSummary = new ArrayList<>();
-                for(QuestionOutputDTO question: questions)
-                {
+
+                for (QuestionOutputDTO question: questions) {
                     List<String> answersContent = new ArrayList<>();
+                    List<String> positiveAnswers = new ArrayList<>();
                     List<PlayerAnswer> answersByQuestionID = playerAnswerService.getPlayerAnswersByByPlayerAndQuestion(question.getQuestionId(),player.getPlayerId());
+
                     answersByQuestionID.forEach(answerOutputDTO -> answersContent.add(answerOutputDTO.getValue()));
-                    answersToSummary.add(new AnswersToSummaryDTO(question.getValue(),answersContent));
+
+                    for (AnswerOutputDTO temp : question.getAnswers()) {
+                        if (temp.isPositive()) {
+                            positiveAnswers.add(temp.getValue());
+                        }
+                    }
+
+                    answersToSummary.add(new AnswersToSummaryDTO(question.getValue(),answersContent, positiveAnswers));
                 }
+
                 summaryDTOS.add(new SummaryDTO(playerOutput, quiz.getTitle(), answersToSummary,questions.size(),player.getResult()));
             }
 

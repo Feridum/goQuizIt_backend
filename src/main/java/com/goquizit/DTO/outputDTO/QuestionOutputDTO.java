@@ -1,7 +1,9 @@
 package com.goquizit.DTO.outputDTO;
 
+import com.goquizit.model.Answer;
 import com.goquizit.model.QuestionState;
 
+import java.util.List;
 import java.util.UUID;
 
 public class QuestionOutputDTO {
@@ -17,6 +19,8 @@ public class QuestionOutputDTO {
     private UUID quizId;
 
     private int index;
+
+    private List<AnswerOutputDTO> answers;
 
     public UUID getQuestionId() {
         return questionId;
@@ -64,5 +68,13 @@ public class QuestionOutputDTO {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public List<AnswerOutputDTO> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<AnswerOutputDTO> answers) {
+        this.answers = answers;
     }
 }
