@@ -68,8 +68,14 @@ public class RESTController {
 
     //PlayerAnswer methods
     @PostMapping("/players/{player_id}/question/{question_id}/answers")
-    public ResponseEntity createPlayerAnswer(@PathVariable(value = "player_id") UUID player_id, @PathVariable(value = "question_id") UUID question_id, @Valid @RequestBody CreateUpdatePlayerAnswerDTO playerAnswerDTOS) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(playerAnswerService.createPlayerAnswer(player_id, question_id, playerAnswerDTOS));
+    public ResponseEntity createPlayerAnswerToSingleMultipleQuestion(@PathVariable(value = "player_id") UUID player_id, @PathVariable(value = "question_id") UUID question_id, @Valid @RequestBody CreateUpdatePlayerAnswerDTO playerAnswerDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(playerAnswerService.createPlayerAnswerToSingleMultipleQuestion(player_id, question_id, playerAnswerDTO));
+    }
+
+    //PlayerAnswer methods
+    @PostMapping("/players/{player_id}/question/{question_id}/open/answers")
+    public ResponseEntity createPlayerAnswerToOpenQuestion(@PathVariable(value = "player_id") UUID player_id, @PathVariable(value = "question_id") UUID question_id, @Valid @RequestBody CreateUpdatePlayerAnswerOpenDTO playerAnswerOpenDTOS) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(playerAnswerService.createPlayerAnswerToOpenQuestion(player_id, question_id, playerAnswerOpenDTOS));
     }
 
     //--------------------------------------------------------------------

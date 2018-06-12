@@ -2,6 +2,7 @@ package com.goquizit.services;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.goquizit.DTO.CreateUpdatePlayerAnswerDTO;
+import com.goquizit.DTO.CreateUpdatePlayerAnswerOpenDTO;
 import com.goquizit.DTO.QuestionWithAnswersAndPlayerIdDTO;
 import com.goquizit.DTO.outputDTO.AnswerToPlayerOutputDTO;
 import com.goquizit.DTO.outputDTO.FinishedQuiz;
@@ -37,19 +38,38 @@ public class PlayerAnswerService {
 
     @Autowired
     private PlayerAnswerRepository playerAnswerRepository;
-    
-    public Object createPlayerAnswer(UUID player_id, UUID question_id, @Valid @JsonProperty("answers") CreateUpdatePlayerAnswerDTO playerAnswerDTOS) {
+
+    public Object createPlayerAnswerToSingleMultipleQuestion(UUID player_id, UUID question_id, @Valid @JsonProperty("answers") CreateUpdatePlayerAnswerDTO playerAnswerDTOS) {
         try {
             Player player = playerService.getOne(player_id);
             Question question = questionService.getOne(question_id);
 
-            this.createPlayerAnswerByDTO(playerAnswerDTOS, question, player);
+            this.createPlayerAnswerToSingleMultipleQuestionByDTO(playerAnswerDTOS, question, player);
+
             return this.prepareNextQuestionWithAnswers(player_id, question);
         } catch (NoMoreReturnsException e) {
             return new FinishedQuiz();
         } catch (PersistenceException e) {
             throw new UnknownRepositoryException(e.getMessage());
         }
+    }
+
+    private void createPlayerAnswerToSingleMultipleQuestionByDTO(CreateUpdatePlayerAnswerDTO createUpdatePlayerAnswerDTOs, Question question, Player player) {
+        removeOldPlayerAnswers(question, player);
+        createUpdatePlayerAnswerDTOs.getId().forEach(playerAnswerId -> {
+            if (!answerService.checkAnswerIdInQuestion(playerAnswerId, question.getQuestionId()))
+                throw new ResponseException("createPlayerAnswerByDTO: There is no answer with that id: " + playerAnswerId);
+
+            PlayerAnswer playerAnswer = new PlayerAnswer();
+            playerAnswer.setQuestion(question);
+            playerAnswer.setAnswerID(playerAnswerId);
+            playerAnswer.setValue(answerService.getOne(playerAnswerId).getValue());
+            player.getPlayerAnswers().add(playerAnswer);
+        });
+        if ((checkIfIncrementPoints(createUpdatePlayerAnswerDTOs, question.getQuestionId())).get())
+            player.incrementPoints();
+
+        playerService.save(player);
     }
 
     private QuestionWithAnswersAndPlayerIdDTO prepareNextQuestionWithAnswers(UUID player_id, Question question) {
@@ -68,28 +88,45 @@ public class PlayerAnswerService {
         return new QuestionWithAnswersAndPlayerIdDTO(player_id, nextQuestionDTO, answers);
     }
 
+    public Object createPlayerAnswerToOpenQuestion(UUID player_id, UUID question_id, @Valid @JsonProperty("answers") CreateUpdatePlayerAnswerOpenDTO playerAnswerOpenDTO) {
+        try {
+            Player player = playerService.getOne(player_id);
+            Question question = questionService.getOne(question_id);
+
+            this.createPlayerAnswerToOpenQuestionByDTO(playerAnswerOpenDTO, question, player);
+
+            return this.prepareNextQuestionWithAnswers(player_id, question);
+        } catch (NoMoreReturnsException e) {
+            return new FinishedQuiz();
+        } catch (PersistenceException e) {
+            throw new UnknownRepositoryException(e.getMessage());
+        }
+    }
+
+    public void createPlayerAnswerToOpenQuestionByDTO(CreateUpdatePlayerAnswerOpenDTO createUpdatePlayerAnswerOpenDTO, Question question, Player player) {
+        boolean didPlayerGiveAnswer = false;
+
+        for(PlayerAnswer temp : question.getPlayerAnswers()) {
+            if (temp.getPlayer().equals(player)) {
+                didPlayerGiveAnswer = true;
+            }
+        }
+
+        if (!didPlayerGiveAnswer) {
+            PlayerAnswer playerAnswer = new PlayerAnswer();
+            playerAnswer.setQuestion(question);
+            playerAnswer.setValue(createUpdatePlayerAnswerOpenDTO.getValue());
+            player.getPlayerAnswers().add(playerAnswer);
+            player.incrementPoints();
+        }
+
+        playerService.save(player);
+    }
+
     private void checkQuestionIndex(Question question, int actualIndex) {
         Quiz quiz = quizService.getOne(question.getQuizId());
         if (actualIndex == quiz.getQuestions().size() - 1)
             throw new NoMoreReturnsException();
-    }
-
-    public void createPlayerAnswerByDTO(CreateUpdatePlayerAnswerDTO createUpdatePlayerAnswerDTOs, Question question, Player player) {
-        removeOldPlayerAnswers(question, player);
-        createUpdatePlayerAnswerDTOs.getId().forEach(playerAnswerId -> {
-            if (!answerService.checkAnswerIdInQuestion(playerAnswerId, question.getQuestionId()))
-                throw new ResponseException("createPlayerAnswerByDTO: There is no answer with that id: " + playerAnswerId);
-
-            PlayerAnswer playerAnswer = new PlayerAnswer();
-            playerAnswer.setQuestion(question);
-            playerAnswer.setAnswerID(playerAnswerId);
-            playerAnswer.setValue(answerService.getOne(playerAnswerId).getValue());
-            player.getPlayerAnswers().add(playerAnswer);
-        });
-        if ((checkIfIncrementPoints(createUpdatePlayerAnswerDTOs, question.getQuestionId())).get())
-            player.incrementPoints();
-
-        playerService.save(player);
     }
 
     private void removeOldPlayerAnswers(Question question, Player player) {
@@ -136,7 +173,7 @@ public class PlayerAnswerService {
     }
 
 
-    public List<PlayerAnswer> getByQuestion(Question question) {
+    private List<PlayerAnswer> getByQuestion(Question question) {
         try {
             return playerAnswerRepository.getByQuestion(question);
         } catch (PersistenceException e) {
