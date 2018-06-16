@@ -54,7 +54,9 @@ public class PlayerService {
             Quiz tempQuiz = quizService.save(quiz);
             UUID playerId = tempQuiz.getPlayers().get(tempQuiz.getPlayers().size() - 1).getPlayerId();
 
-            QuestionWithAnswersAndPlayerIdDTO outputDTO = new QuestionWithAnswersAndPlayerIdDTO(playerId, outputQuestionDTO, answers);
+            int numberOfQuestions = quiz.getQuestions().size();
+
+            QuestionWithAnswersAndPlayerIdDTO outputDTO = new QuestionWithAnswersAndPlayerIdDTO(playerId, outputQuestionDTO, answers, 1, numberOfQuestions);
             return outputDTO;
         } catch (EntityNotFoundException e) {
             throw new UnknownRepositoryException(e.getMessage());

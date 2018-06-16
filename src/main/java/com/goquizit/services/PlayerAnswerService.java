@@ -79,13 +79,20 @@ public class PlayerAnswerService {
         Question nextQuestion = questionService.getOne(nextQuestionDTO.getQuestionId());
         List<AnswerToPlayerOutputDTO> answers = answerService.mapAnswersToPlayerToOutput(nextQuestion.getAnswers());
 
+        int numberOfQuestions = getNumberOfQuestions(question);
+
         QuestionState questionState;
         if (answers.isEmpty() && (nextQuestion.getType().equals(QuestionState.SINGLE_CHOICE) ||
-                nextQuestion.getType().equals(QuestionState.MULTIPLE_CHOICE)))  {
+                nextQuestion.getType().equals(QuestionState.MULTIPLE_CHOICE))) {
             throw new ResponseException("prepareNextQuestionWithAnswers: Question have not any answers");
         }
 
-        return new QuestionWithAnswersAndPlayerIdDTO(player_id, nextQuestionDTO, answers);
+        return new QuestionWithAnswersAndPlayerIdDTO(player_id, nextQuestionDTO, answers,++actualIndex,numberOfQuestions);
+    }
+
+    private int getNumberOfQuestions(Question question) {
+        Quiz quiz = quizService.getOne(question.getQuizId());
+        return quiz.getQuestions().size();
     }
 
     public Object createPlayerAnswerToOpenQuestion(UUID player_id, UUID question_id, @Valid @JsonProperty("answers") CreateUpdatePlayerAnswerOpenDTO playerAnswerOpenDTO) {

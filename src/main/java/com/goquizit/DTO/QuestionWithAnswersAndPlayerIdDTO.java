@@ -19,10 +19,19 @@ public class QuestionWithAnswersAndPlayerIdDTO implements Serializable {
     @JsonProperty("Answers")
     private List<AnswerToPlayerOutputDTO> answers;
 
-    public QuestionWithAnswersAndPlayerIdDTO(UUID playerId, QuestionOutputDTO questionDTO, List<AnswerToPlayerOutputDTO> answers) {
+    @JsonProperty("Index")
+    private int index;
+
+    @JsonProperty("NumberOfQuestions")
+    private int numberOfQuestions;
+
+
+    public QuestionWithAnswersAndPlayerIdDTO(UUID playerId, QuestionOutputDTO questionDTO, List<AnswerToPlayerOutputDTO> answers, int index, int numberOfQuestions) {
         this.playerId = playerId;
         this.questionDTO = questionDTO;
         this.answers = answers;
+        this.index = index;
+        this.numberOfQuestions = numberOfQuestions;
     }
 
     public UUID getPlayerId() {
@@ -47,5 +56,21 @@ public class QuestionWithAnswersAndPlayerIdDTO implements Serializable {
 
     public void setAnswers(List<AnswerToPlayerOutputDTO> answers) {
         this.answers = answers;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public int getNumberOfQuestions() {
+        return numberOfQuestions;
+    }
+
+    public void setNumberOfQuestions(int numberOfQuestions) {
+        numberOfQuestions = numberOfQuestions;
     }
 }
