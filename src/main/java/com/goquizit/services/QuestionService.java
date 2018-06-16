@@ -188,8 +188,8 @@ public class QuestionService implements Serializable {
 
         int positiveAnswers = amountOfPositiveAnswers.intValue();
 
-        if (positiveAnswers < 2 || positiveAnswers > 4) {
-            throw new ResponseException("There should be min 2 and max 4 positive answers");
+        if (positiveAnswers < 1 || positiveAnswers > 4) {
+            throw new ResponseException("There should be min 1 and max 4 positive answers");
         }
     }
 
