@@ -161,12 +161,18 @@ public class QuestionService implements Serializable {
         createUpdateAnswersDTOS.forEach(answer -> {
             if(answer.getIsPositive()) {
                 isPositiveAnswer.set(true);
+                checkEmptyAnswer(answer);
             }
         });
 
        if (!isPositiveAnswer.get()) {
            throw new ResponseException("At least one answer should be positive");
        }
+    }
+
+    private void checkEmptyAnswer(CreateUpdateAnswersDTO answer) {
+        if(answer.getValue() == null || answer.getValue().isEmpty())
+            throw new ResponseException("Answer can not be empty");
     }
 
     private void checkPositiveAnswersInMultipleChoice(List<CreateUpdateAnswersDTO> createUpdateAnswersDTOS) {
@@ -176,13 +182,14 @@ public class QuestionService implements Serializable {
         createUpdateAnswersDTOS.forEach(answer -> {
             if(answer.getIsPositive()) {
                 amountOfPositiveAnswers.getAndIncrement();
+                checkEmptyAnswer(answer);
             }
         });
 
         int positiveAnswers = amountOfPositiveAnswers.intValue();
 
         if (positiveAnswers < 2 || positiveAnswers > 4) {
-            throw new ResponseException("There should be min 2 and man 4 positive answers");
+            throw new ResponseException("There should be min 2 and max 4 positive answers");
         }
     }
 
