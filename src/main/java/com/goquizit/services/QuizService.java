@@ -238,7 +238,11 @@ public class QuizService {
                     answersToSummary.add(new AnswersToSummaryDTO(question.getValue(),answersContent, positiveAnswers));
                 }
 
-                summaryDTOS.add(new SummaryDTO(playerOutput, quiz.getTitle(), answersToSummary,questions.size(),player.getResult()));
+                summaryDTOS.add(new SummaryDTO(playerOutput,
+                        quiz.getTitle(),
+                        answersToSummary,
+                        this.getMaximumAmountOfPoints(questions),
+                        player.getResult()));
             }
 
             return summaryDTOS;
@@ -304,6 +308,20 @@ public class QuizService {
         catch (DocumentException e) {
             throw new DocumentGenerationException(e.getMessage());
         }
+    }
+
+    private int getMaximumAmountOfPoints(List<QuestionOutputDTO> questionOutputDTOS) {
+        int result = 0;
+
+        for (QuestionOutputDTO questionOutputDTO : questionOutputDTOS) {
+            if (questionOutputDTO.getType().equals(QuestionState.OPEN)) {
+                continue;
+            }
+
+            ++result;
+        }
+
+        return result;
     }
 
 }

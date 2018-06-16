@@ -81,7 +81,6 @@ public class PlayerAnswerService {
 
         int numberOfQuestions = getNumberOfQuestions(question);
 
-        QuestionState questionState;
         if (answers.isEmpty() && (nextQuestion.getType().equals(QuestionState.SINGLE_CHOICE) ||
                 nextQuestion.getType().equals(QuestionState.MULTIPLE_CHOICE))) {
             throw new ResponseException("prepareNextQuestionWithAnswers: Question have not any answers");
@@ -124,7 +123,6 @@ public class PlayerAnswerService {
             playerAnswer.setQuestion(question);
             playerAnswer.setValue(createUpdatePlayerAnswerOpenDTO.getValue());
             player.getPlayerAnswers().add(playerAnswer);
-            player.incrementPoints();
         }
 
         playerService.save(player);

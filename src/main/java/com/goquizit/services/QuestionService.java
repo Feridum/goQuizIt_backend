@@ -159,8 +159,9 @@ public class QuestionService implements Serializable {
     private void checkPositiveAnswerSingleChoice(List<CreateUpdateAnswersDTO> createUpdateAnswersDTOS) {
         AtomicBoolean isPositiveAnswer = new AtomicBoolean(false);
         createUpdateAnswersDTOS.forEach(answer -> {
-            if(answer.getIsPositive())
+            if(answer.getIsPositive()) {
                 isPositiveAnswer.set(true);
+            }
         });
 
        if (!isPositiveAnswer.get()) {
