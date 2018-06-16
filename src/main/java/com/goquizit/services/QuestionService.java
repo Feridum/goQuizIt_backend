@@ -58,6 +58,17 @@ public class QuestionService implements Serializable {
         }
     }
 
+    public List<QuestionOutputDTO> getQuestionsByQuizIdToSummary(UUID quizId) {
+        try {
+            List<Question> questions = quizService.getOne(quizId).getQuestions();
+            List<QuestionOutputDTO> outputDTOS = new ArrayList<>();
+            questions.forEach(question -> outputDTOS.add(mapQuestionToOutputSummary(question, quizId)));
+            return outputDTOS;
+        } catch (PersistenceException e) {
+            throw new UnknownRepositoryException(e.getMessage());
+        }
+    }
+
     public QuestionOutputDTO getQuestionById(UUID questionId) throws ResourceNotFoundException {
         Question question = questionRepository.findById(questionId).orElseThrow(() -> new ResourceNotFoundException("Question", "id", questionId));
         return mapQuestionToOutput(question, question.getQuiz().getId());
@@ -268,6 +279,11 @@ public class QuestionService implements Serializable {
         outputDTO.setValue(question.getValue());
         outputDTO.setQuizId(quizId);
         outputDTO.setIndex(question.getIndex());
+        return outputDTO;
+    }
+
+    public QuestionOutputDTO mapQuestionToOutputSummary(Question question, UUID quizId) {
+        QuestionOutputDTO outputDTO = mapQuestionToOutput(question, quizId);
         outputDTO.setAnswers(answerService.mapAnswersToOutput(question.getAnswers()));
         return outputDTO;
     }

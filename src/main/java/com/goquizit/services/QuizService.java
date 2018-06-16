@@ -10,7 +10,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,8 +20,6 @@ import javax.validation.Valid;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -218,7 +215,7 @@ public class QuizService {
         try {
             List<SummaryDTO> summaryDTOS = new ArrayList<>();
             Quiz quiz = this.getOne(quizId);
-            List<QuestionOutputDTO> questions = questionService.getQuestionsByQuizId(quizId);
+            List<QuestionOutputDTO> questions = questionService.getQuestionsByQuizIdToSummary(quizId);
             List<Player> players = quiz.getPlayers();
 
             for (Player player : players) {
@@ -228,7 +225,7 @@ public class QuizService {
                 for (QuestionOutputDTO question: questions) {
                     List<String> answersContent = new ArrayList<>();
                     List<String> positiveAnswers = new ArrayList<>();
-                    List<PlayerAnswer> answersByQuestionID = playerAnswerService.getPlayerAnswersByByPlayerAndQuestion(question.getQuestionId(),player.getPlayerId());
+                    List<PlayerAnswer> answersByQuestionID = playerAnswerService.getPlayerAnswersByPlayerAndQuestion(question.getQuestionId(),player.getPlayerId());
 
                     answersByQuestionID.forEach(answerOutputDTO -> answersContent.add(answerOutputDTO.getValue()));
 

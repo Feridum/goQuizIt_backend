@@ -175,7 +175,7 @@ public class PlayerAnswerService {
         return correctAnswer;
     }
 
-    public List<PlayerAnswer> getPlayerAnswersByByPlayerAndQuestion(UUID questionId, UUID playerId) {
+    public List<PlayerAnswer> getPlayerAnswersByPlayerAndQuestion(UUID questionId, UUID playerId) {
         return playerAnswerRepository.getPlayerAnswersByByPlayerAndQuestion(questionId, playerId);
     }
 
