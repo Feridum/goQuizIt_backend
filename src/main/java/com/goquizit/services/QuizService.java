@@ -55,6 +55,8 @@ public class QuizService {
         quiz.setIsKahoot(createQuizDTO.getIsKahoot());
         quiz.setToken(generateToken());
         quiz.setState(QuizState.INACTIVE);
+        quiz.setTelephoneNumberRequired(createQuizDTO.isTelephoneNumberRequired());
+        quiz.setMailRequired(createQuizDTO.isMailRequired());
 
         UUID ownerId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUserId();
         Quiz newQuiz = userService.saveQuiz(quiz);
