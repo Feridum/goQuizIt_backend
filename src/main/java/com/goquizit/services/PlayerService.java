@@ -7,10 +7,7 @@ import com.goquizit.DTO.outputDTO.PlayerOutputDTO;
 import com.goquizit.DTO.outputDTO.QuestionOutputDTO;
 import com.goquizit.exception.ResponseException;
 import com.goquizit.exception.UnknownRepositoryException;
-import com.goquizit.model.Player;
-import com.goquizit.model.Question;
-import com.goquizit.model.Quiz;
-import com.goquizit.model.QuizState;
+import com.goquizit.model.*;
 import com.goquizit.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,8 +46,12 @@ public class PlayerService {
 
             QuestionOutputDTO outputQuestionDTO = questionService.mapQuestionToOutput(question, quizId);
             List<AnswerToPlayerOutputDTO> answers = answerService.mapAnswersToPlayerToOutput(question.getAnswers());
-            if (answers.isEmpty())
+
+            if (answers.isEmpty() && (question.getType().equals(QuestionState.SINGLE_CHOICE) ||
+                    question.getType().equals(QuestionState.MULTIPLE_CHOICE))) {
                 throw new ResponseException("Question have not any answers");
+            }
+
             Quiz tempQuiz = quizService.save(quiz);
             UUID playerId = tempQuiz.getPlayers().get(tempQuiz.getPlayers().size() - 1).getPlayerId();
 
