@@ -66,8 +66,12 @@ public class PlayerAnswerService {
             playerAnswer.setValue(answerService.getOne(playerAnswerId).getValue());
             player.getPlayerAnswers().add(playerAnswer);
         });
-        if ((checkIfIncrementPoints(createUpdatePlayerAnswerDTOs, question.getQuestionId())).get())
+
+        if ((checkIfIncrementPoints(createUpdatePlayerAnswerDTOs, question.getQuestionId()))) {
+            System.out.println("Points before: " + player.getResult());
             player.incrementPoints();
+            System.out.println("Points after: " + player.getResult());
+        }
 
         playerService.save(player);
     }
@@ -160,10 +164,18 @@ public class PlayerAnswerService {
         playerService.save(player);
     }
 
-    private AtomicBoolean checkIfIncrementPoints(CreateUpdatePlayerAnswerDTO createUpdatePlayerAnswerDTOs, UUID questionId) {
+    private boolean checkIfIncrementPoints(CreateUpdatePlayerAnswerDTO createUpdatePlayerAnswerDTOs, UUID questionId) {
         AtomicBoolean correctAnswer = new AtomicBoolean(true);
         List<UUID> correctAnswers = answerService.getCorrectAnswers(questionId);
         Question question = questionService.getOne(questionId);
+
+        for (UUID playerAnswerUUID : createUpdatePlayerAnswerDTOs.getId()) {
+            System.out.println("Answer: " + playerAnswerUUID);
+        }
+
+        for (UUID correctAnswerUUID : correctAnswers) {
+            System.out.println("Correct answer: " + correctAnswerUUID);
+        }
 
         switch (question.getType()) {
             case SINGLE_CHOICE:
@@ -179,7 +191,8 @@ public class PlayerAnswerService {
                 break;
         }
 
-        return correctAnswer;
+        System.out.println("Method returned: " + correctAnswer);
+        return correctAnswer.get();
     }
 
     public List<PlayerAnswer> getPlayerAnswersByPlayerAndQuestion(UUID questionId, UUID playerId) {
