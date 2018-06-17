@@ -138,9 +138,14 @@ public class QuizService {
     }
 
     public List<QuizOutputDTO> getByState(@Valid QuizState quizState) {
-        List<Quiz> quizzes = quizRepository.findByState(quizState);
+        UUID ownerId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUserId();
+        List<Quiz> quizzesByState = quizRepository.findByState(quizState);
         List<QuizOutputDTO> outputDTOS = new ArrayList<>();
-        quizzes.forEach(quiz -> outputDTOS.add(mapQuizToOutput(quiz)));
+        quizzesByState.forEach(quiz ->
+        {
+            if(quiz.getOwner().getUserId().equals(ownerId))
+                outputDTOS.add(mapQuizToOutput(quiz));
+        });
         return outputDTOS;
     }
 
@@ -319,10 +324,8 @@ public class QuizService {
             if (questionOutputDTO.getType().equals(QuestionState.OPEN)) {
                 continue;
             }
-
             ++result;
         }
-
         return result;
     }
 
