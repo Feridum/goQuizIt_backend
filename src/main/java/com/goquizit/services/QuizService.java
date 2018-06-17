@@ -273,21 +273,26 @@ public class QuizService {
 
             document.open();
 
-            // Hardcoded text for application name and quiz Id
+            String defaultFont = FontFactory.TIMES_ROMAN;
             Phrase titlePhrase = new Phrase();
-            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 24, BaseColor.BLUE);
+            Font titleFont = FontFactory.getFont(defaultFont, 24, BaseColor.BLUE);
             titlePhrase.add(new Chunk("GoQuizIt" + Chunk.NEWLINE + Chunk.NEWLINE, titleFont));
 
+            Font font = FontFactory.getFont(defaultFont, 16, BaseColor.BLACK);
+            Font descFont = FontFactory.getFont(defaultFont, 16, Font.BOLD);
+
             Phrase quizRepresentationPhrase = new Phrase();
-            Font font = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, BaseColor.BLACK);
-            Font descFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, Font.BOLD);
-            quizRepresentationPhrase.add(new Chunk("Quiz id: ", descFont));
-            quizRepresentationPhrase.add(new Chunk(quiz.getId().toString(), font));
+            quizRepresentationPhrase.add(new Chunk("Quiz id: ", font));
+            quizRepresentationPhrase.add(new Chunk(quiz.getId().toString(), descFont));
+            quizRepresentationPhrase.add(new Chunk(Chunk.NEWLINE));
+            quizRepresentationPhrase.add(new Chunk("Quiz name: ", font));
+            quizRepresentationPhrase.add(new Chunk(quiz.getTitle(), descFont));
+            quizRepresentationPhrase.add(new Chunk(Chunk.NEWLINE));
             quizRepresentationPhrase.add(new Chunk(Chunk.NEWLINE));
 
             Paragraph titleParagraph = new Paragraph();
-            titleParagraph.add(titlePhrase);
             titleParagraph.setAlignment(Element.ALIGN_CENTER);
+            titleParagraph.add(titlePhrase);
 
             Paragraph quizPresentationParagraph = new Paragraph();
             quizPresentationParagraph.setAlignment(Element.ALIGN_CENTER);
@@ -296,14 +301,94 @@ public class QuizService {
             document.add(titleParagraph);
             document.add(quizPresentationParagraph);
 
-//             TODO: generate PDF depending on data from getQuizSummaryEndpoint
-//            List<SummaryDTO> summaryDTOS = getQuizSummary(quizId);
-//            for (SummaryDTO summaryDTO : summaryDTOS) {
-//                Chunk chunkQuiz = new Chunk(summaryDTO.getQuiz(), font);
-//                Chunk chunkPoints = new Chunk(summaryDTO.getPoint(), font);
-//                document.add(chunkQuiz);
-//                document.add(chunkPoints);
-//            }
+            Paragraph playersIntroductionParagraph = new Paragraph();
+            Phrase playersIntroductionPhrase = new Phrase();
+            playersIntroductionPhrase.add(new Chunk("List of players:", font));
+            playersIntroductionPhrase.add(new Chunk(Chunk.NEWLINE));
+            playersIntroductionPhrase.add(new Chunk(Chunk.NEWLINE));
+            playersIntroductionParagraph.add(playersIntroductionPhrase);
+
+            List<SummaryDTO> summaryDTOS = getQuizSummary(quizId);
+
+            if (summaryDTOS == null || summaryDTOS.isEmpty()) {
+                Phrase lackOfPlayersPhrase = new Phrase();
+                lackOfPlayersPhrase.add(new Chunk("No players found!", font));
+                playersIntroductionParagraph.add(lackOfPlayersPhrase);
+                document.add(playersIntroductionParagraph);
+                return new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+            }
+
+            document.add(playersIntroductionParagraph);
+
+            List<QuestionOutputDTO> questions = questionService.getQuestionsByQuizIdToSummary(quizId);
+
+            Font informationFont = FontFactory.getFont(defaultFont, 12, Font.BOLD);
+            Font emailFont = FontFactory.getFont(defaultFont, 12, BaseColor.BLUE);
+            Font corrrectAnswerFont = FontFactory.getFont(defaultFont, 12, BaseColor.GREEN);
+            Font incorrrectAnswerFont = FontFactory.getFont(defaultFont, 12, BaseColor.RED);
+            Font idletAnswerFont = FontFactory.getFont(defaultFont, 12, BaseColor.ORANGE);
+
+            for (SummaryDTO summaryDTO : summaryDTOS) {
+                Paragraph playerParagraph = new Paragraph();
+                playerParagraph.setAlignment(Element.ALIGN_MIDDLE);
+
+                Phrase playerPhrase = new Phrase();
+                playerPhrase.add(new Chunk("Name: ", informationFont));
+                playerPhrase.add(new Chunk(summaryDTO.getPlayerOutputDTO().getName() + Chunk.NEWLINE, font));
+                playerPhrase.add(new Chunk("Surname: ", informationFont));
+                playerPhrase.add(new Chunk(summaryDTO.getPlayerOutputDTO().getSurname() + Chunk.NEWLINE, font));
+                playerPhrase.add(new Chunk("Telephone number: ", informationFont));
+                playerPhrase.add(new Chunk(summaryDTO.getPlayerOutputDTO().getTelephoneNumber() + Chunk.NEWLINE, font));
+                playerPhrase.add(new Chunk("Email: ", informationFont));
+                playerPhrase.add(new Chunk(summaryDTO.getPlayerOutputDTO().getMail() + Chunk.NEWLINE, emailFont));
+                playerPhrase.add(new Chunk("Points: ", informationFont));
+                playerPhrase.add(new Chunk(summaryDTO.getPoint() + Chunk.NEWLINE, font));
+                playerPhrase.add(new Chunk(Chunk.NEWLINE));
+
+                playerParagraph.add(playerPhrase);
+
+                int counter = 1;
+
+                Phrase questionWithPlayerAnswersPhrase = new Phrase();
+
+                for (AnswersToSummaryDTO answersToSummaryDTO : summaryDTO.getAnswers()) {
+
+                    questionWithPlayerAnswersPhrase.add(new Chunk(counter + ". " +
+                            answersToSummaryDTO.getQuestion(), descFont));
+                    questionWithPlayerAnswersPhrase.add(new Chunk(Chunk.NEWLINE));
+
+
+                    if (answersToSummaryDTO.getPlayerAnswers() == null ||
+                            (answersToSummaryDTO.getPlayerAnswers().isEmpty())) {
+                        questionWithPlayerAnswersPhrase.add(new Chunk("NO ANSWER", idletAnswerFont));
+                        questionWithPlayerAnswersPhrase.add(new Chunk(Chunk.NEWLINE));
+                    }
+                    else {
+                        for (String playerAnswer : answersToSummaryDTO.getPlayerAnswers()) {
+                            if (answersToSummaryDTO.getPositiveAnswers().contains(playerAnswer)) {
+                                questionWithPlayerAnswersPhrase.add(new Chunk(playerAnswer, corrrectAnswerFont));
+                                questionWithPlayerAnswersPhrase.add(new Chunk(Chunk.NEWLINE));
+                            } else {
+                                if (answersToSummaryDTO.getPositiveAnswers() == null ||
+                                        answersToSummaryDTO.getPositiveAnswers().isEmpty() ) {
+                                    questionWithPlayerAnswersPhrase.add(new Chunk(playerAnswer, idletAnswerFont));
+                                    questionWithPlayerAnswersPhrase.add(new Chunk(Chunk.NEWLINE));
+                                }
+                                else {
+                                    questionWithPlayerAnswersPhrase.add(new Chunk(playerAnswer, incorrrectAnswerFont));
+                                    questionWithPlayerAnswersPhrase.add(new Chunk(Chunk.NEWLINE));
+                                }
+                            }
+                        }
+                    }
+
+                    questionWithPlayerAnswersPhrase.add(new Chunk(Chunk.NEWLINE));
+                    ++counter;
+                }
+
+                playerParagraph.add(questionWithPlayerAnswersPhrase);
+                document.add(playerParagraph);
+            }
 
             document.close();
 
