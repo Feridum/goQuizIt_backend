@@ -163,12 +163,21 @@ public class PlayerAnswerService {
     private AtomicBoolean checkIfIncrementPoints(CreateUpdatePlayerAnswerDTO createUpdatePlayerAnswerDTOs, UUID questionId) {
         AtomicBoolean correctAnswer = new AtomicBoolean(true);
         List<UUID> correctAnswers = answerService.getCorrectAnswers(questionId);
-        if (correctAnswers.size() == createUpdatePlayerAnswerDTOs.getId().size()) {
-            correctAnswers.forEach(answer -> {
-                if (!createUpdatePlayerAnswerDTOs.getId().contains(answer))
-                    correctAnswer.set(false);
-            });
-        } else correctAnswer.set(false);
+        Question question = questionService.getOne(questionId);
+
+        switch (question.getType()) {
+            case SINGLE_CHOICE:
+            case MULTIPLE_CHOICE:
+                for (UUID playerAnswerUUID : createUpdatePlayerAnswerDTOs.getId()) {
+                    if (!correctAnswers.contains(playerAnswerUUID)) {
+                        correctAnswer.set(false);
+                    }
+                }
+                break;
+            case OPEN:
+            default:
+                break;
+        }
 
         return correctAnswer;
     }
