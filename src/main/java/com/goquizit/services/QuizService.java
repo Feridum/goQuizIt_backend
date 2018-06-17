@@ -357,7 +357,6 @@ public class QuizService {
                             answersToSummaryDTO.getQuestion(), descFont));
                     questionWithPlayerAnswersPhrase.add(new Chunk(Chunk.NEWLINE));
 
-
                     if (answersToSummaryDTO.getPlayerAnswers() == null ||
                             (answersToSummaryDTO.getPlayerAnswers().isEmpty())) {
                         questionWithPlayerAnswersPhrase.add(new Chunk("NO ANSWER", idletAnswerFont));

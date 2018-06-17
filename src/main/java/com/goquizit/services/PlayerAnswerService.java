@@ -55,7 +55,8 @@ public class PlayerAnswerService {
     }
 
     private void createPlayerAnswerToSingleMultipleQuestionByDTO(CreateUpdatePlayerAnswerDTO createUpdatePlayerAnswerDTOs, Question question, Player player) {
-        removeOldPlayerAnswers(question, player);
+        // TODO: fix with next and previous question version
+        // removeOldPlayerAnswers(question, player);
         createUpdatePlayerAnswerDTOs.getId().forEach(playerAnswerId -> {
             if (!answerService.checkAnswerIdInQuestion(playerAnswerId, question.getQuestionId()))
                 throw new ResponseException("createPlayerAnswerByDTO: There is no answer with that id: " + playerAnswerId);
@@ -68,9 +69,8 @@ public class PlayerAnswerService {
         });
 
         if ((checkIfIncrementPoints(createUpdatePlayerAnswerDTOs, question.getQuestionId()))) {
-            System.out.println("Points before: " + player.getResult());
             player.incrementPoints();
-            System.out.println("Points after: " + player.getResult());
+            player.incrementPoints();
         }
 
         playerService.save(player);
@@ -154,7 +154,7 @@ public class PlayerAnswerService {
             correctAnswer.set(false);
         }
 
-        if (!correctAnswer.get()) {
+        if (!correctAnswer.get() == false) {
             player.decrementPoints();
 
             if (player.getResult() < 0) {
@@ -169,21 +169,18 @@ public class PlayerAnswerService {
         List<UUID> correctAnswers = answerService.getCorrectAnswers(questionId);
         Question question = questionService.getOne(questionId);
 
-        for (UUID playerAnswerUUID : createUpdatePlayerAnswerDTOs.getId()) {
-            System.out.println("Answer: " + playerAnswerUUID);
-        }
-
-        for (UUID correctAnswerUUID : correctAnswers) {
-            System.out.println("Correct answer: " + correctAnswerUUID);
-        }
-
         switch (question.getType()) {
             case SINGLE_CHOICE:
             case MULTIPLE_CHOICE:
-                for (UUID playerAnswerUUID : createUpdatePlayerAnswerDTOs.getId()) {
-                    if (!correctAnswers.contains(playerAnswerUUID)) {
-                        correctAnswer.set(false);
+                if (correctAnswers.size() == createUpdatePlayerAnswerDTOs.getId().size()) {
+                    for (UUID playerAnswerUUID : createUpdatePlayerAnswerDTOs.getId()) {
+                        if (!correctAnswers.contains(playerAnswerUUID)) {
+                            correctAnswer.set(false);
+                        }
                     }
+                }
+                else {
+                    correctAnswer.set(false);
                 }
                 break;
             case OPEN:
@@ -191,7 +188,6 @@ public class PlayerAnswerService {
                 break;
         }
 
-        System.out.println("Method returned: " + correctAnswer);
         return correctAnswer.get();
     }
 
