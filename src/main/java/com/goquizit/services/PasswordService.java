@@ -2,17 +2,18 @@ package com.goquizit.services;
 
 import com.goquizit.DTO.PasswordForgotDTO;
 import com.goquizit.DTO.PasswordResetDTO;
+import com.goquizit.exception.ResourceNotFoundException;
 import com.goquizit.model.User;
 import com.goquizit.repository.PasswordResetTokenRepository;
 import com.goquizit.utils.Mail;
 import com.goquizit.utils.PasswordResetToken;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -39,7 +40,7 @@ public class PasswordService {
         User user = userService.findByEmail(form.getEmail());
         if (user == null) {
             log.info("No user found for given email address");
-            throw new UsernameNotFoundException("No user with email '" + form.getEmail() + "' found!");
+            throw new ResourceNotFoundException("User", "email", form.getEmail());
         }
 
         PasswordResetToken token = new PasswordResetToken();
