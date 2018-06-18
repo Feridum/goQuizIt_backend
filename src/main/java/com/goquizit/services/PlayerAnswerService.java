@@ -70,7 +70,6 @@ public class PlayerAnswerService {
 
         if ((checkIfIncrementPoints(createUpdatePlayerAnswerDTOs, question.getQuestionId()))) {
             player.incrementPoints();
-            player.incrementPoints();
         }
 
         playerService.save(player);
